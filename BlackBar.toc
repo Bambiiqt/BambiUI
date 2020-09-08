@@ -1,0 +1,7 @@
+## Interface: 80000
+## Title: BlackBar
+## Author: CDUB
+## Version: 1.3
+code.lua
+
+
