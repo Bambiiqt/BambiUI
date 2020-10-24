@@ -140,7 +140,7 @@ end)
 
 function PF:UpdateBars()
   --  print (GetNumGroupMembers())
-					if (GetNumGroupMembers() == 0) then
+				if (GetNumGroupMembers() == 0) then
 				PF:ClearAllPoints()
 				PF:SetSize(64, 64)
 				PF:SetPoint("TOPLEFT", -65, -2)
@@ -188,25 +188,16 @@ function PF:UpdateBars()
 				PF.texture:SetAllPoints(true)
 				PF.texture:SetColorTexture(1.0, 1.0, 1.0, 0)
 			  end
+
+				if InCombatLockdown() then
+				else
+		  	end
 end
 
 function PF:GROUP_ROSTER_UPDATE()
 	PF:UpdateBars()
 end
 
--- I don't know whats going on here
---[[
-local function PF_OnLoad(self)
-	self:RegisterEvent("GROUP_ROSTER_UPDATE")
-	self:SetScript("OnEvent",function(self,event,...) if self[event] then self[event](self,...) end end)
-	PF:UpdateBars()
-	self:SetScript("OnUpdate",PF_OnUpdate)
-end
-
-PF:RegisterEvent("VARIABLES_LOADED")
-PF:RegisterEvent("PLAYER_ENTERING_WORLD")
-PF:SetScript("OnEvent",PF_OnLoad)
-]]
 
 function PF:ADDON_LOADED(arg1)
 	if arg1 == "BlackBar" then
