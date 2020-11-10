@@ -1,5 +1,5 @@
-## Interface: 80000
+## Interface: 90000
 ## Title: Bambi's UI
-## Author: CDUB
+## Author: Bambi
 ## Version: 9.0
 code.lua
