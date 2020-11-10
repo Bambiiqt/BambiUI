@@ -200,10 +200,10 @@ end
 
 
 function PF:ADDON_LOADED(arg1)
-	if arg1 == "BlackBar" then
+	if arg1 == "BambiUI" then
 		if OmniCD then
 			print("OmniCD Loaded")
-			OmniCD.AddUnitFrameData("BlackBar", "PartyAnchor", "yourUnitKey", 1)
+			OmniCD.AddUnitFrameData("BambiUI", "PartyAnchor", "yourUnitKey", 1)
 		end
 	end
 	C_Timer.After(8, function()	-- delay checking to make sure all variables of the other addons are loaded
