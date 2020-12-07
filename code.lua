@@ -120,10 +120,10 @@ for i = 1, 5 do
 	end
 
 	-- this is needed for the addon to identify your frame-to-unit association
-	Anchors.yourUnitKey = i == 5 and "player" or "party" .. i
+--	Anchors.yourUnitKey = i == 5 and "player" or "party" .. i
 	Anchors.texture = Anchors:CreateTexture(nil, "BACKGROUND")
 	Anchors.texture:SetAllPoints(true)
-	Anchors.texture:SetColorTexture(1.0, 1.0, 1.0, 0)
+	--Anchors.texture:SetColorTexture(1.0, 1.0, 1.0, 0)
 
 	AnchorFrames[i] = Anchors
 end
@@ -136,6 +136,14 @@ end
 local PF = CreateFrame("Frame","PF",CompactRaidFrameContainer)
 hooksecurefunc("CompactRaidFrameContainer_SetFlowSortFunction", function(_,_)
 		PF:UpdateBars()
+end)
+local OmniCD1 = CreateFrame("Frame","OmniCD1",CompactRaidFrameContainer)
+hooksecurefunc("CompactRaidFrameContainer_SetFlowSortFunction", function(_,_)
+		PF:OmniCD1()
+end)
+local OmniCD2 = CreateFrame("Frame","OmniCD2",CompactRaidFrameContainer)
+hooksecurefunc("CompactRaidFrameContainer_SetFlowSortFunction", function(_,_)
+		PF:OmniCD2()
 end)
 
 function PF:UpdateBars()
@@ -194,16 +202,84 @@ function PF:UpdateBars()
 		  	end
 end
 
-function PF:GROUP_ROSTER_UPDATE()
-	PF:UpdateBars()
+function PF:OmniCD1()
+		    OmniCD1:ClearAllPoints()
+				OmniCD1:SetSize(64, 64)
+				OmniCD1.texture = OmniCD1:CreateTexture(nil, "BACKGROUND")
+				OmniCD1.texture:SetAllPoints(true)
+				OmniCD1.texture:SetColorTexture(1.0, 1.0, 1.0, 0)
+				if (GetNumGroupMembers() == 0) then
+				OmniCD1:SetPoint("TOPLEFT", -67, -77)
+			  end
+			  if (GetNumGroupMembers() == 2) then
+				OmniCD1:SetPoint("TOPLEFT", -67., -152)
+			  end
+			  if (GetNumGroupMembers() == 3) then
+				OmniCD1:SetPoint("TOPLEFT", -67, -227)
+			  end
+			  if UnitExists("partypet1") or UnitExists("partypet2") and (GetNumGroupMembers() == 2) then
+				OmniCD1:SetPoint("TOPLEFT", -67, -152 - 37.5)
+			  end
+			  if UnitExists("partypet1") or UnitExists("partypet2") and (GetNumGroupMembers() == 3) then
+					print("true")
+				OmniCD1:SetPoint("TOPLEFT", -67, -227 - 37.5)
+			  end
+			  if UnitExists("partypet1") and UnitExists("partypet2") and (GetNumGroupMembers() == 2) then
+				OmniCD1:SetPoint("TOPLEFT", -67, -152 - 37.5 - 37.5)
+			  end
+				if UnitExists("partypet1") and UnitExists("partypet2") and (GetNumGroupMembers() == 3) then
+				OmniCD1:SetPoint("TOPLEFT", -67, -227 - 37.5 - 37.5)
+			  end
+				OmniCD1.yourUnitKey = "party1"
+				AnchorFrames[1] = OmniCD1
+end
+function PF:OmniCD2()
+		    OmniCD2:ClearAllPoints()
+				OmniCD2:SetSize(64, 64)
+				OmniCD2.texture = OmniCD2:CreateTexture(nil, "BACKGROUND")
+				OmniCD2.texture:SetAllPoints(true)
+				OmniCD2.texture:SetColorTexture(1.0, 1.0, 1.0, 0)
+				if (GetNumGroupMembers() == 0) then
+				OmniCD2:SetPoint("TOPLEFT", -67, -77 - 31.5)
+			  end
+			  if (GetNumGroupMembers() == 2) then
+				OmniCD2:SetPoint("TOPLEFT", -67., -152 - 31.5)
+			  end
+			  if (GetNumGroupMembers() == 3) then
+				OmniCD2:SetPoint("TOPLEFT", -67, -227 - 31.5)
+			  end
+			  if UnitExists("partypet1") or UnitExists("partypet2") and (GetNumGroupMembers() == 2) then
+				OmniCD2:SetPoint("TOPLEFT", -67, -152 - 37.5 - 31.5)
+			  end
+			  if UnitExists("partypet1") or UnitExists("partypet2") and (GetNumGroupMembers() == 3) then
+				OmniCD2:SetPoint("TOPLEFT", -67, -227 - 37.5 - 31.5)
+			  end
+			  if UnitExists("partypet1") and UnitExists("partypet2") and (GetNumGroupMembers() == 2) then
+				OmniCD2:SetPoint("TOPLEFT", -67, -152 - 37.5 - 37.5 - 31.5)
+			  end
+				if UnitExists("partypet1") and UnitExists("partypet2") and (GetNumGroupMembers() == 3) then
+				OmniCD2:SetPoint("TOPLEFT", -67, -227 - 37.5 - 37.5 - 31.5)
+			  end
+				OmniCD2.yourUnitKey = "party2"
+				AnchorFrames[2] = OmniCD2
 end
 
 
+function PF:GROUP_ROSTER_UPDATE()
+	PF:UpdateBars()
+	PF:OmniCD1()
+	PF:OmniCD2()
+end
+
+function PF:UNIT_PET()
+	PF:OmniCD1()
+	PF:OmniCD2()
+end
+
 function PF:ADDON_LOADED(arg1)
-	if arg1 == "BambiUI" then
+	if arg1 == "BambiUI" or arg1 == "OmniCD" then
 		if OmniCD then
-			print("OmniCD Loaded")
-			OmniCD.AddUnitFrameData("BambiUI", "PartyAnchor", "yourUnitKey", 1)
+			OmniCD.AddUnitFrameData("BambiUI", "OmniCD", "yourUnitKey", 1)
 		end
 	end
 	C_Timer.After(8, function()	-- delay checking to make sure all variables of the other addons are loaded
@@ -214,4 +290,5 @@ end
 PF:RegisterEvent("ADDON_LOADED")
 PF:RegisterEvent("GROUP_ROSTER_UPDATE")
 PF:RegisterEvent("PLAYER_ENTERING_WORLD")
+PF:RegisterEvent("UNIT_PET")
 PF:SetScript("OnEvent",function(self,event,...) if self[event] then self[event](self,...) end end)
