@@ -221,7 +221,6 @@ function PF:OmniCD1()
 				OmniCD1:SetPoint("TOPLEFT", -67, -152 - 37.5)
 			  end
 			  if UnitExists("partypet1") or UnitExists("partypet2") and (GetNumGroupMembers() == 3) then
-					print("true")
 				OmniCD1:SetPoint("TOPLEFT", -67, -227 - 37.5)
 			  end
 			  if UnitExists("partypet1") and UnitExists("partypet2") and (GetNumGroupMembers() == 2) then
