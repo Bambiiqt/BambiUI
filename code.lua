@@ -42,8 +42,6 @@ local overlay = SpellActivationOverlay_GetOverlay(self, spellID, position);
 	overlay:SetScale(.35);
 end)
 
-
-
 local BottomBar = CreateFrame("Frame", nil, UIParent)
 BottomBar:SetSize(2500, 20)
 BottomBar:SetPoint("CENTER", 0, -590)
