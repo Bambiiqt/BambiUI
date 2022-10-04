@@ -127,7 +127,7 @@ for i = 1, 5 do
 end
 
 FramerateLabel:ClearAllPoints()
-FramerateLabel:SetPoint("RIGHT",UIParent,"CENTER", 0, -225)
+FramerateLabel:SetPoint("RIGHT",UIParent,"CENTER", 0, -220)
 FramerateLabel.SetPoint = function()
 end
 
