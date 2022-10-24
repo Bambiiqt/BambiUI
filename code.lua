@@ -199,7 +199,8 @@ function PF:UpdateBars()
 				else
 		  	end
 end
-local x = 0
+local x = 1
+local y = 0
 function PF:OmniCD1()
 		    OmniCD1:ClearAllPoints()
 				OmniCD1:SetSize(64, 64)
@@ -237,19 +238,19 @@ function PF:OmniCD2()
 				OmniCD2.texture:SetAllPoints(true)
 				OmniCD2.texture:SetColorTexture(1.0, 1.0, 1.0, 0)
 				if (GetNumGroupMembers() == 0) then
-				OmniCD2:SetPoint("TOPLEFT", -67, -77 - 31.5 - x)
+				OmniCD2:SetPoint("TOPLEFT", -67, -77 - 31.5 - y)
 			  end
 			  if not UnitExists("party1") and UnitExists("party2") then
-				OmniCD2:SetPoint("TOPLEFT", -67., -152 - 31.5 - x)
+				OmniCD2:SetPoint("TOPLEFT", -67., -152 - 31.5 - y)
 			  end
 			  if UnitExists("party1") and UnitExists("party2") then
-				OmniCD2:SetPoint("TOPLEFT", -67, -227 - 31.5 - x)
+				OmniCD2:SetPoint("TOPLEFT", -67, -227 - 31.5 - y)
 			  end
 			  if UnitExists("partypet1") or UnitExists("partypet2") and UnitExists("party1") and UnitExists("party2") then
-				OmniCD2:SetPoint("TOPLEFT", -67, -227 - 37.5 - 31.5 - x)
+				OmniCD2:SetPoint("TOPLEFT", -67, -227 - 37.5 - 31.5 - y)
 			  end
 				if UnitExists("partypet1") and UnitExists("partypet2") and UnitExists("party1") and UnitExists("party2") then
-				OmniCD2:SetPoint("TOPLEFT", -67, -227 - 37.5 - 37.5 - 31.5 - x)
+				OmniCD2:SetPoint("TOPLEFT", -67, -227 - 37.5 - 37.5 - 31.5 - y)
 			  end
 				OmniCD2.yourUnitKey = "party2"
 				AnchorFrames[2] = OmniCD2
