@@ -41,7 +41,9 @@ local overlay = SpellActivationOverlay_GetOverlay(self, spellID, position);
 	end
 	overlay:SetScale(.35);
 end)
-
+--------------------------------------------------------------------------------------------------------------------------------
+--Bottom Bar
+--------------------------------------------------------------------------------------------------------------------------------
 local BottomBar = CreateFrame("Frame", nil, UIParent)
 BottomBar:SetSize(2500, 20)
 BottomBar:SetPoint("CENTER", 0, -590)
@@ -50,60 +52,45 @@ BottomBar.texture:SetAllPoints(true)
 BottomBar.texture:SetColorTexture(0.0, 0.0, 0.0, 1)
 BottomBar:SetFrameStrata("BACKGROUND")
 
+--------------------------------------------------------------------------------------------------------------------------------
+--Hide Arena Frames
+--------------------------------------------------------------------------------------------------------------------------------
+
+--/run ArenaEnemyFrame1:Hide()
+--/run ArenaEnemyFrame2:Hide()
+--/run ArenaEnemyFrame3:Hide()
+
+--------------------------------------------------------------------------------------------------------------------------------
+--Raid Frame Options
+--------------------------------------------------------------------------------------------------------------------------------
+
+--[[EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][8].minValue = 72
+EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][8].maxValue = 150
+EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][9].minValue = 36
+EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][9].maxValue = 75
+EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][8].stepValue = 1
+EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][9].stepValue = 1
+EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][8].hideValue = false
+EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][9].hideValue = false]]
+
+--------------------------------------------------------------------------------------------------------------------------------
+--Move Frame rate
+--------------------------------------------------------------------------------------------------------------------------------
+
+FramerateLabel:ClearAllPoints()
+FramerateLabel:SetPoint("RIGHT",UIParent,"CENTER", 0, -220)
+FramerateLabel.SetPoint = function() end
+
+--------------------------------------------------------------------------------------------------------------------------------
+--Lose Control Anchors
+--------------------------------------------------------------------------------------------------------------------------------
 --[[
-local Anchors = CreateFrame("Frame", "PlayerAnchor", UIParent)
-Anchors:SetSize(48, 48)
-Anchors:SetPoint("CENTER", 53.5, -22.5)
-Anchors.texture = Anchors:CreateTexture(nil, "BACKGROUND")
-Anchors.texture:SetAllPoints(true)
-Anchors.texture:SetColorTexture(1.0, 1.0, 1.0, 0)
-
-local Anchors = CreateFrame("Frame", "Party1Anchor", CompactRaidFrameContainer)
-Anchors:SetSize(64, 64)
-Anchors:SetPoint("TOPLEFT", -65, -2)
-Anchors.texture = Anchors:CreateTexture(nil, "BACKGROUND")
-Anchors.texture:SetAllPoints(true)
-Anchors.texture:SetColorTexture(1.0, 1.0, 1.0, 0)
-
-local Anchors = CreateFrame("Frame", "Party2Anchor", CompactRaidFrameContainer)
-Anchors:SetSize(64, 64)
-Anchors:SetPoint("TOPLEFT", -65., -77)
-Anchors.texture = Anchors:CreateTexture(nil, "BACKGROUND")
-Anchors.texture:SetAllPoints(true)
-Anchors.texture:SetColorTexture(1.0, 1.0, 1.0, 0)
-
-local Anchors = CreateFrame("Frame", "Party3Anchor", CompactRaidFrameContainer)
-Anchors:SetSize(64, 64)
-Anchors:SetPoint("TOPLEFT", -65, -152)
-Anchors.texture = Anchors:CreateTexture(nil, "BACKGROUND")
-Anchors.texture:SetAllPoints(true)
-Anchors.texture:SetColorTexture(1.0, 1.0, 1.0, 0)
-
-local Anchors = CreateFrame("Frame", "Party4Anchor", CompactRaidFrameContainer)
-Anchors:SetSize(64, 64)
-Anchors:SetPoint("TOPLEFT", -65, -227)
-Anchors.texture = Anchors:CreateTexture(nil, "BACKGROUND")
-Anchors.texture:SetAllPoints(true)
-Anchors.texture:SetColorTexture(1.0, 1.0, 1.0, 0)
-
-local Anchors = CreateFrame("Frame", "Party5Anchor", CompactRaidFrameContainer)
-Anchors:SetSize(64, 64)
-Anchors:SetPoint("TOPLEFT", -65, -302)
-Anchors.texture = Anchors:CreateTexture(nil, "BACKGROUND")
-Anchors.texture:SetAllPoints(true)
-Anchors.texture:SetColorTexture(1.0, 1.0, 1.0, 0)
-]]
-
--- Frames require a numeric value at the end. Using party5 for player since party5 never exists.
 local AnchorFrames = {}
-local n,w,h="CompactUnitFrameProfilesGeneralOptionsFrame" h,w=_G[n.."HeightSlider"],_G[n.."WidthSlider"]
-h,w=
-_G[n.."HeightSlider"],
-_G[n.."WidthSlider"]
-h:SetMinMaxValues(75,75)
-w:SetMinMaxValues(150,150)
-
 local hieght = {-2, -77, -152, -227, -302}
+
+hooksecurefunc("CompactRaidFrameContainer_SetFlowSortFunction", function(_,_)
+		PF:UpdateBars()
+end)
 
 for i = 1, 5 do
 	local frameName = "PartyAnchor" .. i
@@ -126,23 +113,6 @@ for i = 1, 5 do
 	AnchorFrames[i] = Anchors
 end
 
-FramerateLabel:ClearAllPoints()
-FramerateLabel:SetPoint("RIGHT",UIParent,"CENTER", 0, -220)
-FramerateLabel.SetPoint = function()
-end
-
-local PF = CreateFrame("Frame","PF",CompactRaidFrameContainer)
-hooksecurefunc("CompactRaidFrameContainer_SetFlowSortFunction", function(_,_)
-		PF:UpdateBars()
-end)
-local OmniCD1 = CreateFrame("Frame","OmniCD1",CompactRaidFrameContainer)
-hooksecurefunc("CompactRaidFrameContainer_SetFlowSortFunction", function(_,_)
-		PF:OmniCD1()
-end)
-local OmniCD2 = CreateFrame("Frame","OmniCD2",CompactRaidFrameContainer)
-hooksecurefunc("CompactRaidFrameContainer_SetFlowSortFunction", function(_,_)
-		PF:OmniCD2()
-end)
 
 function PF:UpdateBars()
   --  print (GetNumGroupMembers())
@@ -199,6 +169,21 @@ function PF:UpdateBars()
 				else
 		  	end
 end
+]]
+--------------------------------------------------------------------------------------------------------------------------------
+--OmniCD Anchors
+--------------------------------------------------------------------------------------------------------------------------------
+--[[
+
+local OmniCD1 = CreateFrame("Frame","OmniCD1",CompactRaidFrameContainer)
+hooksecurefunc("CompactRaidFrameContainer_SetFlowSortFunction", function(_,_)
+		PF:OmniCD1()
+end)
+local OmniCD2 = CreateFrame("Frame","OmniCD2",CompactRaidFrameContainer)
+hooksecurefunc("CompactRaidFrameContainer_SetFlowSortFunction", function(_,_)
+		PF:OmniCD2()
+end)
+
 local x = 1
 local y = 0
 function PF:OmniCD1()
@@ -283,4 +268,4 @@ PF:RegisterEvent("ADDON_LOADED")
 PF:RegisterEvent("GROUP_ROSTER_UPDATE")
 PF:RegisterEvent("PLAYER_ENTERING_WORLD")
 PF:RegisterEvent("UNIT_PET")
-PF:SetScript("OnEvent",function(self,event,...) if self[event] then self[event](self,...) end end)
+PF:SetScript("OnEvent",function(self,event,...) if self[event] then self[event](self,...) end end)]]
