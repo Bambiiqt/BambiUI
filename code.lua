@@ -64,14 +64,14 @@ BottomBar:SetFrameStrata("BACKGROUND")
 --Raid Frame Options
 --------------------------------------------------------------------------------------------------------------------------------
 
---[[EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][8].minValue = 72
+EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][8].minValue = 72
 EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][8].maxValue = 150
 EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][9].minValue = 36
 EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][9].maxValue = 75
 EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][8].stepValue = 1
 EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][9].stepValue = 1
 EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][8].hideValue = false
-EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][9].hideValue = false]]
+EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][9].hideValue = false
 
 --------------------------------------------------------------------------------------------------------------------------------
 --Move Frame rate
