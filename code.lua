@@ -13,10 +13,19 @@ local overlay = SpellActivationOverlay_GetOverlay(self, spellID, position);
 			overlay:SetPoint("CENTER", self, "CENTER", 0, 0);
 		elseif ( position == "LEFT" ) then
 			width, height = shortSide, longSide;
-			overlay:SetPoint("RIGHT", self, "LEFT", 177.5, -42.5);
+			if spellID == 114255 then --Widen Surge f Light Procs
+				overlay:SetPoint("RIGHT", self, "LEFT", 127, -36);
+			else
+				overlay:SetPoint("RIGHT", self, "LEFT", 177.5, -42.5);
+			end
 		elseif ( position == "RIGHT" ) then
 			width, height = shortSide, longSide;
-			overlay:SetPoint("LEFT", self, "RIGHT", -177.5, -42.5);
+			width, height = shortSide, longSide;
+			if spellID == 114255 then --Widen Surge f Light Procs
+				overlay:SetPoint("LEFT", self, "RIGHT", -127, -36);
+			else
+				overlay:SetPoint("LEFT", self, "RIGHT", -177.5, -42.5);
+			end
 		elseif ( position == "TOP" ) then
 			width, height = longSide, shortSide;
 			overlay:SetPoint("BOTTOM", self, "TOP");
@@ -39,7 +48,11 @@ local overlay = SpellActivationOverlay_GetOverlay(self, spellID, position);
 		--GMError("Unknown SpellActivationOverlay position: "..tostring(position));
 		return;
 	end
-	overlay:SetScale(.35);
+	if spellID == 114255 then
+		overlay:SetScale(.4);
+	else
+		overlay:SetScale(.35);
+	end
 end)
 --------------------------------------------------------------------------------------------------------------------------------
 --Bottom Bar
@@ -64,14 +77,14 @@ BottomBar:SetFrameStrata("BACKGROUND")
 --Raid Frame Options
 --------------------------------------------------------------------------------------------------------------------------------
 
-EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][8].minValue = 72
-EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][8].maxValue = 150
+--[[EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][8].minValue = 72
+EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][8].maxValue = 150.5
 EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][9].minValue = 36
 EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][9].maxValue = 75
 EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][8].stepValue = 1
 EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][9].stepValue = 1
 EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][8].hideValue = false
-EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][9].hideValue = false
+EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][9].hideValue = false]]
 
 --------------------------------------------------------------------------------------------------------------------------------
 --Move Frame rate
