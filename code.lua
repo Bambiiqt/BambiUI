@@ -1,3 +1,5 @@
+local Ctimer = C_Timer.After
+
 --------------------------------------------------------------------------------------------------------------------------------
 --Scripts and Macro
 --------------------------------------------------------------------------------------------------------------------------------
@@ -335,92 +337,140 @@
 --------------------------------------------------------------------------------------------------------------------------------
 --Lose Control Anchors
 --------------------------------------------------------------------------------------------------------------------------------
---[[
-local AnchorFrames = {}
-local hieght = {-2, -77, -152, -227, -302}
 
-hooksecurefunc("CompactRaidFrameContainer_SetFlowSortFunction", function(_,_)
-		PF:UpdateBars()
-end)
+local HookedCompactRaidFrames = { }
+local AnchorFrames = {}
+local size = 65
+local alpha = 0
 
 for i = 1, 5 do
 	local frameName = "PartyAnchor" .. i
 	local Anchors = CreateFrame("Frame", frameName, UIParent)
 	if i == 5 then
-		Anchors:SetPoint("CENTER", 53.5, -22.5)
-		Anchors:SetSize(48, 48)
-	else
-		Anchors:SetParent(CompactRaidFrameContainer)
-		Anchors:SetPoint("TOPLEFT", -65, hieght[i])
-		Anchors:SetSize(64, 64)
+		size =  48 --player frame size
+		Anchors:SetPoint("CENTER", 53.5, -28)
 	end
-
-	-- this is needed for the addon to identify your frame-to-unit association
---	Anchors.yourUnitKey = i == 5 and "player" or "party" .. i
+	Anchors:SetSize(size, size)
 	Anchors.texture = Anchors:CreateTexture(nil, "BACKGROUND")
 	Anchors.texture:SetAllPoints(true)
-	--Anchors.texture:SetColorTexture(1.0, 1.0, 1.0, 0)
-
+	Anchors.texture:SetColorTexture(1.0, 1.0, 1.0, alpha)
+	Anchors.t = Anchors:CreateFontString(nil, "OVERLAY", "GameTooltipText")
+	Anchors.t:SetParent(Anchors)
+	Anchors.t:SetText(frameName)
+	Anchors.t:SetFont("Fonts\\FRIZQT__.TTF", 9 )
+	Anchors.t:SetPoint("TOP", Anchors, "BOTTOM", 0,0)
+	Anchors.t:SetTextColor(1, 1, 1, alpha)
 	AnchorFrames[i] = Anchors
 end
 
 
-function PF:UpdateBars()
-  --  print (GetNumGroupMembers())
-				if (GetNumGroupMembers() == 0) then
-				PF:ClearAllPoints()
-				PF:SetSize(64, 64)
-				PF:SetPoint("TOPLEFT", -65, -2)
-				PF.texture = PF:CreateTexture(nil, "BACKGROUND")
-				PF.texture:SetAllPoints(true)
-				PF.texture:SetColorTexture(1.0, 1.0, 1.0, 0)
-			  end
-				  if (GetNumGroupMembers() == 2) then
-				PF:ClearAllPoints()
-				PF:SetSize(64, 64)
-				PF:SetPoint("TOPLEFT", -65., -77)
-				PF.texture = PF:CreateTexture(nil, "BACKGROUND")
-				PF.texture:SetAllPoints(true)
-				PF.texture:SetColorTexture(1.0, 1.0, 1.0, 0)
-			  end
-			  if (GetNumGroupMembers() == 3) then
-				PF:ClearAllPoints()
-				PF:SetSize(64, 64)
-				PF:SetPoint("TOPLEFT", -65, -152)
-				PF.texture = PF:CreateTexture(nil, "BACKGROUND")
-				PF.texture:SetAllPoints(true)
-				PF.texture:SetColorTexture(1.0, 1.0, 1.0, 0)
-			  end
-			  if (GetNumGroupMembers() == 4) then
-				PF:ClearAllPoints()
-				PF:SetSize(64, 64)
-				PF:SetPoint("TOPLEFT", -65, -227)
-				PF.texture = PF:CreateTexture(nil, "BACKGROUND")
-				PF.texture:SetAllPoints(true)
-				PF.texture:SetColorTexture(1.0, 1.0, 1.0, 0)
-			  end
-			  if (GetNumGroupMembers() == 5) then
-				PF:ClearAllPoints()
-				PF:SetSize(64, 64)
-				PF:SetPoint("TOPLEFT", -65, -302)
-				PF.texture = PF:CreateTexture(nil, "BACKGROUND")
-				PF.texture:SetAllPoints(true)
-				PF.texture:SetColorTexture(1.0, 1.0, 1.0, 0)
-			  end
-			  if (GetNumGroupMembers() > 5) then
-				PF:ClearAllPoints()
-				PF:SetSize(64, 64)
-				PF:SetPoint("TOPLEFT", -65, -302)
-				PF.texture = PF:CreateTexture(nil, "BACKGROUND")
-				PF.texture:SetAllPoints(true)
-				PF.texture:SetColorTexture(1.0, 1.0, 1.0, 0)
-			  end
+local function UpdateRaidIconsAnchorCompactRaidFrame(compactRaidFrame, key, value)
+	if compactRaidFrame:IsForbidden() then return end
+	if CompactRaidFrameManager.container.groupMode == "discrete" then return end
+	local name = compactRaidFrame:GetName()
+	if not name or not name:match("^Compact") then return end
+	if (key == nil or key == "unit") then
+		local anchorUnitId = value or compactRaidFrame.displayedUnit or compactRaidFrame.unit
+		if (anchorUnitId ~= nil) then
+			local icon
 
-				if InCombatLockdown() then
-				else
-		  	end
+			if UnitIsUnit(anchorUnitId, "party1") then icon = 1 end
+			if UnitIsUnit(anchorUnitId, "party2") then icon = 2 end
+			if UnitIsUnit(anchorUnitId, "party3") then icon = 3 end
+			if UnitIsUnit(anchorUnitId, "party4") then icon = 4 end
+			--if UnitIsUnit(anchorUnitId, "player") then icon = 5 end
+			if icon ~= nil then
+				icon = AnchorFrames[icon]
+				icon:SetParent(compactRaidFrame:GetParent()) --if you set to compactRaidFrame will inherit the alpha
+				icon:ClearAllPoints()
+				icon:SetPoint("BOTTOMRIGHT",	compactRaidFrame, "BOTTOMLEFT", -1.5, 9)
+				icon:SetFrameStrata("MEDIUM")
+			end
+		end
+	end
 end
-]]
+
+local function HookCompactRaidFrame(compactRaidFrame)
+	if not(HookedCompactRaidFrames[compactRaidFrame]) then
+		if compactRaidFrame:IsForbidden() then
+			HookedCompactRaidFrames[compactRaidFrame] = false
+		else
+			compactRaidFrame:HookScript("OnAttributeChanged", function(self, key, value)
+				if self:IsForbidden() then return end
+				UpdateRaidIconsAnchorCompactRaidFrame(self, key, value)
+			end)
+			compactRaidFrame:HookScript("OnShow", function(self)
+				if self:IsForbidden() then return end
+				UpdateRaidIconsAnchorCompactRaidFrame(self)
+			end)
+			compactRaidFrame:HookScript("OnHide", function(self)
+				if self:IsForbidden() then return end
+				UpdateRaidIconsAnchorCompactRaidFrame(self)
+			end)
+			HookedCompactRaidFrames[compactRaidFrame] = true
+		end
+	end
+end
+
+local function UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
+	if EditModeManagerFrame:UseRaidStylePartyFrames() then
+		for i = 1, 5 do
+			local compactRaidFrame = _G["CompactPartyFrameMember"..i]
+			if (compactRaidFrame ~= nil) then
+				HookCompactRaidFrame(compactRaidFrame)
+				UpdateRaidIconsAnchorCompactRaidFrame(compactRaidFrame)
+			end
+		end
+	end
+	if CompactRaidFrameManager.container.groupMode == "flush" then
+		for i = 1, 40 do
+			local compactRaidFrame = _G["CompactRaidFrame"..i]
+			if (compactRaidFrame ~= nil) then
+				HookCompactRaidFrame(compactRaidFrame)
+				UpdateRaidIconsAnchorCompactRaidFrame(compactRaidFrame)
+			end
+		end
+	end
+	--[[for i = 1, 8 do
+		for j = 1, 5 do
+			local compactRaidFrame = _G["CompactRaidGroup"..i.."Member"..j]
+			if (compactRaidFrame ~= nil) then
+				HookCompactRaidFrame(compactRaidFrame)
+				UpdateRaidIconsAnchorCompactRaidFrame(compactRaidFrame)
+			end
+		end
+	end]]
+end
+
+hooksecurefunc(EditModeManagerFrame, "UpdateRaidContainerFlow", function(groupMode)
+	UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
+end)
+
+hooksecurefunc(CompactRaidFrameContainer, "SetGroupMode", function(groupMode)
+	UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
+end)
+
+hooksecurefunc(CompactRaidFrameContainer, "SetFlowFilterFunction", function(flowFilterFu)
+	UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
+end)
+
+hooksecurefunc(CompactRaidFrameContainer, "SetGroupFilterFunction", function(groupFilterFunc)
+	UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
+end)
+
+hooksecurefunc(CompactRaidFrameContainer, "SetFlowSortFunction", function(flowSortFunc)
+	UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
+end)
+
+hooksecurefunc(CompactRaidFrameContainer, "TryUpdate", function()
+	UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
+end)
+
+hooksecurefunc("CompactPartyFrame_RefreshMembers", function()
+	UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
+end)
+
+EditModeManagerFrame:HookScript("OnHide", function() Ctimer(.001, function() UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() end) end)
 --------------------------------------------------------------------------------------------------------------------------------
 --OmniCD Anchors
 --------------------------------------------------------------------------------------------------------------------------------
