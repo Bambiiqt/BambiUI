@@ -1,5 +1,5 @@
 local Ctimer = C_Timer.After
-
+local strmatch = string.match
 --------------------------------------------------------------------------------------------------------------------------------
 --Scripts and Macro
 --------------------------------------------------------------------------------------------------------------------------------
@@ -41,8 +41,8 @@ local Ctimer = C_Timer.After
 			SetCVar("nameplateLargeTopInset", 0.06)
 			SetCVar("nameplateMotionSpeed", 0.025)
 			SetCVar("nameplateOtherBottomInset", 0.15)
-			SetCVar("nameplateOverlapH", 0.7)
-			SetCVar("nameplateOverlapV", 0.6)
+			SetCVar("nameplateOverlapH", 0.6)
+			SetCVar("nameplateOverlapV", 0.5)
 			SetCVar("NameplatePersonalShowAlways", 1)
 
 			SetCVar("SpellQueueWindow", 170)
@@ -63,6 +63,8 @@ local Ctimer = C_Timer.After
 
 			print("UI Scripts Ran")
 		end
+		BambiUI_RunScripts = CreateFrame('CheckButton', 'BambiUI_RunScripts', BambiUI_RunScripts, 'UICheckButtonTemplate')
+		BambiUI_RunScripts:SetScript('OnClick', function() RunScripts()	end)
 
 		local function nameplateMotion()
 		 if InCombatLockdown() then
@@ -111,7 +113,7 @@ local Ctimer = C_Timer.After
 
 		local function MoveParty()
 			if InCombatLockdown() then
-				print("InCombatLockdown: MoveParty")
+				print("InCombatLockdown: MoveParty (Standard)")
 				return
 			else
 				local f,s=PartyFrame,EditModeManagerFrame
@@ -121,7 +123,7 @@ local Ctimer = C_Timer.After
 				s:SaveLayoutChanges()
 				--2, +14 offset from raid
 				--Would be nice to ENABLE pets here
-				print("PartyFrmes (Standard)")
+				print("PartyFrames Position (Standard)")
 			end
 		end
 		BambiUI_MoveParty = CreateFrame('CheckButton', 'BambiUI_MoveParty', BambiUI_MoveParty, 'UICheckButtonTemplate')
@@ -129,7 +131,7 @@ local Ctimer = C_Timer.After
 
 		local function MoveRaidUpperRight()
 			if InCombatLockdown() then
-				print("InCombatLockdown: MoveRaidUpperRight")
+				print("InCombatLockdown: MoveRaid (Standard)")
 				return
 			else
 				local f,s=CompactRaidFrameContainer,EditModeManagerFrame;
@@ -139,7 +141,7 @@ local Ctimer = C_Timer.After
 				s:OnSystemPositionChange(f);
 				s:SaveLayoutChanges();
 				CompactRaidFrameContainer:SetClampedToScreen(false)
-				print("RaidFrames (Standard)")
+				print("RaidFrames Position (Standard)")
 					--Would be nice to ENABLE pets here
 				end
 		end
@@ -148,7 +150,7 @@ local Ctimer = C_Timer.After
 
 		local function MoveRaidCenter()
 			if InCombatLockdown() then
-				print("InCombatLockdown: MoveRaidCenter")
+				print("InCombatLockdown: MoveRaid (Standard)")
 				return
 			else
 				local f,s=CompactRaidFrameContainer,EditModeManagerFrame;
@@ -157,7 +159,7 @@ local Ctimer = C_Timer.After
 				f:SetPoint("CENTER",UIParent,"CENTER",0,-355);
 				s:OnSystemPositionChange(f);
 				s:SaveLayoutChanges();
-				print("RaidFrames (Center)")
+				print("RaidFrames Position (Center)")
 					--Would be nice to DISABLE pets here
 		 end
  		end
@@ -200,26 +202,37 @@ local Ctimer = C_Timer.After
 
 		local function SortParty() --SortBottomDescending
 			local inInstance, instanceType = IsInInstance()
-	    if (IsInGroup() and GetNumGroupMembers() <= 5 and HasLoadedCUFProfiles() and not InCombatLockdown()) then --and not IsInRaid()
-			  local CRFSort_Bottom = function(t1, t2)
-					if not UnitExists(t1) then
-							return false;
-					elseif not UnitExists(t2) then
-							return true
-					elseif UnitIsUnit(t1, 'player') then
-							return false;
-					elseif UnitIsUnit(t2, 'player') then
-							return true;
-					elseif UnitGroupRolesAssigned(t1) == "TANK" then
-							return true;
-					elseif UnitGroupRolesAssigned(t2) == "TANK" then
-							return false;
-					else
-							return t1 < t2;
+    	if (IsInGroup() and GetNumGroupMembers() <= 5 and HasLoadedCUFProfiles() and not InCombatLockdown()) then --and not IsInRaid()
+				for i = 1, 5 do
+					local compactRaidFrame = _G["CompactPartyFrameMember"..i]
+					if (compactRaidFrame ~= nil) then
+						if strmatch(compactRaidFrame.unit, "party") or (strmatch(compactRaidFrame.unit, "raid") and instanceType =="arena") then
+						  local CRFSort_Bottom = function(t1, t2)
+								if not UnitExists(t1) then
+										return false;
+								elseif not UnitExists(t2) then
+										return true
+								elseif UnitIsUnit(t1, 'player') then
+										return false;
+								elseif UnitIsUnit(t2, 'player') then
+										return true;
+								elseif UnitGroupRolesAssigned(t1) == "TANK" then
+										return true;
+								elseif UnitGroupRolesAssigned(t2) == "TANK" then
+										return false;
+								else
+										return t1 < t2;
+								end
+							end
+							CompactPartyFrame_SetFlowSortFunction(CRFSort_Bottom)
+							print("SortParty Successfull")
+							break
+						elseif strmatch(compactRaidFrame.unit, "raid") then
+							print("Using Raid Frames: SortParty Unsuccessfull")
+							break
+						end
 					end
 				end
-			  CompactPartyFrame_SetFlowSortFunction(CRFSort_Bottom)
-				print("SortParty Successfull")
 			elseif IsInRaid() and InCombatLockdown() then
 				print("IsInRaid & InCombatLockdown: SortParty")
 			elseif IsInRaid() then
@@ -230,7 +243,6 @@ local Ctimer = C_Timer.After
 			if CompactPartyFrameTitle then
 			 CompactPartyFrameTitle:SetAlpha(0);
 			end
-			RunScripts()
 		end
 		BambiUI_sortParty = CreateFrame('CheckButton', 'BambiUI_sortParty', BambiUI_sortParty, 'UICheckButtonTemplate');
 		BambiUI_sortParty:SetScript('OnClick', function()	SortParty()	end);
@@ -342,14 +354,11 @@ local HookedCompactRaidFrames = { }
 local AnchorFrames = {}
 local size = 65
 local alpha = 0
+local XAnchor = -25
 
 for i = 1, 5 do
 	local frameName = "PartyAnchor" .. i
 	local Anchors = CreateFrame("Frame", frameName, UIParent)
-	if i == 5 then
-		size =  48 --player frame size
-		Anchors:SetPoint("CENTER", 53.5, -28)
-	end
 	Anchors:SetSize(size, size)
 	Anchors.texture = Anchors:CreateTexture(nil, "BACKGROUND")
 	Anchors.texture:SetAllPoints(true)
@@ -363,6 +372,20 @@ for i = 1, 5 do
 	AnchorFrames[i] = Anchors
 end
 
+local PlayerSize = 48
+local frameName = "PartyPlayer"
+local PlayerAnchor = CreateFrame("Frame", frameName, UIParent)
+PlayerAnchor:SetSize(PlayerSize, PlayerSize)
+PlayerAnchor:SetPoint("CENTER", 53.5, XAnchor)
+PlayerAnchor.texture = PlayerAnchor:CreateTexture(nil, "BACKGROUND")
+PlayerAnchor.texture:SetAllPoints(true)
+PlayerAnchor.texture:SetColorTexture(1.0, 1.0, 1.0, alpha)
+PlayerAnchor.t = PlayerAnchor:CreateFontString(nil, "OVERLAY", "GameTooltipText")
+PlayerAnchor.t:SetParent(PlayerAnchor)
+PlayerAnchor.t:SetText(frameName)
+PlayerAnchor.t:SetFont("Fonts\\FRIZQT__.TTF", 9 )
+PlayerAnchor.t:SetPoint("TOP", PlayerAnchor, "BOTTOM", 0,0)
+PlayerAnchor.t:SetTextColor(1, 1, 1, alpha)
 
 local function UpdateRaidIconsAnchorCompactRaidFrame(compactRaidFrame, key, value)
 	if compactRaidFrame:IsForbidden() then return end
@@ -378,7 +401,7 @@ local function UpdateRaidIconsAnchorCompactRaidFrame(compactRaidFrame, key, valu
 			if UnitIsUnit(anchorUnitId, "party2") then icon = 2 end
 			if UnitIsUnit(anchorUnitId, "party3") then icon = 3 end
 			if UnitIsUnit(anchorUnitId, "party4") then icon = 4 end
-			--if UnitIsUnit(anchorUnitId, "player") then icon = 5 end
+			if UnitIsUnit(anchorUnitId, "player") then icon = 5 end
 			if icon ~= nil then
 				icon = AnchorFrames[icon]
 				icon:SetParent(compactRaidFrame:GetParent()) --if you set to compactRaidFrame will inherit the alpha
@@ -423,7 +446,7 @@ local function UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
 		end
 	end
 	if CompactRaidFrameManager.container.groupMode == "flush" then
-		for i = 1, 40 do
+		for i = 1, 80 do
 			local compactRaidFrame = _G["CompactRaidFrame"..i]
 			if (compactRaidFrame ~= nil) then
 				HookCompactRaidFrame(compactRaidFrame)
@@ -471,90 +494,90 @@ hooksecurefunc("CompactPartyFrame_RefreshMembers", function()
 end)
 
 EditModeManagerFrame:HookScript("OnHide", function() Ctimer(.001, function() UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() end) end)
+
 --------------------------------------------------------------------------------------------------------------------------------
 --OmniCD Anchors
 --------------------------------------------------------------------------------------------------------------------------------
---[[
 
-local OmniCD1 = CreateFrame("Frame","OmniCD1",CompactRaidFrameContainer)
-hooksecurefunc("CompactRaidFrameContainer_SetFlowSortFunction", function(_,_)
-		PF:OmniCD1()
-end)
-local OmniCD2 = CreateFrame("Frame","OmniCD2",CompactRaidFrameContainer)
-hooksecurefunc("CompactRaidFrameContainer_SetFlowSortFunction", function(_,_)
-		PF:OmniCD2()
-end)
+
+local OmniCDAnchor = CreateFrame("Frame", nil, UIParent)
+
+local iconSize = 20 -- Needs to be same size as the OmniCD Icon
+local alphaOmni = 0
+local yPadding = - 2
+
+local OmniCD1 = CreateFrame("Frame", "OmniCD1", UIParent)
+OmniCD1:ClearAllPoints()
+OmniCD1:SetSize(iconSize, iconSize)
+OmniCD1.texture = OmniCD1:CreateTexture(nil, "BACKGROUND")
+OmniCD1.texture:SetAllPoints(true)
+OmniCD1.texture:SetColorTexture(1.0, 1.0, 1.0, alphaOmni)
+OmniCD1.yourUnitKey = "party1"
+
+local OmniCD2 = CreateFrame("Frame", "OmniCD2", UIParent)
+OmniCD2:ClearAllPoints()
+OmniCD2:SetSize(iconSize, iconSize)
+OmniCD2.texture = OmniCD2:CreateTexture(nil, "BACKGROUND")
+OmniCD2.texture:SetAllPoints(true)
+OmniCD2.texture:SetColorTexture(1.0, 1.0, 1.0, alphaOmni)
+OmniCD2:SetPoint("TOP", OmniCD1, "BOTTOM", 0, yPadding)
+OmniCD2.yourUnitKey = "party2"
 
 local x = 1
 local y = 0
-function PF:OmniCD1()
-		    OmniCD1:ClearAllPoints()
-				OmniCD1:SetSize(64, 64)
-				OmniCD1.texture = OmniCD1:CreateTexture(nil, "BACKGROUND")
-				OmniCD1.texture:SetAllPoints(true)
-				OmniCD1.texture:SetColorTexture(1.0, 1.0, 1.0, 0)
-				if (GetNumGroupMembers() == 0) then
-				OmniCD1:SetPoint("TOPLEFT", -67, -77 - x )
-			  end
-			  if UnitExists("party1") and not UnitExists("party2") then
-				OmniCD1:SetPoint("TOPLEFT", -67., -152 - x)
-			  end
-			  if UnitExists("party1") and UnitExists("party2") then
-				OmniCD1:SetPoint("TOPLEFT", -67, -227 - x)
-			  end
-			  if (UnitExists("partypet1") or UnitExists("partypet2")) and UnitExists("party1") and not UnitExists("party2") then --Party one w/ one pet
-				OmniCD1:SetPoint("TOPLEFT", -67, -152 - 37.5 - x)
-			  end
-				if (UnitExists("partypet1") and UnitExists("partypet2")) and UnitExists("party1") and not UnitExists("party2") then --Party one w/ two pets
-				OmniCD1:SetPoint("TOPLEFT", -67, -152 - 37.5 - 37.5 - x)
+function OmniCDAnchor:Anchor()
+	if EditModeManagerFrame:UseRaidStylePartyFrames() then
+		for i = 1, 8 do
+			local compactRaidFrame = _G["CompactPartyFrameMember"..i] --Probably will Need to Add a Pet Function Later
+			if (compactRaidFrame ~= nil) then
+				if UnitExists(compactRaidFrame.unit) then
+			  	OmniCD1:SetPoint("TOPLEFT", compactRaidFrame, "BOTTOMLEFT", 1, yPadding)
 				end
-			  if (UnitExists("partypet1") or UnitExists("partypet2")) and UnitExists("party1") and UnitExists("party2") then --Party one & Party two  w/ one pet
-				OmniCD1:SetPoint("TOPLEFT", -67, -227 - 37.5 - x)
-			  end
-				if (UnitExists("partypet1") and UnitExists("partypet2")) and UnitExists("party1") and UnitExists("party2") then --Party one & Party two  w/ one pet
-				OmniCD1:SetPoint("TOPLEFT", -67, -227 - 37.5 - 37.5 - x)
-			  end
-				OmniCD1.yourUnitKey = "party1"
-				AnchorFrames[1] = OmniCD1
-end
-function PF:OmniCD2()
-		    OmniCD2:ClearAllPoints()
-				OmniCD2:SetSize(64, 64)
-				OmniCD2.texture = OmniCD2:CreateTexture(nil, "BACKGROUND")
-				OmniCD2.texture:SetAllPoints(true)
-				OmniCD2.texture:SetColorTexture(1.0, 1.0, 1.0, 0)
-				if (GetNumGroupMembers() == 0) then
-				OmniCD2:SetPoint("TOPLEFT", -67, -77 - 31.5 - y)
-			  end
-			  if not UnitExists("party1") and UnitExists("party2") then
-				OmniCD2:SetPoint("TOPLEFT", -67., -152 - 31.5 - y)
-			  end
-			  if UnitExists("party1") and UnitExists("party2") then
-				OmniCD2:SetPoint("TOPLEFT", -67, -227 - 31.5 - y)
-			  end
-			  if UnitExists("partypet1") or UnitExists("partypet2") and UnitExists("party1") and UnitExists("party2") then
-				OmniCD2:SetPoint("TOPLEFT", -67, -227 - 37.5 - 31.5 - y)
-			  end
-				if UnitExists("partypet1") and UnitExists("partypet2") and UnitExists("party1") and UnitExists("party2") then
-				OmniCD2:SetPoint("TOPLEFT", -67, -227 - 37.5 - 37.5 - 31.5 - y)
-			  end
-				OmniCD2.yourUnitKey = "party2"
-				AnchorFrames[2] = OmniCD2
+			end
+		end
+	end
 end
 
-
-function PF:GROUP_ROSTER_UPDATE()
-	PF:UpdateBars()
-	PF:OmniCD1()
-	PF:OmniCD2()
+function OmniCDAnchor:GROUP_ROSTER_UPDATE()
+	OmniCDAnchor:Anchor()
 end
 
-function PF:UNIT_PET()
-	PF:OmniCD1()
-	PF:OmniCD2()
+function OmniCDAnchor:UNIT_PET()
+	OmniCDAnchor:Anchor()
 end
 
-function PF:ADDON_LOADED(arg1)
+hooksecurefunc(EditModeManagerFrame, "UpdateRaidContainerFlow", function(groupMode)
+	OmniCDAnchor:Anchor()
+end)
+
+hooksecurefunc(CompactRaidFrameContainer, "SetGroupMode", function(groupMode)
+	OmniCDAnchor:Anchor()
+end)
+
+hooksecurefunc(CompactRaidFrameContainer, "SetFlowFilterFunction", function(flowFilterFu)
+	OmniCDAnchor:Anchor()
+end)
+
+hooksecurefunc(CompactRaidFrameContainer, "SetGroupFilterFunction", function(groupFilterFunc)
+	OmniCDAnchor:Anchor()
+end)
+
+hooksecurefunc(CompactRaidFrameContainer, "SetFlowSortFunction", function(flowSortFunc)
+	OmniCDAnchor:Anchor()
+end)
+
+hooksecurefunc(CompactRaidFrameContainer, "TryUpdate", function()
+	OmniCDAnchor:Anchor()
+end)
+
+hooksecurefunc("CompactPartyFrame_RefreshMembers", function()
+	OmniCDAnchor:Anchor()
+end)
+
+
+EditModeManagerFrame:HookScript("OnHide", function() Ctimer(.001, function() OmniCDAnchor:Anchor() end) end)
+
+function OmniCDAnchor:ADDON_LOADED(arg1)
 	if arg1 == "BambiUI" or arg1 == "OmniCD" then
 		if OmniCD then
 			OmniCD.AddUnitFrameData("BambiUI", "OmniCD", "yourUnitKey", 1)
@@ -565,8 +588,8 @@ function PF:ADDON_LOADED(arg1)
 	end)
 end
 
-PF:RegisterEvent("ADDON_LOADED")
-PF:RegisterEvent("GROUP_ROSTER_UPDATE")
-PF:RegisterEvent("PLAYER_ENTERING_WORLD")
-PF:RegisterEvent("UNIT_PET")
-PF:SetScript("OnEvent",function(self,event,...) if self[event] then self[event](self,...) end end)]]
+OmniCDAnchor:RegisterEvent("ADDON_LOADED")
+OmniCDAnchor:RegisterEvent("GROUP_ROSTER_UPDATE")
+OmniCDAnchor:RegisterEvent("PLAYER_ENTERING_WORLD")
+OmniCDAnchor:RegisterEvent("UNIT_PET")
+OmniCDAnchor:SetScript("OnEvent",function(self,event,...) if self[event] then self[event](self,...) end end)
