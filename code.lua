@@ -57,7 +57,7 @@ local strmatch = string.match
 			SetCVar("lossOfControl", 1)
 			SetCVar("lossOfControlDisarm", 0)
 			SetCVar("lossOfControlFull", 0)
-			SetCVar("lossOfControlInterrupt", 1)
+			SetCVar("lossOfControlInterrupt", 2)
 			SetCVar("lossOfControlRoot", 0)
 			SetCVar("lossOfControlSilence", 0)
 
@@ -270,7 +270,7 @@ local strmatch = string.match
 --------------------------------------------------------------------------------------------------------------------------------
 --Raid Frame Options for Slider (Scale Larger)
 --------------------------------------------------------------------------------------------------------------------------------
-
+--[[
 	EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][8].minValue = 150
 	EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][8].maxValue = 150.5
 	EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][9].minValue = 75
@@ -279,7 +279,7 @@ local strmatch = string.match
 	EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][9].stepValue = .5
 	EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][8].hideValue = false
 	EditModeSettingDisplayInfoManager.systemSettingDisplayInfo[Enum.EditModeSystem.UnitFrame][9].hideValue = false
-
+]]
 --------------------------------------------------------------------------------------------------------------------------------
 --Move Frame rate
 --------------------------------------------------------------------------------------------------------------------------------
@@ -288,6 +288,32 @@ local strmatch = string.match
 	FramerateLabel:SetPoint("RIGHT",UIParent,"CENTER", 0, -220)
 	FramerateLabel.SetPoint = function() end
 
+--------------------------------------------------------------------------------------------------------------------------------
+--LoC Anchor
+--------------------------------------------------------------------------------------------------------------------------------
+
+	local LocPlayerSize = 48
+	local LoCalpha = 0
+	local LoCXAnchor = -25
+	local LocframeName = "LoCPlayer"
+	local LoCPlayerAnchor = CreateFrame("Frame", LocframeName, UIParent)
+	LoCPlayerAnchor:SetSize(LocPlayerSize, LocPlayerSize)
+	LoCPlayerAnchor:SetPoint("CENTER", 0, LoCXAnchor)
+	LoCPlayerAnchor.texture = LoCPlayerAnchor:CreateTexture(nil, "BACKGROUND")
+	LoCPlayerAnchor.texture:SetAllPoints(true)
+	LoCPlayerAnchor.texture:SetColorTexture(1.0, 1.0, 1.0, LoCalpha)
+	LoCPlayerAnchor.t = LoCPlayerAnchor:CreateFontString(nil, "OVERLAY", "GameTooltipText")
+	LoCPlayerAnchor.t:SetParent(LoCPlayerAnchor)
+	LoCPlayerAnchor.t:SetText(LocframeName)
+	LoCPlayerAnchor.t:SetFont("Fonts\\FRIZQT__.TTF", 9 )
+	LoCPlayerAnchor.t:SetPoint("TOP", LoCPlayerAnchor, "BOTTOM", 0,0)
+	LoCPlayerAnchor.t:SetTextColor(1, 1, 1, LoCalpha)
+
+	hooksecurefunc("LossOfControlFrame_SetUpDisplay", function()
+	 LossOfControlFrame:ClearAllPoints()
+	 LossOfControlFrame:SetPoint("CENTER", LoCPlayerAnchor,"CENTER", 0, 0)
+	 --LossOfControlFrame.fadeTime = 1.5
+	end)
 --------------------------------------------------------------------------------------------------------------------------------
 --Blizzard SPell Alert sizeScale
 --------------------------------------------------------------------------------------------------------------------------------
@@ -387,113 +413,71 @@ PlayerAnchor.t:SetFont("Fonts\\FRIZQT__.TTF", 9 )
 PlayerAnchor.t:SetPoint("TOP", PlayerAnchor, "BOTTOM", 0,0)
 PlayerAnchor.t:SetTextColor(1, 1, 1, alpha)
 
-local function UpdateRaidIconsAnchorCompactRaidFrame(compactRaidFrame, key, value)
-	if compactRaidFrame:IsForbidden() then return end
-	if CompactRaidFrameManager.container.groupMode == "discrete" then return end
-	local name = compactRaidFrame:GetName()
-	if not name or not name:match("^Compact") then return end
-	if (key == nil or key == "unit") then
-		local anchorUnitId = value or compactRaidFrame.displayedUnit or compactRaidFrame.unit
-		if (anchorUnitId ~= nil) then
+local function UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
+	if CompactRaidFrameManager.container.groupMode == "flush" then
+		for i = 1, 80 do
 			local icon
-
-			if UnitIsUnit(anchorUnitId, "party1") then icon = 1 end
-			if UnitIsUnit(anchorUnitId, "party2") then icon = 2 end
-			if UnitIsUnit(anchorUnitId, "party3") then icon = 3 end
-			if UnitIsUnit(anchorUnitId, "party4") then icon = 4 end
-			if UnitIsUnit(anchorUnitId, "player") then icon = 5 end
-			if icon ~= nil then
-				icon = AnchorFrames[icon]
-				icon:SetParent(compactRaidFrame:GetParent()) --if you set to compactRaidFrame will inherit the alpha
-				icon:ClearAllPoints()
-				icon:SetPoint("BOTTOMRIGHT",	compactRaidFrame, "BOTTOMLEFT", -1.5, 9)
-				icon:SetFrameStrata("MEDIUM")
+			local compactRaidFrame = _G["CompactRaidFrame"..i]
+			if compactRaidFrame and compactRaidFrame.unit then
+				if UnitIsUnit(compactRaidFrame.unit, "party1") then icon = 1 end
+				if UnitIsUnit(compactRaidFrame.unit, "party2") then icon = 2 end
+				if UnitIsUnit(compactRaidFrame.unit, "party3") then icon = 3 end
+				if UnitIsUnit(compactRaidFrame.unit, "party4") then icon = 4 end
+				if UnitIsUnit(compactRaidFrame.unit, "player") then icon = 5 end
+				if icon ~= nil then
+					icon = AnchorFrames[icon]
+					icon:SetParent(compactRaidFrame:GetParent()) --if you set to compactRaidFrame will inherit the alpha
+					icon:ClearAllPoints()
+					icon:SetPoint("BOTTOMRIGHT",	compactRaidFrame, "BOTTOMLEFT", -1.5, 9)
+					icon:SetFrameStrata("MEDIUM")
+				end
+			end
+		end
+	elseif CompactRaidFrameManager.container.groupMode == "discrete" then
+		for i = 1, 8 do
+			for j = 1, 5 do
+				local icon
+				local compactRaidFrame = _G["CompactRaidGroup"..i.."Member"..j]
+				if compactRaidFrame and compactRaidFrame.unit then
+					if UnitIsUnit(compactRaidFrame.unit, "party1") then icon = 1 end
+					if UnitIsUnit(compactRaidFrame.unit, "party2") then icon = 2 end
+					if UnitIsUnit(compactRaidFrame.unit, "party3") then icon = 3 end
+					if UnitIsUnit(compactRaidFrame.unit, "party4") then icon = 4 end
+					if UnitIsUnit(compactRaidFrame.unit, "player") then icon = 5 end
+					if icon ~= nil then
+						icon = AnchorFrames[icon]
+						icon:SetParent(compactRaidFrame:GetParent()) --if you set to compactRaidFrame will inherit the alpha
+						icon:ClearAllPoints()
+						icon:SetPoint("BOTTOMRIGHT",	compactRaidFrame, "BOTTOMLEFT", -1.5, 9)
+						icon:SetFrameStrata("MEDIUM")
+					end
+				end
 			end
 		end
 	end
-end
-
-local function HookCompactRaidFrame(compactRaidFrame)
-	if not(HookedCompactRaidFrames[compactRaidFrame]) then
-		if compactRaidFrame:IsForbidden() then
-			HookedCompactRaidFrames[compactRaidFrame] = false
-		else
-			compactRaidFrame:HookScript("OnAttributeChanged", function(self, key, value)
-				if self:IsForbidden() then return end
-				UpdateRaidIconsAnchorCompactRaidFrame(self, key, value)
-			end)
-			compactRaidFrame:HookScript("OnShow", function(self)
-				if self:IsForbidden() then return end
-				UpdateRaidIconsAnchorCompactRaidFrame(self)
-			end)
-			compactRaidFrame:HookScript("OnHide", function(self)
-				if self:IsForbidden() then return end
-				UpdateRaidIconsAnchorCompactRaidFrame(self)
-			end)
-			HookedCompactRaidFrames[compactRaidFrame] = true
-		end
-	end
-end
-
-local function UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
 	if EditModeManagerFrame:UseRaidStylePartyFrames() then
 		for i = 1, 5 do
 			local compactRaidFrame = _G["CompactPartyFrameMember"..i]
+			local icon
 			if (compactRaidFrame ~= nil) then
-				HookCompactRaidFrame(compactRaidFrame)
-				UpdateRaidIconsAnchorCompactRaidFrame(compactRaidFrame)
+				if compactRaidFrame and compactRaidFrame.unit then
+					if UnitIsUnit(compactRaidFrame.unit, "party1") then icon = 1 end
+					if UnitIsUnit(compactRaidFrame.unit, "party2") then icon = 2 end
+					if UnitIsUnit(compactRaidFrame.unit, "party3") then icon = 3 end
+					if UnitIsUnit(compactRaidFrame.unit, "party4") then icon = 4 end
+					if UnitIsUnit(compactRaidFrame.unit, "player") then icon = 5 end
+					if icon ~= nil then
+						icon = AnchorFrames[icon]
+						icon:SetParent(compactRaidFrame:GetParent()) --if you set to compactRaidFrame will inherit the alpha
+						icon:ClearAllPoints()
+						icon:SetPoint("BOTTOMRIGHT",	compactRaidFrame, "BOTTOMLEFT", -1.5, 9)
+						icon:SetFrameStrata("MEDIUM")
+					end
+				end
 			end
 		end
 	end
-	if CompactRaidFrameManager.container.groupMode == "flush" then
-		for i = 1, 80 do
-			local compactRaidFrame = _G["CompactRaidFrame"..i]
-			if (compactRaidFrame ~= nil) then
-				HookCompactRaidFrame(compactRaidFrame)
-				UpdateRaidIconsAnchorCompactRaidFrame(compactRaidFrame)
-			end
-		end
-	end
-	--[[for i = 1, 8 do
-		for j = 1, 5 do
-			local compactRaidFrame = _G["CompactRaidGroup"..i.."Member"..j]
-			if (compactRaidFrame ~= nil) then
-				HookCompactRaidFrame(compactRaidFrame)
-				UpdateRaidIconsAnchorCompactRaidFrame(compactRaidFrame)
-			end
-		end
-	end]]
 end
-
-hooksecurefunc(EditModeManagerFrame, "UpdateRaidContainerFlow", function(groupMode)
-	UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
-end)
-
-hooksecurefunc(CompactRaidFrameContainer, "SetGroupMode", function(groupMode)
-	UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
-end)
-
-hooksecurefunc(CompactRaidFrameContainer, "SetFlowFilterFunction", function(flowFilterFu)
-	UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
-end)
-
-hooksecurefunc(CompactRaidFrameContainer, "SetGroupFilterFunction", function(groupFilterFunc)
-	UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
-end)
-
-hooksecurefunc(CompactRaidFrameContainer, "SetFlowSortFunction", function(flowSortFunc)
-	UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
-end)
-
-hooksecurefunc(CompactRaidFrameContainer, "TryUpdate", function()
-	UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
-end)
-
-hooksecurefunc("CompactPartyFrame_RefreshMembers", function()
-	UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
-end)
-
-EditModeManagerFrame:HookScript("OnHide", function() Ctimer(.001, function() UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() end) end)
 
 --------------------------------------------------------------------------------------------------------------------------------
 --OmniCD Anchors
@@ -540,6 +524,7 @@ end
 
 function OmniCDAnchor:GROUP_ROSTER_UPDATE()
 	OmniCDAnchor:Anchor()
+	UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
 end
 
 function OmniCDAnchor:UNIT_PET()
@@ -548,34 +533,40 @@ end
 
 hooksecurefunc(EditModeManagerFrame, "UpdateRaidContainerFlow", function(groupMode)
 	OmniCDAnchor:Anchor()
+	UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
 end)
 
 hooksecurefunc(CompactRaidFrameContainer, "SetGroupMode", function(groupMode)
 	OmniCDAnchor:Anchor()
+	UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
 end)
 
 hooksecurefunc(CompactRaidFrameContainer, "SetFlowFilterFunction", function(flowFilterFu)
 	OmniCDAnchor:Anchor()
+	UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
 end)
 
 hooksecurefunc(CompactRaidFrameContainer, "SetGroupFilterFunction", function(groupFilterFunc)
 	OmniCDAnchor:Anchor()
+	UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
 end)
 
 hooksecurefunc(CompactRaidFrameContainer, "SetFlowSortFunction", function(flowSortFunc)
 	OmniCDAnchor:Anchor()
+	UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
 end)
 
-hooksecurefunc(CompactRaidFrameContainer, "TryUpdate", function()
+--[[
+hooksecurefunc(CompactRaidFrameContainer, "TryUpdate", function() --HIGH CPU
 	OmniCDAnchor:Anchor()
 end)
 
-hooksecurefunc("CompactPartyFrame_RefreshMembers", function()
+hooksecurefunc("CompactPartyFrame_RefreshMembers", function() --HIGH CPU
 	OmniCDAnchor:Anchor()
-end)
+end)]]
 
 
-EditModeManagerFrame:HookScript("OnHide", function() Ctimer(.001, function() OmniCDAnchor:Anchor() end) end)
+EditModeManagerFrame:HookScript("OnHide", function() Ctimer(.001, function() OmniCDAnchor:Anchor() UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() end) end)
 
 function OmniCDAnchor:ADDON_LOADED(arg1)
 	if arg1 == "BambiUI" or arg1 == "OmniCD" then
