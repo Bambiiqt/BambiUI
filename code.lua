@@ -244,14 +244,19 @@ local strmatch = string.match
 --------------------------------------------------------------------------------------------------------------------------------
 --Move Frame rate
 --------------------------------------------------------------------------------------------------------------------------------
+	local function MoveFrameRate()
+		FramerateLabel:ClearAllPoints()
+		FramerateLabel:SetPoint("RIGHT",UIParent,"CENTER", 0, -220)
+		FramerateText:ClearAllPoints()
+		FramerateText:SetPoint("LEFT",FramerateLabel,"RIGHT")
+	end
 
-	FramerateLabel:ClearAllPoints()
-	FramerateLabel:SetPoint("RIGHT",UIParent,"CENTER", 0, -220)
-	FramerateText:ClearAllPoints()
-	FramerateText:SetPoint("LEFT",FramerateLabel,"RIGHT")
-	FramerateLabel.SetPoint = function() end
-	FramerateText.SetPoint = function() end
-
+	FramerateText:HookScript("OnShow", function(self)
+		FramerateLabel:ClearAllPoints()
+		FramerateLabel:SetPoint("RIGHT",UIParent,"CENTER", 0, -220)
+		FramerateText:ClearAllPoints()
+		FramerateText:SetPoint("LEFT",FramerateLabel,"RIGHT")
+	end)
 --------------------------------------------------------------------------------------------------------------------------------
 --Move Frame rate
 --------------------------------------------------------------------------------------------------------------------------------
@@ -547,6 +552,7 @@ local strmatch = string.match
 
 	function BambiUI:PLAYER_ENTERING_WORLD()
 		 ReSizeRaidFrames()
+		 MoveFrameRate()
 	end
 
 	BambiUI:RegisterEvent("ADDON_LOADED")
