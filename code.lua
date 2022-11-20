@@ -105,11 +105,12 @@ local strmatch = string.match
 				return
 			else
 				local f,s=PartyFrame,EditModeManagerFrame
-				f:SetScale(sizeStandard);
+				f:SetScale(1);  --Helps if Anything Happens and When ReSizing Down
 				f:ClearAllPoints()
 				f:SetPoint("TOPLEFT", UIParent,"TOPRIGHT",-719,-485)
 				s:OnSystemPositionChange(f)
 				s:SaveLayoutChanges()
+				f:SetScale(sizeStandard);
 				--2, +14 offset from raid
 				--Would be nice to ENABLE pets here
 				print("PartyFrames Position (Standard)")
@@ -124,12 +125,13 @@ local strmatch = string.match
 			return
 		else
 			local f,s=CompactRaidFrameContainer,EditModeManagerFrame;
-			f:SetScale(sizeStandard);
+			f:SetScale(1); --Helps if Anything Happens and When ReSizing Down
 			f:ClearAllPoints();
 			f:SetPoint("TOPLEFT",UIParent,"TOPRIGHT",-717,-499);
 			s:OnSystemPositionChange(f);
 			s:SaveLayoutChanges();
 			CompactRaidFrameContainer:SetClampedToScreen(false)
+			f:SetScale(sizeStandard);
 			print("RaidFrames Position (Standard)")
 				--Would be nice to ENABLE pets here
 			end
