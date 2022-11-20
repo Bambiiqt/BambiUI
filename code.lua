@@ -105,11 +105,11 @@ local strmatch = string.match
 				return
 			else
 				local f,s=PartyFrame,EditModeManagerFrame
-				f:SetScale(1);f:ClearAllPoints()
+				f:SetScale(sizeStandard);
+				f:ClearAllPoints()
 				f:SetPoint("TOPLEFT", UIParent,"TOPRIGHT",-719,-485)
 				s:OnSystemPositionChange(f)
 				s:SaveLayoutChanges()
-				PartyFrame:SetScale(sizeStandard)
 				--2, +14 offset from raid
 				--Would be nice to ENABLE pets here
 				print("PartyFrames Position (Standard)")
@@ -124,13 +124,12 @@ local strmatch = string.match
 			return
 		else
 			local f,s=CompactRaidFrameContainer,EditModeManagerFrame;
-			f:SetScale(1);
+			f:SetScale(sizeStandard);
 			f:ClearAllPoints();
 			f:SetPoint("TOPLEFT",UIParent,"TOPRIGHT",-717,-499);
 			s:OnSystemPositionChange(f);
 			s:SaveLayoutChanges();
 			CompactRaidFrameContainer:SetClampedToScreen(false)
-			CompactRaidFrameContainer:SetScale(sizeStandard)
 			print("RaidFrames Position (Standard)")
 				--Would be nice to ENABLE pets here
 			end
@@ -144,12 +143,11 @@ local strmatch = string.match
 				return
 			else
 				local f,s=CompactRaidFrameContainer,EditModeManagerFrame;
-				f:SetScale(.65);
+				f:SetScale(sizeRaid);
 				f:ClearAllPoints();
 				f:SetPoint("CENTER",UIParent,"CENTER",0,-355);
 				s:OnSystemPositionChange(f);
 				s:SaveLayoutChanges();
-				CompactRaidFrameContainer:SetScale(sizeRaid)
 				print("RaidFrames Position (Center)")
 					--Would be nice to DISABLE pets here
 		 end
