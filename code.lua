@@ -175,7 +175,7 @@ local strmatch = string.match
 		--------------------------------------------------------------------------------------------------------------------------------
 
 		local function SortParty() --SortBottomDescending
-			local inInstance, instanceType = IsInInstance()
+		--[[	local inInstance, instanceType = IsInInstance()
     	if (IsInGroup() and GetNumGroupMembers() <= 5 and HasLoadedCUFProfiles() and not InCombatLockdown()) then --and not IsInRaid()
 				for i = 1, 5 do
 					local compactRaidFrame = _G["CompactPartyFrameMember"..i]
@@ -216,7 +216,7 @@ local strmatch = string.match
 			end
 			if CompactPartyFrameTitle then
 			 CompactPartyFrameTitle:SetAlpha(0);
-			end
+		 end]]
 		end
 		BambiUI_sortParty = CreateFrame('CheckButton', 'BambiUI_sortParty', BambiUI_sortParty, 'UICheckButtonTemplate');
 		BambiUI_sortParty:SetScript('OnClick', function()	SortParty()	end);
@@ -507,37 +507,37 @@ local strmatch = string.match
 	EditModeManagerFrame:HookScript("OnHide", function() Ctimer(.001, function() OmniCDAnchor() UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() end) end)
 
 	hooksecurefunc(EditModeManagerFrame, "UpdateRaidContainerFlow", function(groupMode)
-		print("EditModeManagerFrame: UpdateRaidContainerFlow")
+		--print("EditModeManagerFrame: UpdateRaidContainerFlow")
 		OmniCDAnchor()
 		UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
 	end)
 
 	hooksecurefunc(CompactRaidFrameContainer, "SetGroupMode", function(groupMode)
-		print("SetGroupMode")
+		--print("SetGroupMode")
 		OmniCDAnchor()
 		UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
 	end)
 
 	hooksecurefunc(CompactRaidFrameContainer, "SetFlowFilterFunction", function(flowFilterFunc)
-		print("SetFlowFilterFunction")
+		--print("SetFlowFilterFunction")
 	  OmniCDAnchor()
 		UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
 	end)
 
 	hooksecurefunc(CompactRaidFrameContainer, "SetGroupFilterFunction", function(groupFilterFunc)
-		print("SetGroupFilterFunction")
+		--print("SetGroupFilterFunction")
 	  OmniCDAnchor()
 		UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
 	end)
 
 	hooksecurefunc(CompactRaidFrameContainer, "SetFlowSortFunction", function(flowSortFunc)
-		print("SetFlowSortFunction")
+		--print("SetFlowSortFunction")
 		OmniCDAnchor()
 		UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
 	end)
 
 	hooksecurefunc("CompactPartyFrame_SetFlowSortFunction", function()
-		print("CompactPartyFrame_SetFlowSortFunction")
+		--print("CompactPartyFrame_SetFlowSortFunction")
 		OmniCDAnchor()
 		UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
 	end)
