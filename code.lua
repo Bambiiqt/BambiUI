@@ -175,7 +175,7 @@ local strmatch = string.match
 		--------------------------------------------------------------------------------------------------------------------------------
 
 		local function SortParty() --SortBottomDescending
-		--[[	local inInstance, instanceType = IsInInstance()
+		--[[local inInstance, instanceType = IsInInstance()
     	if (IsInGroup() and GetNumGroupMembers() <= 5 and HasLoadedCUFProfiles() and not InCombatLockdown()) then --and not IsInRaid()
 				for i = 1, 5 do
 					local compactRaidFrame = _G["CompactPartyFrameMember"..i]
