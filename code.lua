@@ -1,3 +1,4 @@
+
 local Ctimer = C_Timer.After
 local strmatch = string.match
 --------------------------------------------------------------------------------------------------------------------------------
@@ -29,7 +30,7 @@ local strmatch = string.match
 			SetCVar("nameplateLargeTopInset", 0.06)
 			SetCVar("nameplateMotionSpeed", 0.025)
 			SetCVar("nameplateOtherBottomInset", 0.15)
-			SetCVar("nameplateOverlapH", 0.6)
+			SetCVar("nameplateOverlapH", 0.7)
 			SetCVar("nameplateOverlapV", 0.5)
 			SetCVar("NameplatePersonalShowAlways", 1)
 
@@ -99,40 +100,28 @@ local strmatch = string.match
 		BambiUI_ShowEnemyMinus = CreateFrame('CheckButton', 'BambiUI_ShowEnemyMinus', BambiUI_ShowEnemyMinus, 'UICheckButtonTemplate')
 		BambiUI_ShowEnemyMinus:SetScript('OnClick', function() ShowEnemyMinus()	end)
 
-		local function MoveParty()
-			if InCombatLockdown() then
-				print("InCombatLockdown: MoveParty (Standard)")
-				return
-			else
-				local f,s=PartyFrame,EditModeManagerFrame
-				f:SetScale(1);  --Helps if Anything Happens and When ReSizing Down
-				f:ClearAllPoints()
-				f:SetPoint("TOPLEFT", UIParent,"TOPRIGHT",-719,-485)
-				s:OnSystemPositionChange(f)
-				s:SaveLayoutChanges()
-				f:SetScale(sizeStandard);
-				--2, +14 offset from raid
-				--Would be nice to ENABLE pets here
-				print("PartyFrames Position (Standard)")
-			end
-		end
-		BambiUI_MoveParty = CreateFrame('CheckButton', 'BambiUI_MoveParty', BambiUI_MoveParty, 'UICheckButtonTemplate')
-		BambiUI_MoveParty:SetScript('OnClick', function() MoveParty()	end)
-
 		local function MoveRaidUpperRight()
 		if InCombatLockdown() then
 			print("InCombatLockdown: MoveRaid (Standard)")
 			return
 		else
-			local f,s=CompactRaidFrameContainer,EditModeManagerFrame;
+			local f,s,p=CompactRaidFrameContainer,EditModeManagerFrame,PartyFrame
 			f:SetScale(1); --Helps if Anything Happens and When ReSizing Down
 			f:ClearAllPoints();
-			f:SetPoint("TOPLEFT",UIParent,"TOPRIGHT",-717,-499);
+			f:SetPoint("TOPLEFT",UIParent,"TOPRIGHT",-716,-499);
+			p:SetScale(1);
+			p:ClearAllPoints();
+			p:SetPoint("TOPLEFT", UIParent,"TOPRIGHT",-718,-485) --2, +14 offset from raid
 			s:OnSystemPositionChange(f);
+			s:OnSystemPositionChange(p);
 			s:SaveLayoutChanges();
-			CompactRaidFrameContainer:SetClampedToScreen(false)
+			f:SetClampedToScreen(false)
+			p:SetClampedToScreen(false)
 			f:SetScale(sizeStandard);
+			p:SetScale(sizeStandard);
 			print("RaidFrames Position (Standard)")
+				--Would be nice to ENABLE pets here
+				--2, +14 offset from raid
 				--Would be nice to ENABLE pets here
 			end
 		end
@@ -144,11 +133,15 @@ local strmatch = string.match
 				print("InCombatLockdown: MoveRaid (Standard)")
 				return
 			else
-				local f,s=CompactRaidFrameContainer,EditModeManagerFrame;
+				local f,s,p=CompactRaidFrameContainer,EditModeManagerFrame,PartyFrame
 				f:SetScale(sizeRaid);
 				f:ClearAllPoints();
-				f:SetPoint("CENTER",UIParent,"CENTER",0,-355);
+				f:SetPoint("CENTER",UIParent,"CENTER",0,-1000);
+				p:SetScale(sizeRaid);
+				p:ClearAllPoints();
+				p:SetPoint("CENTER",UIParent,"CENTER",0,-994.5);
 				s:OnSystemPositionChange(f);
+				s:OnSystemPositionChange(p);
 				s:SaveLayoutChanges();
 				print("RaidFrames Position (Center)")
 					--Would be nice to DISABLE pets here
@@ -309,7 +302,6 @@ local strmatch = string.match
 		local shortSide = 128 * sizeScale;
 		local width, height;
 		local overlay = SpellActivationOverlay_GetOverlay(self, spellID, position);
-
 		if ( position == "CENTER" ) then
 				width, height = longSide, longSide;
 				overlay:SetPoint("CENTER", self, "CENTER", 0, 0);
@@ -323,7 +315,7 @@ local strmatch = string.match
 			elseif ( position == "RIGHT" ) then
 				width, height = shortSide, longSide;
 				width, height = shortSide, longSide;
-				if spellID == 114255 then --Widen Surge f Light Procs
+				if spellID == 128654 then --Widen Surge f Light Procs
 					overlay:SetPoint("LEFT", self, "RIGHT", -127, -36);
 				else
 					overlay:SetPoint("LEFT", self, "RIGHT", -177.5, -42.5);
@@ -350,7 +342,7 @@ local strmatch = string.match
 			--GMError("Unknown SpellActivationOverlay position: "..tostring(position));
 			return;
 		end
-		if spellID == 114255 then --Sacle Surge of Light
+		if spellID == 114255 or spellID == 128654 then --Sacle Surge of Light
 			overlay:SetScale(.4);
 		else
 			overlay:SetScale(.35);
