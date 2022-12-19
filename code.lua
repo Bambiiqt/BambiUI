@@ -163,56 +163,7 @@ local strmatch = string.match
 		BambiUI_ScaleFrames = CreateFrame('CheckButton', 'BambiUI_ScaleFrames', BambiUI_ScaleFrames, 'UICheckButtonTemplate')
 		BambiUI_ScaleFrames:SetScript('OnClick', function() ScaleFramesRaid()	end)
 
-		--------------------------------------------------------------------------------------------------------------------------------
-		--Sort Party Group
-		--------------------------------------------------------------------------------------------------------------------------------
 
-		local function SortParty() --SortBottomDescending
-		--[[local inInstance, instanceType = IsInInstance()
-    	if (IsInGroup() and GetNumGroupMembers() <= 5 and HasLoadedCUFProfiles() and not InCombatLockdown()) then --and not IsInRaid()
-				for i = 1, 5 do
-					local compactRaidFrame = _G["CompactPartyFrameMember"..i]
-					if (compactRaidFrame ~= nil) then
-						if strmatch(compactRaidFrame.unit, "party") or (strmatch(compactRaidFrame.unit, "raid") and instanceType =="arena") then
-						  local CRFSort_Bottom = function(t1, t2)
-								if not UnitExists(t1) then
-										return false;
-								elseif not UnitExists(t2) then
-										return true
-								elseif UnitIsUnit(t1, 'player') then
-										return false;
-								elseif UnitIsUnit(t2, 'player') then
-										return true;
-								elseif UnitGroupRolesAssigned(t1) == "TANK" then
-										return true;
-								elseif UnitGroupRolesAssigned(t2) == "TANK" then
-										return false;
-								else
-										return t1 < t2;
-								end
-							end
-							CompactPartyFrame_SetFlowSortFunction(CRFSort_Bottom)
-							print("SortParty Successfull")
-							break
-						elseif strmatch(compactRaidFrame.unit, "raid") then
-							print("Using Raid Frames: SortParty Unsuccessfull")
-							break
-						end
-					end
-				end
-			elseif IsInRaid() and InCombatLockdown() then
-				print("IsInRaid & InCombatLockdown: SortParty")
-			elseif IsInRaid() then
-				print("IsInRaid: SortParty")
-			elseif InCombatLockdown() then
-			 	print("InCombatLockdown: SortParty")
-			end
-			if CompactPartyFrameTitle then
-			 CompactPartyFrameTitle:SetAlpha(0);
-		 end]]
-		end
-		BambiUI_sortParty = CreateFrame('CheckButton', 'BambiUI_sortParty', BambiUI_sortParty, 'UICheckButtonTemplate');
-		BambiUI_sortParty:SetScript('OnClick', function()	SortParty()	end);
 
 --------------------------------------------------------------------------------------------------------------------------------
 --Bottom Black UI Bar
