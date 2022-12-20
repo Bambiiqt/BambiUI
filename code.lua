@@ -181,9 +181,26 @@ local strmatch = string.match
 --Hide Arena Frames
 --------------------------------------------------------------------------------------------------------------------------------
 
-	--/run ArenaEnemyFrame1:Hide()
-	--/run ArenaEnemyFrame2:Hide()
-	--/run ArenaEnemyFrame3:Hide()
+local function ArenaHide()
+	local inInstance, instanceType = IsInInstance()
+	if instanceType == "arena"  then
+		ArenaEnemyMatchFrame1:SetAlpha(0)
+		ArenaEnemyMatchFrame2:SetAlpha(0)
+		ArenaEnemyMatchFrame3:SetAlpha(0)
+		ArenaEnemyMatchFrame1PetFrame:SetAlpha(0)
+		ArenaEnemyMatchFrame2PetFrame:SetAlpha(0)
+		ArenaEnemyMatchFrame3PetFrame:SetAlpha(0)
+	end
+end
+
+ArenaEnemyMatchFrame1:SetAlpha(0)
+ArenaEnemyMatchFrame2:SetAlpha(0)
+ArenaEnemyMatchFrame3:SetAlpha(0)
+ArenaEnemyMatchFrame1PetFrame:SetAlpha(0)
+ArenaEnemyMatchFrame2PetFrame:SetAlpha(0)
+ArenaEnemyMatchFrame3PetFrame:SetAlpha(0)
+
+
 
 --------------------------------------------------------------------------------------------------------------------------------
 --Move Frame rate
@@ -202,7 +219,7 @@ local strmatch = string.match
 		FramerateText:SetPoint("LEFT",FramerateLabel,"RIGHT")
 	end)
 --------------------------------------------------------------------------------------------------------------------------------
---Move Frame rate
+--ReSizeRaidFrames
 --------------------------------------------------------------------------------------------------------------------------------
 
 	local function ReSizeRaidFrames()
@@ -244,7 +261,7 @@ local strmatch = string.match
 	end)
 
 --------------------------------------------------------------------------------------------------------------------------------
---Blizzard SPell Alert sizeScale
+--Blizzard Spell Alert sizeScale
 --------------------------------------------------------------------------------------------------------------------------------
 
 	hooksecurefunc("SpellActivationOverlay_ShowOverlay", function(self, spellID, texturePath, position, scale, r, g, b, vFlip, hFlip)
@@ -504,8 +521,13 @@ local strmatch = string.match
 		 MoveFrameRate()
 	end
 
+	function BambiUI:ARENA_OPPONENT_UPDATE()
+		ArenaHide()
+	end
+
 	BambiUI:RegisterEvent("ADDON_LOADED")
 	BambiUI:RegisterEvent("GROUP_ROSTER_UPDATE")
 	BambiUI:RegisterEvent("PLAYER_ENTERING_WORLD")
 	BambiUI:RegisterEvent("UNIT_PET")
+	BambiUI:RegisterEvent("ARENA_OPPONENT_UPDATE")
 	BambiUI:SetScript("OnEvent",function(self,event,...) if self[event] then self[event](self,...) end end)
