@@ -4,7 +4,7 @@ local strmatch = string.match
 --------------------------------------------------------------------------------------------------------------------------------
 --Scripts and Macro
 --------------------------------------------------------------------------------------------------------------------------------
-		local sizeStandard = 1.04
+		local sizeStandard = 1.05
 		local sizeRaid =.65
 
 		local function RunScripts()
@@ -414,7 +414,7 @@ ArenaEnemyMatchFrame3PetFrame:SetAlpha(0)
 
 	local iconSize = 20 -- Needs to be same size as the OmniCD Icon
 	local alphaOmni = 0
-	local yPadding = -2
+	local yPadding = -10
 
 	local OmniCD1 = CreateFrame("Frame", "OmniCD1", UIParent)
 	OmniCD1:ClearAllPoints()
