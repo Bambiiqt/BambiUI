@@ -26,11 +26,11 @@ local strmatch = string.match
 			SetCVar("nameplateMinScale",1)
 			SetCVar("nameplateShowAll",1);
 			SetCVar("nameplateMaxDistance", 60)
-			SetCVar("nameplateOtherTopInset", 0.06)
-			SetCVar("nameplateLargeTopInset", 0.06)
+			SetCVar("nameplateOtherTopInset", 0.05)
+			SetCVar("nameplateLargeTopInset", 0.05)
 			SetCVar("nameplateMotionSpeed", 0.025)
 			SetCVar("nameplateOtherBottomInset", 0.15)
-			SetCVar("nameplateOverlapH", 0.7)
+			SetCVar("nameplateOverlapH", 0.4)
 			SetCVar("nameplateOverlapV", 0.5)
 			SetCVar("NameplatePersonalShowAlways", 1)
 
@@ -136,10 +136,10 @@ local strmatch = string.match
 				local f,s,p=CompactRaidFrameContainer,EditModeManagerFrame,PartyFrame
 				f:SetScale(sizeRaid);
 				f:ClearAllPoints();
-				f:SetPoint("CENTER",UIParent,"CENTER",0,-1000);
+				f:SetPoint("CENTER",UIParent,"CENTER",0,-360);
 				p:SetScale(sizeRaid);
 				p:ClearAllPoints();
-				p:SetPoint("CENTER",UIParent,"CENTER",0,-994.5);
+				p:SetPoint("CENTER",UIParent,"CENTER",0,-354.5);
 				s:OnSystemPositionChange(f);
 				s:OnSystemPositionChange(p);
 				s:SaveLayoutChanges();
@@ -199,7 +199,6 @@ ArenaEnemyMatchFrame3:SetAlpha(0)
 ArenaEnemyMatchFrame1PetFrame:SetAlpha(0)
 ArenaEnemyMatchFrame2PetFrame:SetAlpha(0)
 ArenaEnemyMatchFrame3PetFrame:SetAlpha(0)
-
 
 
 --------------------------------------------------------------------------------------------------------------------------------
@@ -442,12 +441,25 @@ ArenaEnemyMatchFrame3PetFrame:SetAlpha(0)
 				local compactRaidFrame = _G["CompactPartyFrameMember"..i] --Probably will Need to Add a Pet Function Later
 				if (compactRaidFrame ~= nil) then
 					if UnitExists(compactRaidFrame.unit) then
-				  	OmniCD1:SetPoint("TOPLEFT", compactRaidFrame, "BOTTOMLEFT", 1, yPadding)
+				  		OmniCD1:SetPoint("TOPLEFT", compactRaidFrame, "BOTTOMLEFT", 1, yPadding)
 					end
 				end
+				Ctimer(.001, function() 
+					if UnitExists("partypet1") and PPF_P1:IsShown() then
+						OmniCD1:SetPoint("TOPLEFT", PPF_P1, "BOTTOMLEFT", 1, yPadding)
+					end
+					if UnitExists("partypet2") and PPF_P2:IsShown() then
+						OmniCD1:SetPoint("TOPLEFT", PPF_P2, "BOTTOMLEFT", 1, yPadding)
+					end
+					if UnitExists("partypet3") and PPF_P3:IsShown() then
+						OmniCD1:SetPoint("TOPLEFT", PPF_P3, "BOTTOMLEFT", 1, yPadding)
+					end
+				end)
 			end
 		end
 	end
+
+	--PPF_PetButton
 
 	local function OmniCDKey(arg1)
 		if arg1 == "BambiUI" or arg1 == "OmniCD" then
