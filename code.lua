@@ -4,7 +4,7 @@ local strmatch = string.match
 --------------------------------------------------------------------------------------------------------------------------------
 --Scripts and Macro
 --------------------------------------------------------------------------------------------------------------------------------
-		local sizeStandard = 1.05
+		local sizeStandard = 1.1
 		local sizeRaid =.65
 
 		local function RunScripts()
@@ -46,7 +46,7 @@ local strmatch = string.match
 			SetCVar("lossOfControl", 1)
 			SetCVar("lossOfControlDisarm", 0)
 			SetCVar("lossOfControlFull", 0)
-			SetCVar("lossOfControlInterrupt", 2)
+			SetCVar("lossOfControlInterrupt", 1)
 			SetCVar("lossOfControlRoot", 0)
 			SetCVar("lossOfControlSilence", 0)
 
@@ -108,10 +108,10 @@ local strmatch = string.match
 			local f,s,p=CompactRaidFrameContainer,EditModeManagerFrame,PartyFrame
 			f:SetScale(1); --Helps if Anything Happens and When ReSizing Down
 			f:ClearAllPoints();
-			f:SetPoint("TOPLEFT",UIParent,"TOPRIGHT",-716,-499);
+			f:SetPoint("TOPLEFT",UIParent,"TOPRIGHT",-725,-499);
 			p:SetScale(1);
 			p:ClearAllPoints();
-			p:SetPoint("TOPLEFT", UIParent,"TOPRIGHT",-718,-485) --2, +14 offset from raid
+			p:SetPoint("TOPLEFT", UIParent,"TOPRIGHT",-727,-483.5) --2, +14 offset from raid
 			s:OnSystemPositionChange(f);
 			s:OnSystemPositionChange(p);
 			s:SaveLayoutChanges();
@@ -187,18 +187,26 @@ local function ArenaHide()
 		ArenaEnemyMatchFrame1:SetAlpha(0)
 		ArenaEnemyMatchFrame2:SetAlpha(0)
 		ArenaEnemyMatchFrame3:SetAlpha(0)
+		ArenaEnemyMatchFrame4:SetAlpha(0)
+		ArenaEnemyMatchFrame5:SetAlpha(0)
 		ArenaEnemyMatchFrame1PetFrame:SetAlpha(0)
 		ArenaEnemyMatchFrame2PetFrame:SetAlpha(0)
 		ArenaEnemyMatchFrame3PetFrame:SetAlpha(0)
+		ArenaEnemyMatchFrame4PetFrame:SetAlpha(0)
+		ArenaEnemyMatchFrame5PetFrame:SetAlpha(0)
 	end
 end
 
 ArenaEnemyMatchFrame1:SetAlpha(0)
 ArenaEnemyMatchFrame2:SetAlpha(0)
 ArenaEnemyMatchFrame3:SetAlpha(0)
+ArenaEnemyMatchFrame4:SetAlpha(0)
+ArenaEnemyMatchFrame5:SetAlpha(0)
 ArenaEnemyMatchFrame1PetFrame:SetAlpha(0)
 ArenaEnemyMatchFrame2PetFrame:SetAlpha(0)
 ArenaEnemyMatchFrame3PetFrame:SetAlpha(0)
+ArenaEnemyMatchFrame4PetFrame:SetAlpha(0)
+ArenaEnemyMatchFrame5PetFrame:SetAlpha(0)
 
 
 --------------------------------------------------------------------------------------------------------------------------------
