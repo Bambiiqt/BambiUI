@@ -331,7 +331,7 @@ ArenaEnemyMatchFrame5PetFrame:SetAlpha(0)
 	local HookedCompactRaidFrames = { }
 	local AnchorFrames = {}
 	local size = 62
-	local alpha = 0
+	local alpha = 1
 	local XAnchor = -25
 	local Xset, Yset = -1.5, 9
 
@@ -377,7 +377,7 @@ ArenaEnemyMatchFrame5PetFrame:SetAlpha(0)
 			icon = AnchorFrames[icon]
 			icon:SetParent(compactRaidFrame:GetParent()) --if you set to compactRaidFrame will inherit the alpha
 			icon:ClearAllPoints()
-			icon:SetPoint("BOTTOMRIGHT",	compactRaidFrame, "BOTTOMLEFT", Xset, Yset)
+			icon:SetPoint("BOTTOMRIGHT", compactRaidFrame, "BOTTOMLEFT", Xset, Yset)
 			icon:SetFrameStrata("MEDIUM")
 		end
 	end
@@ -539,6 +539,10 @@ ArenaEnemyMatchFrame5PetFrame:SetAlpha(0)
 	function BambiUI:PLAYER_ENTERING_WORLD()
 		 ReSizeRaidFrames()
 		 MoveFrameRate()
+		 UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
+		Ctimer(1, function()
+			UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
+		end) 
 	end
 
 	function BambiUI:ARENA_OPPONENT_UPDATE()
