@@ -1,167 +1,170 @@
 
 local Ctimer = C_Timer.After
 local strmatch = string.match
+local strfind = string.find
+
 --------------------------------------------------------------------------------------------------------------------------------
 --Scripts and Macro
 --------------------------------------------------------------------------------------------------------------------------------
-		local sizeStandard = 1.1
-		local sizeRaid =.65
 
-		local function RunScripts()
-			COMBAT_TEXT_HEIGHT = 25;
-			COMBAT_TEXT_STAGGER_RANGE = 0;
-			COMBAT_TEXT_SPACING = 5;
-			COMBAT_TEXT_MAX_OFFSET = 35;
-			NUM_COMBAT_TEXT_LINES = 10;
-			COMBAT_TEXT_X_ADJUSTMENT = 80;
-			OMBAT_TEXT_CRIT_MAXHEIGHT = 45;
+	local sizeStandard = 1.1
+	local sizeRaid =.65
 
-			SetCVar("floatingCombatTextCombatDamageDirectionalScale", 1)
-			SetCVar("floatingCombatTextCombatHealing", 1)
-			SetCVar("floatingCombatTextCombatDamage", 1)
+	local function RunScripts()
+		COMBAT_TEXT_HEIGHT = 25;
+		COMBAT_TEXT_STAGGER_RANGE = 0;
+		COMBAT_TEXT_SPACING = 5;
+		COMBAT_TEXT_MAX_OFFSET = 35;
+		NUM_COMBAT_TEXT_LINES = 10;
+		COMBAT_TEXT_X_ADJUSTMENT = 80;
+		OMBAT_TEXT_CRIT_MAXHEIGHT = 45;
 
-			SetCVar("nameplateMinAlpha",.9)
-			SetCVar("nameplateSelectedScale",1)
-			SetCVar("nameplateLargerScale",1)
-			SetCVar("nameplateMinScale",1)
-			SetCVar("nameplateShowAll",1);
-			SetCVar("nameplateMaxDistance", 60)
-			SetCVar("nameplateOtherTopInset", 0.05)
-			SetCVar("nameplateLargeTopInset", 0.05)
-			SetCVar("nameplateMotionSpeed", 0.025)
-			SetCVar("nameplateOtherBottomInset", 0.15)
-			SetCVar("nameplateOverlapH", 0.4)
-			SetCVar("nameplateOverlapV", 0.5)
-			SetCVar("NameplatePersonalShowAlways", 1)
+		SetCVar("floatingCombatTextCombatDamageDirectionalScale", 1)
+		SetCVar("floatingCombatTextCombatHealing", 1)
+		SetCVar("floatingCombatTextCombatDamage", 1)
 
-			SetCVar("SpellQueueWindow", 170)
-			SetCVar("noBuffDebuffFilterOnTarget", 1)
-			SetCVar("fstack_preferParentKey", 0)
-			SetCVar("autoSelfCast", 0)
-			SetCVar("weatherdensity", 1)
-			SetCVar("ffxspecial", 1) --Toggles Haze effects (Borean Tundra Haze).
-			SetCVar("ffxGlow", 1)
-			SetCVar("ffxnetherworld", 1) --Toggles Netherworld Glow (Mage Invis Spell Effect).
+		SetCVar("nameplateMinAlpha",.9)
+		SetCVar("nameplateSelectedScale",1)
+		SetCVar("nameplateLargerScale",1)
+		SetCVar("nameplateMinScale",1)
+		SetCVar("nameplateShowAll",1);
+		SetCVar("nameplateMaxDistance", 60)
+		SetCVar("nameplateOtherTopInset", 0.05)
+		SetCVar("nameplateLargeTopInset", 0.05)
+		SetCVar("nameplateMotionSpeed", 0.025)
+		SetCVar("nameplateOtherBottomInset", 0.15)
+		SetCVar("nameplateOverlapH", 0.4)
+		SetCVar("nameplateOverlapV", 0.5)
+		SetCVar("NameplatePersonalShowAlways", 1)
 
-			SetCVar("lossOfControl", 1)
-			SetCVar("lossOfControlDisarm", 0)
-			SetCVar("lossOfControlFull", 0)
-			SetCVar("lossOfControlInterrupt", 1)
-			SetCVar("lossOfControlRoot", 0)
-			SetCVar("lossOfControlSilence", 0)
+		SetCVar("SpellQueueWindow", 170)
+		SetCVar("noBuffDebuffFilterOnTarget", 1)
+		SetCVar("fstack_preferParentKey", 0)
+		SetCVar("autoSelfCast", 0)
+		SetCVar("weatherdensity", 1)
+		SetCVar("ffxspecial", 1) --Toggles Haze effects (Borean Tundra Haze).
+		SetCVar("ffxGlow", 1)
+		SetCVar("ffxnetherworld", 1) --Toggles Netherworld Glow (Mage Invis Spell Effect).
 
-			print("UI Scripts Ran")
-		end
-		BambiUI_RunScripts = CreateFrame('CheckButton', 'BambiUI_RunScripts', BambiUI_RunScripts, 'UICheckButtonTemplate')
-		BambiUI_RunScripts:SetScript('OnClick', function() RunScripts()	end)
+		SetCVar("lossOfControl", 1)
+		SetCVar("lossOfControlDisarm", 0)
+		SetCVar("lossOfControlFull", 0)
+		SetCVar("lossOfControlInterrupt", 1)
+		SetCVar("lossOfControlRoot", 0)
+		SetCVar("lossOfControlSilence", 0)
 
-		local function nameplateMotion()
-		 if InCombatLockdown() then
-			 print("InCombatLockdown: StackingNamePlates")
-			 return
-		 else
-			 if GetCVar("nameplateMotion") == "1" then
-				 SetCVar("nameplateMotion","0");print("Stacking NamePlates: Off (Arena)")
-				else
-					SetCVar("nameplateMotion","1");print("Stacking NamePlates: On (M+)")
-				end
+		print("UI Scripts Ran")
+	end
+	BambiUI_RunScripts = CreateFrame('CheckButton', 'BambiUI_RunScripts', BambiUI_RunScripts, 'UICheckButtonTemplate')
+	BambiUI_RunScripts:SetScript('OnClick', function() RunScripts()	end)
+
+	local function nameplateMotion()
+		if InCombatLockdown() then
+			print("InCombatLockdown: StackingNamePlates")
+			return
+		else
+			if GetCVar("nameplateMotion") == "1" then
+				SetCVar("nameplateMotion","0");print("Stacking NamePlates: Off (Arena)")
+			else
+				SetCVar("nameplateMotion","1");print("Stacking NamePlates: On (M+)")
 			end
 		end
-		BambiUI_nameplateMotion = CreateFrame('CheckButton', 'BambiUI_nameplateMotion', BambiUI_nameplateMotion, 'UICheckButtonTemplate')
-		BambiUI_nameplateMotion:SetScript('OnClick', function() nameplateMotion()	end)
+	end
+	BambiUI_nameplateMotion = CreateFrame('CheckButton', 'BambiUI_nameplateMotion', BambiUI_nameplateMotion, 'UICheckButtonTemplate')
+	BambiUI_nameplateMotion:SetScript('OnClick', function() nameplateMotion()	end)
 
-		local function ShowEnemyGuardians()
-		 if InCombatLockdown() then
-			 print("InCombatLockdown: ShowEnemyGuardians")
-			 return
-		 else
-			 if GetCVar("nameplateShowEnemyGuardians") == "1" then
-				 SetCVar("nameplateShowEnemyGuardians","0");print("ShowEnemyGuardians: Off")
-			 	else
-					SetCVar("nameplateShowEnemyGuardians","1");print("ShowEnemyGuardians: On")
-				end
+	local function ShowEnemyGuardians()
+		if InCombatLockdown() then
+			print("InCombatLockdown: ShowEnemyGuardians")
+			return
+		else
+			if GetCVar("nameplateShowEnemyGuardians") == "1" then
+				SetCVar("nameplateShowEnemyGuardians","0");print("ShowEnemyGuardians: Off")
+			else
+				SetCVar("nameplateShowEnemyGuardians","1");print("ShowEnemyGuardians: On")
 			end
 		end
-		BambiUI_ShowEnemyGuardians = CreateFrame('CheckButton', 'BambiUI_ShowEnemyGuardians', BambiUI_ShowEnemyGuardians, 'UICheckButtonTemplate')
-		BambiUI_ShowEnemyGuardians:SetScript('OnClick', function() ShowEnemyGuardians()	end)
+	end
+	BambiUI_ShowEnemyGuardians = CreateFrame('CheckButton', 'BambiUI_ShowEnemyGuardians', BambiUI_ShowEnemyGuardians, 'UICheckButtonTemplate')
+	BambiUI_ShowEnemyGuardians:SetScript('OnClick', function() ShowEnemyGuardians()	end)
 
-		local function ShowEnemyMinus()
-		 if InCombatLockdown() then
-			 print("InCombatLockdown: ShowEnemyMinus")
-			 return
-		 else
-			 if GetCVar("nameplateShowEnemyMinus") == "1" then
-				 SetCVar("nameplateShowEnemyMinus","0");print("ShowEnemyMinus: Off")
-				else
-					SetCVar("nameplateShowEnemyMinus","1");print("ShowEnemyMinus: On")
-				end
+	local function ShowEnemyMinus()
+		if InCombatLockdown() then
+			print("InCombatLockdown: ShowEnemyMinus")
+			return
+		else
+			if GetCVar("nameplateShowEnemyMinus") == "1" then
+				SetCVar("nameplateShowEnemyMinus","0");print("ShowEnemyMinus: Off")
+			else
+				SetCVar("nameplateShowEnemyMinus","1");print("ShowEnemyMinus: On")
 			end
 		end
-		BambiUI_ShowEnemyMinus = CreateFrame('CheckButton', 'BambiUI_ShowEnemyMinus', BambiUI_ShowEnemyMinus, 'UICheckButtonTemplate')
-		BambiUI_ShowEnemyMinus:SetScript('OnClick', function() ShowEnemyMinus()	end)
+	end
+	BambiUI_ShowEnemyMinus = CreateFrame('CheckButton', 'BambiUI_ShowEnemyMinus', BambiUI_ShowEnemyMinus, 'UICheckButtonTemplate')
+	BambiUI_ShowEnemyMinus:SetScript('OnClick', function() ShowEnemyMinus()	end)
 
-		local function MoveRaidUpperRight()
+	local function MoveRaidUpperRight()
+	if InCombatLockdown() then
+		print("InCombatLockdown: MoveRaid (Standard)")
+		return
+	else
+		local f,s,p=CompactRaidFrameContainer,EditModeManagerFrame,PartyFrame
+		f:SetScale(1); --Helps if Anything Happens and When ReSizing Down
+		f:ClearAllPoints();
+		f:SetPoint("TOPLEFT",UIParent,"TOPRIGHT",-725,-499);
+		p:SetScale(1);
+		p:ClearAllPoints();
+		p:SetPoint("TOPLEFT", UIParent,"TOPRIGHT",-727,-483.5) --2, +14 offset from raid
+		s:OnSystemPositionChange(f);
+		s:OnSystemPositionChange(p);
+		s:SaveLayoutChanges();
+		f:SetClampedToScreen(false)
+		p:SetClampedToScreen(false)
+		f:SetScale(sizeStandard);
+		p:SetScale(sizeStandard);
+		print("RaidFrames Position (Standard)")
+			--Would be nice to ENABLE pets here
+			--2, +14 offset from raid
+			--Would be nice to ENABLE pets here
+		end
+	end
+	BambiUI_MoveRaidUpperRight = CreateFrame('CheckButton', 'BambiUI_MoveRaidUpperRight', BambiUI_MoveRaidUpperRight, 'UICheckButtonTemplate')
+	BambiUI_MoveRaidUpperRight:SetScript('OnClick', function() MoveRaidUpperRight()	end)
+
+	local function MoveRaidCenter()
 		if InCombatLockdown() then
 			print("InCombatLockdown: MoveRaid (Standard)")
 			return
 		else
 			local f,s,p=CompactRaidFrameContainer,EditModeManagerFrame,PartyFrame
-			f:SetScale(1); --Helps if Anything Happens and When ReSizing Down
+			f:SetScale(sizeRaid);
 			f:ClearAllPoints();
-			f:SetPoint("TOPLEFT",UIParent,"TOPRIGHT",-725,-499);
-			p:SetScale(1);
+			f:SetPoint("CENTER",UIParent,"CENTER",0,-360);
+			p:SetScale(sizeRaid);
 			p:ClearAllPoints();
-			p:SetPoint("TOPLEFT", UIParent,"TOPRIGHT",-727,-483.5) --2, +14 offset from raid
+			p:SetPoint("CENTER",UIParent,"CENTER",0,-354.5);
 			s:OnSystemPositionChange(f);
 			s:OnSystemPositionChange(p);
 			s:SaveLayoutChanges();
-			f:SetClampedToScreen(false)
-			p:SetClampedToScreen(false)
-			f:SetScale(sizeStandard);
-			p:SetScale(sizeStandard);
-			print("RaidFrames Position (Standard)")
-				--Would be nice to ENABLE pets here
-				--2, +14 offset from raid
-				--Would be nice to ENABLE pets here
-			end
+			print("RaidFrames Position (Center)")
+				--Would be nice to DISABLE pets here
 		end
-		BambiUI_MoveRaidUpperRight = CreateFrame('CheckButton', 'BambiUI_MoveRaidUpperRight', BambiUI_MoveRaidUpperRight, 'UICheckButtonTemplate')
-		BambiUI_MoveRaidUpperRight:SetScript('OnClick', function() MoveRaidUpperRight()	end)
+	end
+	BambiUI_MoveRaidCenter = CreateFrame('CheckButton', 'BambiUI_MoveRaidCenter', BambiUI_MoveRaidCenter, 'UICheckButtonTemplate')
+	BambiUI_MoveRaidCenter:SetScript('OnClick', function() MoveRaidCenter()	end)
 
-		local function MoveRaidCenter()
-			if InCombatLockdown() then
-				print("InCombatLockdown: MoveRaid (Standard)")
-				return
-			else
-				local f,s,p=CompactRaidFrameContainer,EditModeManagerFrame,PartyFrame
-				f:SetScale(sizeRaid);
-				f:ClearAllPoints();
-				f:SetPoint("CENTER",UIParent,"CENTER",0,-360);
-				p:SetScale(sizeRaid);
-				p:ClearAllPoints();
-				p:SetPoint("CENTER",UIParent,"CENTER",0,-354.5);
-				s:OnSystemPositionChange(f);
-				s:OnSystemPositionChange(p);
-				s:SaveLayoutChanges();
-				print("RaidFrames Position (Center)")
-					--Would be nice to DISABLE pets here
-		 end
- 		end
-		BambiUI_MoveRaidCenter = CreateFrame('CheckButton', 'BambiUI_MoveRaidCenter', BambiUI_MoveRaidCenter, 'UICheckButtonTemplate')
-		BambiUI_MoveRaidCenter:SetScript('OnClick', function() MoveRaidCenter()	end)
-
-		local function ScaleFramesRaid()
-			if InCombatLockdown() then
-				print("InCombatLockdown: ScaleFrames")
-				return
-			else
-				CompactRaidFrameContainer:SetScale(sizeRaid)
-				PartyFrame:SetScale(sizeRaid)
-				print("FramesScaled ("..sizeRaid..")")
-			end
+	local function ScaleFramesRaid()
+		if InCombatLockdown() then
+			print("InCombatLockdown: ScaleFrames")
+			return
+		else
+			CompactRaidFrameContainer:SetScale(sizeRaid)
+			PartyFrame:SetScale(sizeRaid)
+			print("FramesScaled ("..sizeRaid..")")
 		end
-		BambiUI_ScaleFrames = CreateFrame('CheckButton', 'BambiUI_ScaleFrames', BambiUI_ScaleFrames, 'UICheckButtonTemplate')
-		BambiUI_ScaleFrames:SetScript('OnClick', function() ScaleFramesRaid()	end)
+	end
+	BambiUI_ScaleFrames = CreateFrame('CheckButton', 'BambiUI_ScaleFrames', BambiUI_ScaleFrames, 'UICheckButtonTemplate')
+	BambiUI_ScaleFrames:SetScript('OnClick', function() ScaleFramesRaid()	end)
 
 
 
@@ -181,37 +184,38 @@ local strmatch = string.match
 --Hide Arena Frames
 --------------------------------------------------------------------------------------------------------------------------------
 
-local function ArenaHide()
-	local inInstance, instanceType = IsInInstance()
-	if instanceType == "arena"  then
-		ArenaEnemyMatchFrame1:SetAlpha(0)
-		ArenaEnemyMatchFrame2:SetAlpha(0)
-		ArenaEnemyMatchFrame3:SetAlpha(0)
-		ArenaEnemyMatchFrame4:SetAlpha(0)
-		ArenaEnemyMatchFrame5:SetAlpha(0)
-		ArenaEnemyMatchFrame1PetFrame:SetAlpha(0)
-		ArenaEnemyMatchFrame2PetFrame:SetAlpha(0)
-		ArenaEnemyMatchFrame3PetFrame:SetAlpha(0)
-		ArenaEnemyMatchFrame4PetFrame:SetAlpha(0)
-		ArenaEnemyMatchFrame5PetFrame:SetAlpha(0)
+	local function ArenaHide()
+		local inInstance, instanceType = IsInInstance()
+		if instanceType == "arena"  then
+			ArenaEnemyMatchFrame1:SetAlpha(0)
+			ArenaEnemyMatchFrame2:SetAlpha(0)
+			ArenaEnemyMatchFrame3:SetAlpha(0)
+			ArenaEnemyMatchFrame4:SetAlpha(0)
+			ArenaEnemyMatchFrame5:SetAlpha(0)
+			ArenaEnemyMatchFrame1PetFrame:SetAlpha(0)
+			ArenaEnemyMatchFrame2PetFrame:SetAlpha(0)
+			ArenaEnemyMatchFrame3PetFrame:SetAlpha(0)
+			ArenaEnemyMatchFrame4PetFrame:SetAlpha(0)
+			ArenaEnemyMatchFrame5PetFrame:SetAlpha(0)
+		end
 	end
-end
 
-ArenaEnemyMatchFrame1:SetAlpha(0)
-ArenaEnemyMatchFrame2:SetAlpha(0)
-ArenaEnemyMatchFrame3:SetAlpha(0)
-ArenaEnemyMatchFrame4:SetAlpha(0)
-ArenaEnemyMatchFrame5:SetAlpha(0)
-ArenaEnemyMatchFrame1PetFrame:SetAlpha(0)
-ArenaEnemyMatchFrame2PetFrame:SetAlpha(0)
-ArenaEnemyMatchFrame3PetFrame:SetAlpha(0)
-ArenaEnemyMatchFrame4PetFrame:SetAlpha(0)
-ArenaEnemyMatchFrame5PetFrame:SetAlpha(0)
+	ArenaEnemyMatchFrame1:SetAlpha(0)
+	ArenaEnemyMatchFrame2:SetAlpha(0)
+	ArenaEnemyMatchFrame3:SetAlpha(0)
+	ArenaEnemyMatchFrame4:SetAlpha(0)
+	ArenaEnemyMatchFrame5:SetAlpha(0)
+	ArenaEnemyMatchFrame1PetFrame:SetAlpha(0)
+	ArenaEnemyMatchFrame2PetFrame:SetAlpha(0)
+	ArenaEnemyMatchFrame3PetFrame:SetAlpha(0)
+	ArenaEnemyMatchFrame4PetFrame:SetAlpha(0)
+	ArenaEnemyMatchFrame5PetFrame:SetAlpha(0)
 
 
 --------------------------------------------------------------------------------------------------------------------------------
 --Move Frame rate
 --------------------------------------------------------------------------------------------------------------------------------
+
 	local function MoveFrameRate()
 		FramerateLabel:ClearAllPoints()
 		FramerateLabel:SetPoint("RIGHT",UIParent,"CENTER", 0, -220)
@@ -225,20 +229,21 @@ ArenaEnemyMatchFrame5PetFrame:SetAlpha(0)
 		FramerateText:ClearAllPoints()
 		FramerateText:SetPoint("LEFT",FramerateLabel,"RIGHT")
 	end)
+
 --------------------------------------------------------------------------------------------------------------------------------
 --ReSizeRaidFrames
 --------------------------------------------------------------------------------------------------------------------------------
 
 	local function ReSizeRaidFrames()
 		Ctimer(1, function()
-				CompactRaidFrameContainer:SetScale(sizeStandard) --works in combat
-				PartyFrame:SetScale(sizeStandard)
-				CompactRaidFrameContainer:SetClampedToScreen(false) --Allows RaidFrame to Move OffScreen
-				if CompactPartyFrameTitle then --Hides Party on PartyFrame
-					CompactPartyFrameTitle:SetAlpha(0)
-				end
-			end)
-		end
+			CompactRaidFrameContainer:SetScale(sizeStandard) --works in combat
+			PartyFrame:SetScale(sizeStandard)
+			CompactRaidFrameContainer:SetClampedToScreen(false) --Allows RaidFrame to Move OffScreen
+			if CompactPartyFrameTitle then --Hides Party on PartyFrame
+				CompactPartyFrameTitle:SetAlpha(0)
+			end
+		end)
+	end
 
 --------------------------------------------------------------------------------------------------------------------------------
 --LoC Anchor
@@ -262,9 +267,9 @@ ArenaEnemyMatchFrame5PetFrame:SetAlpha(0)
 	LoCPlayerAnchor.t:SetTextColor(1, 1, 1, LoCalpha)
 
 	hooksecurefunc("LossOfControlFrame_SetUpDisplay", function()
-	 LossOfControlFrame:ClearAllPoints()
-	 LossOfControlFrame:SetPoint("CENTER", LoCPlayerAnchor,"CENTER", 0, 0)
-	 --LossOfControlFrame.fadeTime = 1.5
+		LossOfControlFrame:ClearAllPoints()
+		LossOfControlFrame:SetPoint("CENTER", LoCPlayerAnchor,"CENTER", 0, 0)
+		--LossOfControlFrame.fadeTime = 1.5
 	end)
 
 --------------------------------------------------------------------------------------------------------------------------------
@@ -331,7 +336,7 @@ ArenaEnemyMatchFrame5PetFrame:SetAlpha(0)
 	local HookedCompactRaidFrames = { }
 	local AnchorFrames = {}
 	local size = 62
-	local alpha = 1
+	local alpha = 0
 	local XAnchor = -25
 	local Xset, Yset = -1.5, 9
 
@@ -368,29 +373,78 @@ ArenaEnemyMatchFrame5PetFrame:SetAlpha(0)
 
 	local function SetCompactAnchor(compactRaidFrame)
 		local icon
-		if UnitIsUnit(compactRaidFrame.unit, "party1") then icon = 1 end
-		if UnitIsUnit(compactRaidFrame.unit, "party2") then icon = 2 end
-		if UnitIsUnit(compactRaidFrame.unit, "party3") then icon = 3 end
-		if UnitIsUnit(compactRaidFrame.unit, "party4") then icon = 4 end
-		if UnitIsUnit(compactRaidFrame.unit, "player") then icon = 5 end
-		if icon ~= nil then
-			icon = AnchorFrames[icon]
-			icon:SetParent(compactRaidFrame:GetParent()) --if you set to compactRaidFrame will inherit the alpha
-			icon:ClearAllPoints()
-			icon:SetPoint("BOTTOMRIGHT", compactRaidFrame, "BOTTOMLEFT", Xset, Yset)
-			icon:SetFrameStrata("MEDIUM")
+		if compactRaidFrame:IsForbidden() then return end
+		local name = compactRaidFrame:GetName()
+		if not name or not name:match("^Compact") then return end
+		local anchorUnitId = compactRaidFrame.displayedUnit or compactRaidFrame.unit
+		if (anchorUnitId ~= nil) then
+			local isPartyFrame = (strfind(anchorUnitId, "party") or strfind(anchorUnitId, "player")) and name:match("^CompactParty")
+			local isRaidFrame = (strfind(anchorUnitId, "raid") or strfind(anchorUnitId, "player"))  and name:match("^CompactRaid")
+			if isPartyFrame then
+				if UnitIsUnit(anchorUnitId, "player") then 
+					icon = AnchorFrames[5]
+				else
+					for i = 1, 4 do
+						local unit = "party"..i
+						if UnitIsUnit(anchorUnitId, unit) then 
+							icon = AnchorFrames[i]
+						end
+					end
+				end
+			elseif isRaidFrame then
+				local isInInstance, instanceType = IsInInstance()
+				if instanceType == "arena" then --forces party frames
+					for i = 1, 5 do
+						local anchorPartyframe = _G["CompactPartyFrameMember"..i]
+						local anchorPartyUnitId = anchorPartyframe.displayedUnit or anchorPartyframe.unit
+						if anchorPartyUnitId then
+							if anchorPartyUnitId == anchorUnitId or UnitIsUnit(anchorUnitId, anchorPartyUnitId) then
+								if UnitIsUnit(anchorPartyUnitId, "party1") then 
+									icon = AnchorFrames[1]; compactRaidFrame = anchorPartyframe
+								elseif UnitIsUnit(anchorPartyUnitId, "party2") then  
+									icon = AnchorFrames[2]; compactRaidFrame = anchorPartyframe
+								elseif UnitIsUnit(anchorPartyUnitId, "party3") then 
+									icon = AnchorFrames[3]; compactRaidFrame = anchorPartyframe
+								elseif UnitIsUnit(anchorPartyUnitId, "party4") then 
+									icon = AnchorFrames[4]; compactRaidFrame = anchorPartyframe
+								elseif UnitIsUnit(anchorPartyUnitId, "player") then 
+									icon = AnchorFrames[5]; compactRaidFrame = anchorPartyframe
+								end
+							end
+						end
+					end
+				else
+					if UnitIsUnit(anchorUnitId, "player") then 
+						icon = AnchorFrames[5]
+					else
+						for i = 1, 4 do
+							local unit = "party"..i
+							if UnitIsUnit(anchorUnitId, unit) then 
+								icon = AnchorFrames[i]
+							end
+						end
+					end
+				end
+			end
+			if icon ~= nil then
+				icon:SetParent(compactRaidFrame:GetParent()) --if you set to compactRaidFrame will inherit the alpha
+				icon:ClearAllPoints()
+				icon:SetPoint("BOTTOMRIGHT", compactRaidFrame, "BOTTOMLEFT", Xset, Yset)
+				icon:SetFrameStrata("MEDIUM")
+				--icon:SetIgnoreParentAlpha(true)
+			end
 		end
 	end
 
 	local function UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
-		if CompactRaidFrameManager.container.groupMode == "flush" then
+		if not EditModeManagerFrame:ShouldRaidFrameShowSeparateGroups() then
 			for i = 1, 80 do
 				local compactRaidFrame = _G["CompactRaidFrame"..i]
 				if compactRaidFrame and compactRaidFrame.unit then
 					SetCompactAnchor(compactRaidFrame)
 				end
 			end
-		elseif CompactRaidFrameManager.container.groupMode == "discrete" then
+		elseif EditModeManagerFrame:ShouldRaidFrameShowSeparateGroups() then
 			for i = 1, 8 do
 				for j = 1, 5 do
 					local compactRaidFrame = _G["CompactRaidGroup"..i.."Member"..j]
@@ -411,6 +465,7 @@ ArenaEnemyMatchFrame5PetFrame:SetAlpha(0)
 			end
 		end
 	end
+
 
 --------------------------------------------------------------------------------------------------------------------------------
 --OmniCD Anchors
@@ -484,7 +539,7 @@ ArenaEnemyMatchFrame5PetFrame:SetAlpha(0)
 --Handler's
 --------------------------------------------------------------------------------------------------------------------------------
 
-	EditModeManagerFrame:HookScript("OnHide", function() Ctimer(.001, function() OmniCDAnchor() UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() end) end)
+	EditModeManagerFrame:HookScript("OnHide", function() Ctimer(.002, function() OmniCDAnchor() UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() end) end)
 
 	hooksecurefunc(EditModeManagerFrame, "UpdateRaidContainerFlow", function(groupMode)
 		--print("EditModeManagerFrame: UpdateRaidContainerFlow")
@@ -500,13 +555,13 @@ ArenaEnemyMatchFrame5PetFrame:SetAlpha(0)
 
 	hooksecurefunc(CompactRaidFrameContainer, "SetFlowFilterFunction", function(flowFilterFunc)
 		--print("SetFlowFilterFunction")
-	  OmniCDAnchor()
+		OmniCDAnchor()
 		UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
 	end)
 
 	hooksecurefunc(CompactRaidFrameContainer, "SetGroupFilterFunction", function(groupFilterFunc)
 		--print("SetGroupFilterFunction")
-	  OmniCDAnchor()
+		OmniCDAnchor()
 		UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
 	end)
 
@@ -522,6 +577,15 @@ ArenaEnemyMatchFrame5PetFrame:SetAlpha(0)
 		UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
 	end)
 
+	hooksecurefunc("CompactUnitFrame_OnLoad", function(self)
+		OmniCDAnchor()
+		UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
+	end)
+
+	hooksecurefunc("CompactUnitFrame_UpdateAll", function(self)
+		OmniCDAnchor()
+		UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
+	end)
 
 	function BambiUI:GROUP_ROSTER_UPDATE()
 		OmniCDAnchor()
@@ -540,9 +604,6 @@ ArenaEnemyMatchFrame5PetFrame:SetAlpha(0)
 		 ReSizeRaidFrames()
 		 MoveFrameRate()
 		 UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
-		Ctimer(1, function()
-			UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
-		end) 
 	end
 
 	function BambiUI:ARENA_OPPONENT_UPDATE()
