@@ -424,7 +424,7 @@ end)
 	local HookedCompactRaidFrames = { }
 	local AnchorFrames = {}
 	local size = 62
-	local alpha = 1
+	local alpha = 0
 	local XAnchor = -25
 	local Xset, Yset = -1.5, 9
 
@@ -541,13 +541,19 @@ end)
 				else
 					if UnitIsUnit(anchorUnitId, "player") then 
 						icon = AnchorFrames[5]
-						OmniCDFrames[5]:ClearAllPoints()
+						if members <= 5 and index <= 5 and not EditModeManagerFrame:ShouldRaidFrameShowSeparateGroups() then
+							OmniCDFrames[5]:ClearAllPoints() 
+							OmniCDFrames[5]:SetPoint("CENTER", "OmniCDAnchor"..index, "CENTER", 0, yPadding)
+						end
 					else
 						for i = 1, 4 do
 							local unit = "party"..i
 							if UnitIsUnit(anchorUnitId, unit) then 
 								icon = AnchorFrames[i]
-								OmniCDFrames[i]:ClearAllPoints()
+								if members <= 5 and index <= 5 and not EditModeManagerFrame:ShouldRaidFrameShowSeparateGroups() then
+									OmniCDFrames[i]:ClearAllPoints() 
+									OmniCDFrames[i]:SetPoint("CENTER", "OmniCDAnchor"..index, "CENTER", 0, yPadding)
+								end
 							end
 						end
 					end
@@ -602,7 +608,7 @@ end)
 	local BambiUI = CreateFrame("Frame", nil, UIParent)
 
 	local iconSize = 20 -- Needs to be same size as the OmniCD Icon
-	local alphaOmni = 1
+	local alphaOmni = 0
 	local yPadding = -10
 
 	local OmniCDAnchor1 = CreateFrame("Frame", "OmniCDAnchor1", UIParent)
@@ -760,6 +766,7 @@ end)
 	local OmniCDAnchorFrame
 
 	local function OmniCDAnchor()
+		local isInInstance, instanceType = IsInInstance()
 		local units, pets, Anchor = 0, nil, nil
 		local members = GetNumGroupMembers()
 		if EditModeManagerFrame:UseRaidStylePartyFrames() and members <= 5 then
@@ -773,36 +780,49 @@ end)
 				end
 			end
 			Ctimer(.001, function() 
-				if UnitExists("partypet1") and PPF_P1:IsShown() then
-					Anchor= PPF_P1
+				if UnitExists("pet") and PPF_Pet:IsShown() then
+					Anchor= PPF_Pet
 					pets = 1
+					if UnitExists("partypet1") and PPF_P1:IsShown() then
+						Anchor= PPF_P1
+						pets = 2
+					end
+					if UnitExists("partypet2") and PPF_P2:IsShown() then
+						Anchor= PPF_P2
+						pets = 3
+					end
+					if UnitExists("partypet3") and PPF_P3:IsShown() then
+						Anchor= PPF_P3
+						pets = 4
+					end
+				else
+					if UnitExists("partypet1") and PPF_P1:IsShown() then
+						Anchor= PPF_P1
+						pets = 1
+					end
+					if UnitExists("partypet2") and PPF_P2:IsShown() then
+						Anchor= PPF_P2
+						pets = 2
+					end
+					if UnitExists("partypet3") and PPF_P3:IsShown() then
+						Anchor= PPF_P3
+						pets = 3
+					end
 				end
-				if UnitExists("partypet2") and PPF_P2:IsShown() then
-					Anchor= PPF_P2
-					pets = 2
-				end
-				if UnitExists("partypet3") and PPF_P3:IsShown() then
-					Anchor= PPF_P3
-					pets = 3
-				end
-				if not pets and Anchor ~= OmniCDAnchorFrame then
+				if Anchor ~= OmniCDAnchorFrame then
 					OmniCDAnchorFrame = Anchor
 					OmniCDAnchor1:ClearAllPoints()
 					OmniCDAnchor1:SetPoint("TOPLEFT", Anchor, "BOTTOMLEFT", 1, yPadding)
-				elseif pets == 1 and Anchor ~= OmniCDAnchorFrame then
-					OmniCDAnchorFrame = PPF_P1
-					OmniCDAnchor1:ClearAllPoints()
-					OmniCDAnchor1:SetPoint("TOPLEFT", PPF_P1, "BOTTOMLEFT", 1, yPadding)
-				elseif pets == 2 and Anchor ~= OmniCDAnchorFrame then
-					OmniCDAnchorFrame = PPF_P2
-					OmniCDAnchor1:ClearAllPoints()
-					OmniCDAnchor1:SetPoint("TOPLEFT", PPF_P2, "BOTTOMLEFT", 1, yPadding)
-				elseif pets == 3 and Anchor ~= OmniCDAnchorFrame then
-					OmniCDAnchorFrame = PPF_P3
-					OmniCDAnchor1:ClearAllPoints()
-					OmniCDAnchor1:SetPoint("TOPLEFT", PPF_P3, "BOTTOMLEFT", 1, yPadding)
 				end
 			end)
+		end
+		if IsInRaid() and CompactRaidFrameContainer:IsShown() and instanceType ~= "arena" and members <= 5 and not EditModeManagerFrame:ShouldRaidFrameShowSeparateGroups() then 
+			OmniCDAnchor1:ClearAllPoints()
+			OmniCDAnchor1:SetPoint("TOPLEFT", CompactRaidFrameContainer, "BOTTOMLEFT", 1, yPadding)
+		end
+		if members > 5 or EditModeManagerFrame:ShouldRaidFrameShowSeparateGroups() then
+			OmniCDAnchor1:ClearAllPoints()
+			OmniCDAnchor1:SetPoint("BOTTOMLEFT", "UIParent", "BOTTOMLEFT", 0, -1000)
 		end
 	end
 
