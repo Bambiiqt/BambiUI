@@ -10,7 +10,7 @@ local FramerateAnchorSizeX = 100
 local FramerateAnchorSizeY = 2
 local FramerateAnchoralpha = 0
 local FramerateAnchorScale = 1.3
-local yFramerateAnchor = -275
+local yFramerateAnchor = -265
 local FramerateAnchoName = "FrameRateAnchor"
 
 local FramerateAnchor = CreateFrame("Frame", FramerateAnchoName, UIParent)
