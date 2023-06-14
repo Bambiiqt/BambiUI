@@ -782,31 +782,30 @@ end)
 			Ctimer(.001, function() 
 				if UnitExists("pet") and PPF_Pet:IsShown() then
 					Anchor= PPF_Pet
-					pets = 1
 					if UnitExists("partypet1") and PPF_P1:IsShown() then
 						Anchor= PPF_P1
-						pets = 2
 					end
 					if UnitExists("partypet2") and PPF_P2:IsShown() then
 						Anchor= PPF_P2
-						pets = 3
 					end
 					if UnitExists("partypet3") and PPF_P3:IsShown() then
 						Anchor= PPF_P3
-						pets = 4
+					end
+					if UnitExists("partypet4") and PPF_P4:IsShown() then
+						Anchor= PPF_P4
 					end
 				else
 					if UnitExists("partypet1") and PPF_P1:IsShown() then
 						Anchor= PPF_P1
-						pets = 1
 					end
 					if UnitExists("partypet2") and PPF_P2:IsShown() then
 						Anchor= PPF_P2
-						pets = 2
 					end
 					if UnitExists("partypet3") and PPF_P3:IsShown() then
 						Anchor= PPF_P3
-						pets = 3
+					end
+					if UnitExists("partypet4") and PPF_P4:IsShown() then
+						Anchor= PPF_P4
 					end
 				end
 				if Anchor ~= OmniCDAnchorFrame then
