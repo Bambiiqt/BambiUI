@@ -118,6 +118,8 @@ end)
 		NUM_COMBAT_TEXT_LINES = 10;
 		COMBAT_TEXT_X_ADJUSTMENT = 80;
 		OMBAT_TEXT_CRIT_MAXHEIGHT = 45;
+		MAX_TARGET_DEBUFFS = 32;
+		MAX_TARGET_BUFFS = 32;
 
 		SetCVar("floatingCombatTextCombatDamageDirectionalScale", 1)
 		SetCVar("floatingCombatTextCombatHealing", 1)
