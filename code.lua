@@ -29,76 +29,38 @@ FramerateAnchor.t:SetPoint("TOP", FramerateAnchor, "BOTTOM", 0,0)
 FramerateAnchor.t:SetTextColor(1, 1, 1, FramerateAnchoralpha)
 
 local function MoveFrameRate()
-	FramerateLabel:ClearAllPoints()
-	FramerateLabel:SetParent(FramerateAnchor)
+	FramerateFrame:ClearAllPoints()
+	FramerateFrame:SetParent(FramerateAnchor)
 	--FramerateLabel:SetPoint("CENTER",UIParent,"CENTER", 0, -220)
-	FramerateLabel:SetPoint("CENTER",FramerateAnchor,"CENTER", 0, 0)
-	FramerateText:SetPoint("LEFT",FramerateLabel,"RIGHT")
-	FramerateText:SetParent(FramerateAnchor)
-	FramerateText:ClearAllPoints()
-	FramerateLabel:SetScale(FramerateAnchorScale)
-	FramerateText:SetScale(FramerateAnchorScale)
+	FramerateFrame:SetPoint("CENTER",FramerateAnchor,"CENTER", 0, 0)
+	FramerateFrame:SetScale(FramerateAnchorScale)
 end
 
-FramerateText:HookScript("OnShow", function(self)
-	FramerateLabel:ClearAllPoints()
+FramerateFrame:HookScript("OnShow", function(self)
+	FramerateFrame:ClearAllPoints()
 	--FramerateLabel:SetPoint("CENTER",UIParenr,"CENTER", 0, -220)
-	FramerateLabel:SetPoint("RIGHT",FramerateAnchor,"CENTER", 0, 0)
-	FramerateLabel:SetParent(FramerateAnchor)
-	FramerateText:ClearAllPoints()
-	FramerateText:SetPoint("LEFT",FramerateLabel,"RIGHT")
-	FramerateText:SetParent(FramerateAnchor)
-	FramerateLabel:SetScale(FramerateAnchorScale)
-	FramerateText:SetScale(FramerateAnchorScale)
+	FramerateFrame:SetPoint("CENTER",FramerateAnchor,"CENTER", 0, 0)
+	FramerateFrame:SetParent(FramerateAnchor)
+	FramerateFrame:SetScale(FramerateAnchorScale)
 end)
 
 
-
---[[FramerateFrame:SetScript("OnUpdate", function(self, elapsed)
-	if ( FramerateText:IsShown() ) then
-		local timeLeft = self.fpsTime - elapsed
-		if ( timeLeft <= 0 ) then
-			self.fpsTime = FRAMERATE_FREQUENCY;
-			local framerate = GetFramerate();
-			FramerateText:SetFormattedText("%.1f", framerate);
-			local point, relativeTo, relativePoint, offset_x, offset_y = FramerateText:GetPoint()
-			if relativeTo ~= FramerateLabels then
-				FramerateLabel:ClearAllPoints()
-				FramerateLabel:SetPoint("RIGHT",FramerateAnchor,"CENTER", 0, 0)
-				FramerateLabel:SetParent(FramerateAnchor)
-				FramerateText:ClearAllPoints()
-				FramerateText:SetPoint("LEFT",FramerateLabel,"RIGHT")
-				FramerateText:SetParent(FramerateAnchor)
-			end
-		else
-			self.fpsTime = timeLeft;
-		end
-	end
-end)]]
 
 
 QueueStatusButton:HookScript("OnShow", function(self)
-	FramerateLabel:ClearAllPoints()
+	FramerateFrame:ClearAllPoints()
 	--FramerateLabel:SetPoint("CENTER",UIParenr,"CENTER", 0, -220)
-	FramerateLabel:SetPoint("RIGHT",FramerateAnchor,"CENTER", 0, 0)
-	FramerateLabel:SetParent(FramerateAnchor)
-	FramerateText:ClearAllPoints()
-	FramerateText:SetPoint("LEFT",FramerateLabel,"RIGHT")
-	FramerateText:SetParent(FramerateAnchor)
-	FramerateLabel:SetScale(FramerateAnchorScale)
-	FramerateText:SetScale(FramerateAnchorScale)
+	FramerateFrame:SetPoint("RIGHT",FramerateAnchor,"CENTER", 0, 0)
+	FramerateFrame:SetParent(FramerateAnchor)
+	FramerateFrame:SetScale(FramerateAnchorScale)
 end)
 
 QueueStatusButton:HookScript("OnHide", function(self)
-	FramerateLabel:ClearAllPoints()
+	FramerateFrame:ClearAllPoints()
 	--FramerateLabel:SetPoint("CENTER",UIParenr,"CENTER", 0, -220)
-	FramerateLabel:SetPoint("RIGHT",FramerateAnchor,"CENTER", 0, 0)
-	FramerateLabel:SetParent(FramerateAnchor)
-	FramerateText:ClearAllPoints()
-	FramerateText:SetPoint("LEFT",FramerateLabel,"RIGHT")
-	FramerateText:SetParent(FramerateAnchor)
-	FramerateLabel:SetScale(FramerateAnchorScale)
-	FramerateText:SetScale(FramerateAnchorScale)
+	FramerateFrame:SetPoint("RIGHT",FramerateAnchor,"CENTER", 0, 0)
+	FramerateFrame:SetParent(FramerateAnchor)
+	FramerateFrame:SetScale(FramerateAnchorScale)
 end)
 
 
@@ -293,29 +255,75 @@ end)
 	local function ArenaHide()
 		local inInstance, instanceType = IsInInstance()
 		if instanceType == "arena"  then
-			ArenaEnemyMatchFrame1:SetAlpha(0)
-			ArenaEnemyMatchFrame2:SetAlpha(0)
-			ArenaEnemyMatchFrame3:SetAlpha(0)
-			ArenaEnemyMatchFrame4:SetAlpha(0)
-			ArenaEnemyMatchFrame5:SetAlpha(0)
-			ArenaEnemyMatchFrame1PetFrame:SetAlpha(0)
-			ArenaEnemyMatchFrame2PetFrame:SetAlpha(0)
-			ArenaEnemyMatchFrame3PetFrame:SetAlpha(0)
-			ArenaEnemyMatchFrame4PetFrame:SetAlpha(0)
-			ArenaEnemyMatchFrame5PetFrame:SetAlpha(0)
+			--[[CompactArenaFrame:SetAlpha(0)
+			CompactArenaFrameMember1:SetAlpha(0)
+			CompactArenaFrameMember2:SetAlpha(0)
+			CompactArenaFrameMember3:SetAlpha(0)
+			CompactArenaFrameMember4:SetAlpha(0)
+			CompactArenaFrameMember5:SetAlpha(0)
+			CompactArenaFrameMember1HealthBar:SetAlpha(0)
+			CompactArenaFrameMember2HealthBar:SetAlpha(0)
+			CompactArenaFrameMember3HealthBar:SetAlpha(0)
+			CompactArenaFrameMember4HealthBar:SetAlpha(0)
+			CompactArenaFrameMember5HealthBar:SetAlpha(0)
+			CompactArenaFrameMember1.CcRemoverFrame:SetAlpha(0)
+			CompactArenaFrameMember2.CcRemoverFrame:SetAlpha(0)
+			CompactArenaFrameMember3.CcRemoverFrame:SetAlpha(0)
+			CompactArenaFrameMember4.CcRemoverFrame:SetAlpha(0)
+			CompactArenaFrameMember5.CcRemoverFrame:SetAlpha(0)
+			CompactArenaFrameMember1.CastingBarFrame:SetAlpha(0)
+			CompactArenaFrameMember2.CastingBarFrame:SetAlpha(0)
+			CompactArenaFrameMember3.CastingBarFrame:SetAlpha(0)
+			CompactArenaFrameMember4.CastingBarFrame:SetAlpha(0)
+			CompactArenaFrameMember5.CastingBarFrame:SetAlpha(0)
+			CompactArenaFrameMember1.DebuffFrame:SetAlpha(0)
+			CompactArenaFrameMember2.DebuffFrame:SetAlpha(0)
+			CompactArenaFrameMember3.DebuffFrame:SetAlpha(0)
+			CompactArenaFrameMember4.DebuffFrame:SetAlpha(0)
+			CompactArenaFrameMember5.DebuffFrame:SetAlpha(0)
+			CompactArenaFramePet1:SetAlpha(0)
+			CompactArenaFramePet2:SetAlpha(0)
+			CompactArenaFramePet3:SetAlpha(0)
+			CompactArenaFramePet4:SetAlpha(0)
+			CompactArenaFramePet5:SetAlpha(0)]]
 		end
 	end
 
-	ArenaEnemyMatchFrame1:SetAlpha(0)
-	ArenaEnemyMatchFrame2:SetAlpha(0)
-	ArenaEnemyMatchFrame3:SetAlpha(0)
-	ArenaEnemyMatchFrame4:SetAlpha(0)
-	ArenaEnemyMatchFrame5:SetAlpha(0)
-	ArenaEnemyMatchFrame1PetFrame:SetAlpha(0)
-	ArenaEnemyMatchFrame2PetFrame:SetAlpha(0)
-	ArenaEnemyMatchFrame3PetFrame:SetAlpha(0)
-	ArenaEnemyMatchFrame4PetFrame:SetAlpha(0)
-	ArenaEnemyMatchFrame5PetFrame:SetAlpha(0)
+	--[[CompactArenaFramePet1:SetAlpha(0)
+	CompactArenaFramePet2:SetAlpha(0)
+	CompactArenaFramePet3:SetAlpha(0)
+	CompactArenaFramePet4:SetAlpha(0)
+	CompactArenaFramePet5:SetAlpha(0)
+	CompactArenaFrame:SetAlpha(0)
+	CompactArenaFrameMember1:SetAlpha(0)
+	CompactArenaFrameMember2:SetAlpha(0)
+	CompactArenaFrameMember3:SetAlpha(0)
+	CompactArenaFrameMember4:SetAlpha(0)
+	CompactArenaFrameMember5:SetAlpha(0)
+	CompactArenaFrameMember1HealthBar:SetAlpha(0)
+	CompactArenaFrameMember2HealthBar:SetAlpha(0)
+	CompactArenaFrameMember3HealthBar:SetAlpha(0)
+	CompactArenaFrameMember4HealthBar:SetAlpha(0)
+	CompactArenaFrameMember5HealthBar:SetAlpha(0)
+	CompactArenaFrameMember1.CcRemoverFrame:SetAlpha(0)
+	CompactArenaFrameMember2.CcRemoverFrame:SetAlpha(0)
+	CompactArenaFrameMember3.CcRemoverFrame:SetAlpha(0)
+	CompactArenaFrameMember4.CcRemoverFrame:SetAlpha(0)
+	CompactArenaFrameMember5.CcRemoverFrame:SetAlpha(0)
+	CompactArenaFrameMember1.CastingBarFrame:SetAlpha(0)
+	CompactArenaFrameMember2.CastingBarFrame:SetAlpha(0)
+	CompactArenaFrameMember3.CastingBarFrame:SetAlpha(0)
+	CompactArenaFrameMember4.CastingBarFrame:SetAlpha(0)
+	CompactArenaFrameMember5.CastingBarFrame:SetAlpha(0)
+	CompactArenaFrameMember1.DebuffFrame:SetAlpha(0)
+	CompactArenaFrameMember2.DebuffFrame:SetAlpha(0)
+	CompactArenaFrameMember3.DebuffFrame:SetAlpha(0)
+	CompactArenaFrameMember4.DebuffFrame:SetAlpha(0)
+	CompactArenaFrameMember5.DebuffFrame:SetAlpha(0)]]
+
+
+	--CompactArenaFrame:HookScript("OnShow", function(self) CompactArenaFrame:Hide() end)
+
 
 
 
@@ -782,32 +790,32 @@ end)
 				end
 			end
 			Ctimer(.001, function() 
-				if UnitExists("pet") and PPF_Pet:IsShown() then
-					Anchor= PPF_Pet
-					if UnitExists("partypet1") and PPF_P1:IsShown() then
-						Anchor= PPF_P1
+				if UnitExists("pet") and CompactPartyFramePet1:IsShown() then
+					Anchor= CompactPartyFramePet1
+					if UnitExists("partypet1") and CompactPartyFramePet1:IsShown() then
+						Anchor= CompactPartyFramePet1
 					end
-					if UnitExists("partypet2") and PPF_P2:IsShown() then
-						Anchor= PPF_P2
+					if UnitExists("partypet2") and CompactPartyFramePet2:IsShown() then
+						Anchor= CompactPartyFramePet2
 					end
-					if UnitExists("partypet3") and PPF_P3:IsShown() then
-						Anchor= PPF_P3
+					if UnitExists("partypet3") and CompactPartyFramePet3:IsShown() then
+						Anchor= CompactPartyFramePet3
 					end
-					if UnitExists("partypet4") and PPF_P4:IsShown() then
-						Anchor= PPF_P4
+					if UnitExists("partypet4") and CompactPartyFramePet4:IsShown() then
+						Anchor= CompactPartyFramePet4
 					end
 				else
-					if UnitExists("partypet1") and PPF_P1:IsShown() then
-						Anchor= PPF_P1
+					if UnitExists("partypet1") and CompactPartyFramePet1:IsShown() then
+						Anchor= CompactPartyFramePet1
 					end
-					if UnitExists("partypet2") and PPF_P2:IsShown() then
-						Anchor= PPF_P2
+					if UnitExists("partypet2") and CompactPartyFramePet2:IsShown() then
+						Anchor= CompactPartyFramePet2
 					end
-					if UnitExists("partypet3") and PPF_P3:IsShown() then
-						Anchor= PPF_P3
+					if UnitExists("partypet3") and CompactPartyFramePet3:IsShown() then
+						Anchor= CompactPartyFramePet3
 					end
-					if UnitExists("partypet4") and PPF_P4:IsShown() then
-						Anchor= PPF_P4
+					if UnitExists("partypet4") and CompactPartyFramePet4:IsShown() then
+						Anchor= CompactPartyFramePet4
 					end
 				end
 				if Anchor ~= OmniCDAnchorFrame then
@@ -827,7 +835,7 @@ end)
 		end
 	end
 
-	--PPF_PetButton
+	--CompactPartyFramePetetButton
 
 	local function OmniCDKey(arg1)
 		if arg1 == "BambiUI" or arg1 == "OmniCD" then
@@ -876,7 +884,7 @@ end)
 		UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
 	end)
 
-	hooksecurefunc("CompactPartyFrame_SetFlowSortFunction", function()
+	hooksecurefunc(CompactPartyFrame, "SetFlowSortFunction", function()
 		--print("CompactPartyFrame_SetFlowSortFunction")
 		OmniCDAnchor()
 		UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
