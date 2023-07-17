@@ -45,20 +45,10 @@ FramerateFrame:HookScript("OnShow", function(self)
 end)
 
 
-
-
-QueueStatusButton:HookScript("OnShow", function(self)
+hooksecurefunc(FramerateFrame, "UpdatePosition", function(microMenuPosition, isMenuHorizontal)
 	FramerateFrame:ClearAllPoints()
 	--FramerateLabel:SetPoint("CENTER",UIParenr,"CENTER", 0, -220)
-	FramerateFrame:SetPoint("RIGHT",FramerateAnchor,"CENTER", 0, 0)
-	FramerateFrame:SetParent(FramerateAnchor)
-	FramerateFrame:SetScale(FramerateAnchorScale)
-end)
-
-QueueStatusButton:HookScript("OnHide", function(self)
-	FramerateFrame:ClearAllPoints()
-	--FramerateLabel:SetPoint("CENTER",UIParenr,"CENTER", 0, -220)
-	FramerateFrame:SetPoint("RIGHT",FramerateAnchor,"CENTER", 0, 0)
+	FramerateFrame:SetPoint("CENTER",FramerateAnchor,"CENTER", 0, 0)
 	FramerateFrame:SetParent(FramerateAnchor)
 	FramerateFrame:SetScale(FramerateAnchorScale)
 end)
@@ -322,7 +312,7 @@ end)
 	CompactArenaFrameMember5.DebuffFrame:SetAlpha(0)]]
 
 
-	--CompactArenaFrame:HookScript("OnShow", function(self) CompactArenaFrame:Hide() end)
+	CompactArenaFrame:HookScript("OnShow", function(self) CompactArenaFrame:Hide() end)
 
 
 
