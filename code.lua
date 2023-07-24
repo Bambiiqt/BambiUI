@@ -1,7 +1,10 @@
+local BambiUI = CreateFrame("Frame", nil, UIParent)
 
 local Ctimer = C_Timer.After
 local strmatch = string.match
 local strfind = string.find
+local tblinsert = table.insert
+local tremove = table.remove
 
 --------------------------------------------------------------------------------------------------------------------------------
 --Move Frame rate
@@ -183,6 +186,8 @@ end)
 		FramerateAnchor:ClearAllPoints()
 		FramerateAnchor:SetPoint("CENTER",UIParent,"CENTER", 0, yFramerateAnchor)
 		end
+		BambiUI:OmniCDAnchor(true)
+		BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
 	end
 	BambiUI_MoveRaidUpperRight = CreateFrame('CheckButton', 'BambiUI_MoveRaidUpperRight', BambiUI_MoveRaidUpperRight, 'UICheckButtonTemplate')
 	BambiUI_MoveRaidUpperRight:SetScript('OnClick', function() MoveRaidUpperRight()	end)
@@ -207,6 +212,8 @@ end)
 			FramerateAnchor:ClearAllPoints()
 			FramerateAnchor:SetPoint("CENTER",UIParent,"CENTER", 0, -85)
 		end
+		BambiUI:OmniCDAnchor(true)
+		BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
 	end
 	BambiUI_MoveRaidCenter = CreateFrame('CheckButton', 'BambiUI_MoveRaidCenter', BambiUI_MoveRaidCenter, 'UICheckButtonTemplate')
 	BambiUI_MoveRaidCenter:SetScript('OnClick', function() MoveRaidCenter()	end)
@@ -220,11 +227,11 @@ end)
 			PartyFrame:SetScale(sizeRaid)
 			print("FramesScaled ("..sizeRaid..")")
 		end
+		BambiUI:OmniCDAnchor(true)
+		BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
 	end
 	BambiUI_ScaleFrames = CreateFrame('CheckButton', 'BambiUI_ScaleFrames', BambiUI_ScaleFrames, 'UICheckButtonTemplate')
 	BambiUI_ScaleFrames:SetScript('OnClick', function() ScaleFramesRaid()	end)
-
-
 
 --------------------------------------------------------------------------------------------------------------------------------
 --Bottom Black UI Bar
@@ -245,78 +252,12 @@ end)
 	local function ArenaHide()
 		local inInstance, instanceType = IsInInstance()
 		if instanceType == "arena"  then
-			--[[CompactArenaFrame:SetAlpha(0)
-			CompactArenaFrameMember1:SetAlpha(0)
-			CompactArenaFrameMember2:SetAlpha(0)
-			CompactArenaFrameMember3:SetAlpha(0)
-			CompactArenaFrameMember4:SetAlpha(0)
-			CompactArenaFrameMember5:SetAlpha(0)
-			CompactArenaFrameMember1HealthBar:SetAlpha(0)
-			CompactArenaFrameMember2HealthBar:SetAlpha(0)
-			CompactArenaFrameMember3HealthBar:SetAlpha(0)
-			CompactArenaFrameMember4HealthBar:SetAlpha(0)
-			CompactArenaFrameMember5HealthBar:SetAlpha(0)
-			CompactArenaFrameMember1.CcRemoverFrame:SetAlpha(0)
-			CompactArenaFrameMember2.CcRemoverFrame:SetAlpha(0)
-			CompactArenaFrameMember3.CcRemoverFrame:SetAlpha(0)
-			CompactArenaFrameMember4.CcRemoverFrame:SetAlpha(0)
-			CompactArenaFrameMember5.CcRemoverFrame:SetAlpha(0)
-			CompactArenaFrameMember1.CastingBarFrame:SetAlpha(0)
-			CompactArenaFrameMember2.CastingBarFrame:SetAlpha(0)
-			CompactArenaFrameMember3.CastingBarFrame:SetAlpha(0)
-			CompactArenaFrameMember4.CastingBarFrame:SetAlpha(0)
-			CompactArenaFrameMember5.CastingBarFrame:SetAlpha(0)
-			CompactArenaFrameMember1.DebuffFrame:SetAlpha(0)
-			CompactArenaFrameMember2.DebuffFrame:SetAlpha(0)
-			CompactArenaFrameMember3.DebuffFrame:SetAlpha(0)
-			CompactArenaFrameMember4.DebuffFrame:SetAlpha(0)
-			CompactArenaFrameMember5.DebuffFrame:SetAlpha(0)
-			CompactArenaFramePet1:SetAlpha(0)
-			CompactArenaFramePet2:SetAlpha(0)
-			CompactArenaFramePet3:SetAlpha(0)
-			CompactArenaFramePet4:SetAlpha(0)
-			CompactArenaFramePet5:SetAlpha(0)]]
+			CompactArenaFrame:Hide()
 		end
 	end
 
-	--[[CompactArenaFramePet1:SetAlpha(0)
-	CompactArenaFramePet2:SetAlpha(0)
-	CompactArenaFramePet3:SetAlpha(0)
-	CompactArenaFramePet4:SetAlpha(0)
-	CompactArenaFramePet5:SetAlpha(0)
-	CompactArenaFrame:SetAlpha(0)
-	CompactArenaFrameMember1:SetAlpha(0)
-	CompactArenaFrameMember2:SetAlpha(0)
-	CompactArenaFrameMember3:SetAlpha(0)
-	CompactArenaFrameMember4:SetAlpha(0)
-	CompactArenaFrameMember5:SetAlpha(0)
-	CompactArenaFrameMember1HealthBar:SetAlpha(0)
-	CompactArenaFrameMember2HealthBar:SetAlpha(0)
-	CompactArenaFrameMember3HealthBar:SetAlpha(0)
-	CompactArenaFrameMember4HealthBar:SetAlpha(0)
-	CompactArenaFrameMember5HealthBar:SetAlpha(0)
-	CompactArenaFrameMember1.CcRemoverFrame:SetAlpha(0)
-	CompactArenaFrameMember2.CcRemoverFrame:SetAlpha(0)
-	CompactArenaFrameMember3.CcRemoverFrame:SetAlpha(0)
-	CompactArenaFrameMember4.CcRemoverFrame:SetAlpha(0)
-	CompactArenaFrameMember5.CcRemoverFrame:SetAlpha(0)
-	CompactArenaFrameMember1.CastingBarFrame:SetAlpha(0)
-	CompactArenaFrameMember2.CastingBarFrame:SetAlpha(0)
-	CompactArenaFrameMember3.CastingBarFrame:SetAlpha(0)
-	CompactArenaFrameMember4.CastingBarFrame:SetAlpha(0)
-	CompactArenaFrameMember5.CastingBarFrame:SetAlpha(0)
-	CompactArenaFrameMember1.DebuffFrame:SetAlpha(0)
-	CompactArenaFrameMember2.DebuffFrame:SetAlpha(0)
-	CompactArenaFrameMember3.DebuffFrame:SetAlpha(0)
-	CompactArenaFrameMember4.DebuffFrame:SetAlpha(0)
-	CompactArenaFrameMember5.DebuffFrame:SetAlpha(0)]]
-
-
-	CompactArenaFrame:HookScript("OnShow", function(self) CompactArenaFrame:Hide() end)
-
-
-
-
+	--CompactArenaFrame:HookScript("OnShow", function(self) CompactArenaFrame:Hide() end)
+	--CompactArenaFrame:HookScript("OnEvent", function(self) CompactArenaFrame:Hide() end)
 
 --------------------------------------------------------------------------------------------------------------------------------
 --ReSizeRaidFrames
@@ -421,7 +362,6 @@ end)
 --Lose Control Anchors
 --------------------------------------------------------------------------------------------------------------------------------
 
-	local HookedCompactRaidFrames = { }
 	local AnchorFrames = {}
 	local size = 62
 	local alpha = 0
@@ -459,17 +399,10 @@ end)
 	PlayerAnchor.t:SetPoint("TOP", PlayerAnchor, "BOTTOM", 0,0)
 	PlayerAnchor.t:SetTextColor(1, 1, 1, alpha)
 
-	local function SetCompactAnchor(compactRaidFrame, index)
-		local icon, OmniCDFrames
+	local function SetCompactAnchor(compactRaidFrame)
+		local icon
 		local members = GetNumGroupMembers()
-		if not OmniCDFrames then
-			OmniCDFrames = {}
-			OmniCDFrames[1] = OmniCD1
-			OmniCDFrames[2] = OmniCD2
-			OmniCDFrames[3] = OmniCD3
-			OmniCDFrames[4] = OmniCD4
-			OmniCDFrames[5] = OmniCD5
-		end
+
 		if compactRaidFrame:IsForbidden() then return end
 		local name = compactRaidFrame:GetName()
 		if not name or not name:match("^Compact") then return end
@@ -480,19 +413,11 @@ end)
 			if isPartyFrame then
 				if UnitIsUnit(anchorUnitId, "player") then 
 					icon = AnchorFrames[5]
-					if members <= 5 then
-						OmniCDFrames[5]:ClearAllPoints()
-						OmniCDFrames[5]:SetPoint("CENTER", "OmniCDAnchor"..index, "CENTER", 0, yPadding)
-					end
 				else
 					for i = 1, 4 do
 						local unit = "party"..i
 						if UnitIsUnit(anchorUnitId, unit) then 
 							icon = AnchorFrames[i]
-							if members <= 5 then
-								OmniCDFrames[i]:ClearAllPoints()
-								OmniCDFrames[i]:SetPoint("CENTER", "OmniCDAnchor"..index, "CENTER", 0, yPadding)
-							end
 						end
 					end
 				end
@@ -506,34 +431,14 @@ end)
 							if anchorPartyUnitId == anchorUnitId or UnitIsUnit(anchorUnitId, anchorPartyUnitId) then
 								if UnitIsUnit(anchorPartyUnitId, "party1") then 
 									icon = AnchorFrames[1]; compactRaidFrame = anchorPartyframe
-									if members <= 5 then
-										OmniCDFrames[1]:ClearAllPoints()
-										OmniCDFrames[1]:SetPoint("CENTER", "OmniCDAnchor"..i, "CENTER", 0, yPadding)
-									end
 								elseif UnitIsUnit(anchorPartyUnitId, "party2") then  
 									icon = AnchorFrames[2]; compactRaidFrame = anchorPartyframe
-									if members <= 5 then
-										OmniCDFrames[2]:ClearAllPoints()
-										OmniCDFrames[2]:SetPoint("CENTER", "OmniCDAnchor"..i, "CENTER", 0, yPadding)
-									end
 								elseif UnitIsUnit(anchorPartyUnitId, "party3") then 
 									icon = AnchorFrames[3]; compactRaidFrame = anchorPartyframe
-									if members <= 5 then
-										OmniCDFrames[4]:ClearAllPoints()
-										OmniCDFrames[4]:SetPoint("CENTER", "OmniCDAnchor"..i, "CENTER", 0, yPadding)
-									end
 								elseif UnitIsUnit(anchorPartyUnitId, "party4") then 
 									icon = AnchorFrames[4]; compactRaidFrame = anchorPartyframe
-									if members <= 5 then
-										OmniCDFrames[4]:ClearAllPoints()
-										OmniCDFrames[4]:SetPoint("CENTER", "OmniCDAnchor"..i, "CENTER", 0, yPadding)
-									end
 								elseif UnitIsUnit(anchorPartyUnitId, "player") then 
 									icon = AnchorFrames[5]; compactRaidFrame = anchorPartyframe
-									if members <= 5 then
-										OmniCDFrames[5]:ClearAllPoints()
-										OmniCDFrames[5]:SetPoint("CENTER", "OmniCDAnchor"..i, "CENTER", 0, yPadding)
-									end
 								end
 							end
 						end
@@ -541,19 +446,11 @@ end)
 				else
 					if UnitIsUnit(anchorUnitId, "player") then 
 						icon = AnchorFrames[5]
-						if members <= 5 and index <= 5 and not EditModeManagerFrame:ShouldRaidFrameShowSeparateGroups() then
-							OmniCDFrames[5]:ClearAllPoints() 
-							OmniCDFrames[5]:SetPoint("CENTER", "OmniCDAnchor"..index, "CENTER", 0, yPadding)
-						end
 					else
 						for i = 1, 4 do
 							local unit = "party"..i
 							if UnitIsUnit(anchorUnitId, unit) then 
 								icon = AnchorFrames[i]
-								if members <= 5 and index <= 5 and not EditModeManagerFrame:ShouldRaidFrameShowSeparateGroups() then
-									OmniCDFrames[i]:ClearAllPoints() 
-									OmniCDFrames[i]:SetPoint("CENTER", "OmniCDAnchor"..index, "CENTER", 0, yPadding)
-								end
 							end
 						end
 					end
@@ -569,7 +466,7 @@ end)
 		end
 	end
 
-	local function UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
+	function BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
 		if not EditModeManagerFrame:ShouldRaidFrameShowSeparateGroups() then
 			for i = 1, 80 do
 				local compactRaidFrame = _G["CompactRaidFrame"..i]
@@ -605,233 +502,286 @@ end)
 --------------------------------------------------------------------------------------------------------------------------------
 
 
-	local BambiUI = CreateFrame("Frame", nil, UIParent)
-
 	local iconSize = 20 -- Needs to be same size as the OmniCD Icon
-	local alphaOmni = 0
+	local alphaOmni = 1
 	local yPadding = -10
+	local playerpadding = -10
+	local petpadding = -11
 
-	local OmniCDAnchor1 = CreateFrame("Frame", "OmniCDAnchor1", UIParent)
-	OmniCDAnchor1:ClearAllPoints()
-	OmniCDAnchor1:SetSize(iconSize, iconSize)
-	OmniCDAnchor1.texture = OmniCDAnchor1:CreateTexture(nil, "BACKGROUND")
-	OmniCDAnchor1.texture:SetAllPoints(true)
-	OmniCDAnchor1.texture:SetColorTexture(1.0, 1.0, 1.0, alphaOmni)
-	OmniCDAnchor1.t = OmniCDAnchor1:CreateFontString(nil, "OVERLAY", "GameTooltipText")
-	OmniCDAnchor1.t:SetParent(OmniCDAnchor1)
-	OmniCDAnchor1.t:SetText(OmniCDAnchor1:GetName())
-	OmniCDAnchor1.t:SetFont("Fonts\\FRIZQT__.TTF", 9 )
-	OmniCDAnchor1.t:SetPoint("BOTTOMLEFT", OmniCDAnchor1, "BOTTOMRIGHT", 2, 0)
-	OmniCDAnchor1.t:SetTextColor(1, 1, 1, alphaOmni)
-	--OmniCDAnchor1.yourUnitKey = "party1"
 
-	local OmniCDAnchor2 = CreateFrame("Frame", "OmniCDAnchor2", UIParent)
-	OmniCDAnchor2:ClearAllPoints()
-	OmniCDAnchor2:SetSize(iconSize, iconSize)
-	OmniCDAnchor2:SetPoint("TOP", OmniCDAnchor1, "BOTTOM", 0, yPadding)
-	OmniCDAnchor2.texture = OmniCDAnchor2:CreateTexture(nil, "BACKGROUND")
-	OmniCDAnchor2.texture:SetAllPoints(true)
-	OmniCDAnchor2.texture:SetColorTexture(1.0, 1.0, 1.0, alphaOmni)
-	OmniCDAnchor2.t = OmniCDAnchor2:CreateFontString(nil, "OVERLAY", "GameTooltipText")
-	OmniCDAnchor2.t:SetParent(OmniCDAnchor2)
-	OmniCDAnchor2.t:SetText(OmniCDAnchor2:GetName())
-	OmniCDAnchor2.t:SetFont("Fonts\\FRIZQT__.TTF", 9 )
-	OmniCDAnchor2.t:SetPoint("BOTTOMLEFT", OmniCDAnchor2, "BOTTOMRIGHT", 2, 0)
-	OmniCDAnchor2.t:SetTextColor(1, 1, 1, alphaOmni)
-	--OmniCDAnchor2.yourUnitKey = "party2"
+	local OmniCDAnchor = {}
 
-	local OmniCDAnchor3 = CreateFrame("Frame", "OmniCDAnchor3", UIParent)
-	OmniCDAnchor3:ClearAllPoints()
-	OmniCDAnchor3:SetSize(iconSize, iconSize)
-	OmniCDAnchor3:SetPoint("TOP", OmniCDAnchor2, "BOTTOM", 0, yPadding)
-	OmniCDAnchor3.texture = OmniCDAnchor3:CreateTexture(nil, "BACKGROUND")
-	OmniCDAnchor3.texture:SetAllPoints(true)
-	OmniCDAnchor3.texture:SetColorTexture(1.0, 1.0, 1.0, alphaOmni)
-	OmniCDAnchor3.t = OmniCDAnchor3:CreateFontString(nil, "OVERLAY", "GameTooltipText")
-	OmniCDAnchor3.t:SetParent(OmniCDAnchor3)
-	OmniCDAnchor3.t:SetText(OmniCDAnchor3:GetName())
-	OmniCDAnchor3.t:SetFont("Fonts\\FRIZQT__.TTF", 9 )
-	OmniCDAnchor3.t:SetPoint("BOTTOMLEFT", OmniCDAnchor3, "BOTTOMRIGHT", 2, 0)
-	OmniCDAnchor3.t:SetTextColor(1, 1, 1, alphaOmni)
-	--OmniCDAnchor3.yourUnitKey = "party3"
+	for i = 1, 40 do
+		OmniCDAnchor["CompactRaidFrame"..i] = CreateFrame("Frame", "OmniCDRaid"..i, UIParent)
+		local OmniCDAnchor = OmniCDAnchor["CompactRaidFrame"..i]
+		OmniCDAnchor:ClearAllPoints()
+		OmniCDAnchor:SetSize(iconSize, iconSize)
+		OmniCDAnchor.texture = OmniCDAnchor:CreateTexture(nil, "BACKGROUND")
+		OmniCDAnchor.texture:SetAllPoints(true)
+		OmniCDAnchor.texture:SetColorTexture(1.0, 1.0, 1.0, alphaOmni)
+		OmniCDAnchor.t = OmniCDAnchor:CreateFontString(nil, "OVERLAY", "GameTooltipText")
+		OmniCDAnchor.t:SetParent(OmniCDAnchor)
+		OmniCDAnchor.t:SetText(OmniCDAnchor:GetName())
+		OmniCDAnchor.t:SetFont("Fonts\\FRIZQT__.TTF", 9 )
+		OmniCDAnchor.t:SetPoint("BOTTOMLEFT", OmniCDAnchor, "BOTTOMRIGHT", 2, 0)
+		OmniCDAnchor.t:SetTextColor(1, 1, 1, alphaOmni)
+		
+	end
 
-	local OmniCDAnchor4 = CreateFrame("Frame", "OmniCDAnchor4", UIParent)
-	OmniCDAnchor4:ClearAllPoints()
-	OmniCDAnchor4:SetSize(iconSize, iconSize)
-	OmniCDAnchor4:SetPoint("TOP", OmniCDAnchor3, "BOTTOM", 0, yPadding)
-	OmniCDAnchor4.texture = OmniCDAnchor4:CreateTexture(nil, "BACKGROUND")
-	OmniCDAnchor4.texture:SetAllPoints(true)
-	OmniCDAnchor4.texture:SetColorTexture(1.0, 1.0, 1.0, alphaOmni)
-	OmniCDAnchor4.t = OmniCDAnchor4:CreateFontString(nil, "OVERLAY", "GameTooltipText")
-	OmniCDAnchor4.t:SetParent(OmniCDAnchor4)
-	OmniCDAnchor4.t:SetText(OmniCDAnchor4:GetName())
-	OmniCDAnchor4.t:SetFont("Fonts\\FRIZQT__.TTF", 9 )
-	OmniCDAnchor4.t:SetPoint("BOTTOMLEFT", OmniCDAnchor4, "BOTTOMRIGHT", 2, 0)
-	OmniCDAnchor4.t:SetTextColor(1, 1, 1, alphaOmni)
-	--OmniCDAnchor4.yourUnitKey = "party4"
-
-	
-	local OmniCDAnchor5 = CreateFrame("Frame", "OmniCDAnchor5", UIParent)
-	OmniCDAnchor5:ClearAllPoints()
-	OmniCDAnchor5:SetSize(iconSize, iconSize)
-	OmniCDAnchor5:SetPoint("TOP", OmniCDAnchor4, "BOTTOM", 0, yPadding)
-	OmniCDAnchor5.texture = OmniCDAnchor5:CreateTexture(nil, "BACKGROUND")
-	OmniCDAnchor5.texture:SetAllPoints(true)
-	OmniCDAnchor5.texture:SetColorTexture(1.0, 1.0, 1.0, alphaOmni)
-	OmniCDAnchor5.t = OmniCDAnchor5:CreateFontString(nil, "OVERLAY", "GameTooltipText")
-	OmniCDAnchor5.t:SetParent(OmniCDAnchor5)
-	OmniCDAnchor5.t:SetText(OmniCDAnchor5:GetName())
-	OmniCDAnchor5.t:SetFont("Fonts\\FRIZQT__.TTF", 9 )
-	OmniCDAnchor5.t:SetPoint("BOTTOMLEFT", OmniCDAnchor5, "BOTTOMRIGHT", 2, 0)
-	OmniCDAnchor5.t:SetTextColor(1, 1, 1, alphaOmni)
-	--OmniCDAnchor5.yourUnitKey = "player"
-
-	local OmniCD1 = CreateFrame("Frame", "OmniCD1", UIParent)
-	OmniCD1:ClearAllPoints()
-	OmniCD1:SetSize(iconSize, iconSize)
-	OmniCD1.texture = OmniCD1:CreateTexture(nil, "BACKGROUND")
-	OmniCD1.texture:SetAllPoints(true)
-	OmniCD1.texture:SetColorTexture(1.0, 1.0, 1.0, alphaOmni)
-	OmniCD1.t = OmniCD1:CreateFontString(nil, "OVERLAY", "GameTooltipText")
-	OmniCD1.t:SetParent(OmniCD1)
-	OmniCD1.t:SetText(OmniCD1:GetName())
-	OmniCD1.t:SetFont("Fonts\\FRIZQT__.TTF", 9 )
-	OmniCD1.t:SetPoint("TOPLEFT", OmniCD1, "TOPRIGHT", 2, 0)
-	OmniCD1.t:SetTextColor(1, 1, 1, alphaOmni)
-	OmniCD1.yourUnitKey = "party1"
-
-	local OmniCD2 = CreateFrame("Frame", "OmniCD2", UIParent)
-	OmniCD2:ClearAllPoints()
-	OmniCD2:SetSize(iconSize, iconSize)
-	OmniCD2:SetPoint("TOP", OmniCD1, "BOTTOM", 0, yPadding)
-	OmniCD2.texture = OmniCD2:CreateTexture(nil, "BACKGROUND")
-	OmniCD2.texture:SetAllPoints(true)
-	OmniCD2.texture:SetColorTexture(1.0, 1.0, 1.0, alphaOmni)
-	OmniCD2.t = OmniCD2:CreateFontString(nil, "OVERLAY", "GameTooltipText")
-	OmniCD2.t:SetParent(OmniCD2)
-	OmniCD2.t:SetText(OmniCD2:GetName())
-	OmniCD2.t:SetFont("Fonts\\FRIZQT__.TTF", 9 )
-	OmniCD2.t:SetPoint("TOPLEFT", OmniCD2, "TOPRIGHT", 2, 0)
-	OmniCD2.t:SetTextColor(1, 1, 1, alphaOmni)
-	OmniCD2.yourUnitKey = "party2"
-
-	local OmniCD3 = CreateFrame("Frame", "OmniCD3", UIParent)
-	OmniCD3:ClearAllPoints()
-	OmniCD3:SetSize(iconSize, iconSize)
-	OmniCD3:SetPoint("TOP", OmniCD2, "BOTTOM", 0, yPadding)
-	OmniCD3.texture = OmniCD3:CreateTexture(nil, "BACKGROUND")
-	OmniCD3.texture:SetAllPoints(true)
-	OmniCD3.texture:SetColorTexture(1.0, 1.0, 1.0, alphaOmni)
-	OmniCD3.t = OmniCD3:CreateFontString(nil, "OVERLAY", "GameTooltipText")
-	OmniCD3.t:SetParent(OmniCD3)
-	OmniCD3.t:SetText(OmniCD3:GetName())
-	OmniCD3.t:SetFont("Fonts\\FRIZQT__.TTF", 9 )
-	OmniCD3.t:SetPoint("TOPLEFT", OmniCD3, "TOPRIGHT", 2, 0)
-	OmniCD3.t:SetTextColor(1, 1, 1, alphaOmni)
-	OmniCD3.yourUnitKey = "party3"
-
-	local OmniCD4 = CreateFrame("Frame", "OmniCD4", UIParent)
-	OmniCD4:ClearAllPoints()
-	OmniCD4:SetSize(iconSize, iconSize)
-	OmniCD4:SetPoint("TOP", OmniCD3, "BOTTOM", 0, yPadding)
-	OmniCD4.texture = OmniCD4:CreateTexture(nil, "BACKGROUND")
-	OmniCD4.texture:SetAllPoints(true)
-	OmniCD4.texture:SetColorTexture(1.0, 1.0, 1.0, alphaOmni)
-	OmniCD4.t = OmniCD4:CreateFontString(nil, "OVERLAY", "GameTooltipText")
-	OmniCD4.t:SetParent(OmniCD4)
-	OmniCD4.t:SetText(OmniCD4:GetName())
-	OmniCD4.t:SetFont("Fonts\\FRIZQT__.TTF", 9 )
-	OmniCD4.t:SetPoint("TOPLEFT", OmniCD4, "TOPRIGHT", 2, 0)
-	OmniCD4.t:SetTextColor(1, 1, 1, alphaOmni)
-	OmniCD4.yourUnitKey = "party4"
-
-	
-	local OmniCD5 = CreateFrame("Frame", "OmniCD5", UIParent)
-	OmniCD5:ClearAllPoints()
-	OmniCD5:SetSize(iconSize, iconSize)
-	OmniCD5:SetPoint("TOP", OmniCD4, "BOTTOM", 0, yPadding)
-	OmniCD5.texture = OmniCD5:CreateTexture(nil, "BACKGROUND")
-	OmniCD5.texture:SetAllPoints(true)
-	OmniCD5.texture:SetColorTexture(1.0, 1.0, 1.0, alphaOmni)
-	OmniCD5.t = OmniCD5:CreateFontString(nil, "OVERLAY", "GameTooltipText")
-	OmniCD5.t:SetParent(OmniCD5)
-	OmniCD5.t:SetText("Player")
-	OmniCD5.t:SetFont("Fonts\\FRIZQT__.TTF", 9 )
-	OmniCD5.t:SetPoint("TOPLEFT", OmniCD5, "TOPRIGHT", 2, 0)
-	OmniCD5.t:SetTextColor(1, 1, 1, alphaOmni)
-	OmniCD5.yourUnitKey = "player"
-
-	local x = 1
-	local y = 0
-	local OmniCDAnchorFrame
-
-	local function OmniCDAnchor()
-		local isInInstance, instanceType = IsInInstance()
-		local units, pets, Anchor = 0, nil, nil
-		local members = GetNumGroupMembers()
-		if EditModeManagerFrame:UseRaidStylePartyFrames() and members <= 5 then
-			for i = 1, 5 do
-				local compactRaidFrame = _G["CompactPartyFrameMember"..i] --Probably will Need to Add a Pet Function Later
-				if (compactRaidFrame ~= nil) then
-					if UnitExists(compactRaidFrame.unit) then
-						Anchor = compactRaidFrame
-						units = units + 1
-					end
-				end
-			end
-			Ctimer(.001, function() 
-				if UnitExists("pet") and CompactPartyFramePet1:IsShown() then
-					Anchor= CompactPartyFramePet1
-					if UnitExists("partypet1") and CompactPartyFramePet1:IsShown() then
-						Anchor= CompactPartyFramePet1
-					end
-					if UnitExists("partypet2") and CompactPartyFramePet2:IsShown() then
-						Anchor= CompactPartyFramePet2
-					end
-					if UnitExists("partypet3") and CompactPartyFramePet3:IsShown() then
-						Anchor= CompactPartyFramePet3
-					end
-					if UnitExists("partypet4") and CompactPartyFramePet4:IsShown() then
-						Anchor= CompactPartyFramePet4
-					end
-				else
-					if UnitExists("partypet1") and CompactPartyFramePet1:IsShown() then
-						Anchor= CompactPartyFramePet1
-					end
-					if UnitExists("partypet2") and CompactPartyFramePet2:IsShown() then
-						Anchor= CompactPartyFramePet2
-					end
-					if UnitExists("partypet3") and CompactPartyFramePet3:IsShown() then
-						Anchor= CompactPartyFramePet3
-					end
-					if UnitExists("partypet4") and CompactPartyFramePet4:IsShown() then
-						Anchor= CompactPartyFramePet4
-					end
-				end
-				if Anchor ~= OmniCDAnchorFrame then
-					OmniCDAnchorFrame = Anchor
-					OmniCDAnchor1:ClearAllPoints()
-					OmniCDAnchor1:SetPoint("TOPLEFT", Anchor, "BOTTOMLEFT", 1, yPadding)
-				end
-			end)
-		end
-		if IsInRaid() and CompactRaidFrameContainer:IsShown() and instanceType ~= "arena" and members <= 5 and not EditModeManagerFrame:ShouldRaidFrameShowSeparateGroups() then 
-			OmniCDAnchor1:ClearAllPoints()
-			OmniCDAnchor1:SetPoint("TOPLEFT", CompactRaidFrameContainer, "BOTTOMLEFT", 1, yPadding)
-		end
-		if members > 5 or EditModeManagerFrame:ShouldRaidFrameShowSeparateGroups() then
-			OmniCDAnchor1:ClearAllPoints()
-			OmniCDAnchor1:SetPoint("BOTTOMLEFT", "UIParent", "BOTTOMLEFT", 0, -1000)
+	for i = 1, 8 do
+		for j = 1, 5 do
+			OmniCDAnchor["CompactRaidGroup"..i.."Member"..j] = CreateFrame("Frame", "OmniCDRaid"..i.."Member"..j, UIParent)
+			local OmniCDAnchor = OmniCDAnchor["CompactRaidGroup"..i.."Member"..j]
+			OmniCDAnchor:ClearAllPoints()
+			OmniCDAnchor:SetSize(iconSize, iconSize)
+			OmniCDAnchor.texture = OmniCDAnchor:CreateTexture(nil, "BACKGROUND")
+			OmniCDAnchor.texture:SetAllPoints(OmniCDAnchor)
+			OmniCDAnchor.texture:SetColorTexture(1.0, 1.0, 1.0, alphaOmni)
+			OmniCDAnchor.t = OmniCDAnchor:CreateFontString(nil, "OVERLAY", "GameTooltipText")
+			OmniCDAnchor.t:SetParent(OmniCDAnchor)
+			OmniCDAnchor.t:SetText(OmniCDAnchor:GetName())
+			OmniCDAnchor.t:SetFont("Fonts\\FRIZQT__.TTF", 9 )
+			OmniCDAnchor.t:SetPoint("BOTTOMLEFT", OmniCDAnchor, "BOTTOMRIGHT", 2, 0)
+			OmniCDAnchor.t:SetTextColor(1, 1, 1, alphaOmni)
 		end
 	end
 
-	--CompactPartyFramePetetButton
+	for i = 1, 5 do
+		OmniCDAnchor["CompactPartyFrameMember"..i] = CreateFrame("Frame", "OmniCDParty"..i, UIParent)
+		local OmniCDAnchor = OmniCDAnchor["CompactPartyFrameMember"..i]
+		OmniCDAnchor:ClearAllPoints()
+		OmniCDAnchor:SetSize(iconSize, iconSize)
+		OmniCDAnchor.texture = OmniCDAnchor:CreateTexture(nil, "BACKGROUND")
+		OmniCDAnchor.texture:SetAllPoints(OmniCDAnchor)
+		OmniCDAnchor.texture:SetColorTexture(1.0, 1.0, 1.0, alphaOmni)
+		OmniCDAnchor.t = OmniCDAnchor:CreateFontString(nil, "OVERLAY", "GameTooltipText")
+		OmniCDAnchor.t:SetParent(OmniCDAnchor)
+		OmniCDAnchor.t:SetText(OmniCDAnchor:GetName())
+		OmniCDAnchor.t:SetFont("Fonts\\FRIZQT__.TTF", 9 )
+		OmniCDAnchor.t:SetPoint("BOTTOMLEFT", OmniCDAnchor, "BOTTOMRIGHT", 2, 0)
+		OmniCDAnchor.t:SetTextColor(1, 1, 1, alphaOmni)
+	end
+
+	local OmniCDKey  = {}
+
+	for i = 1, 40 do 
+		OmniCDKey["raid"..i] = CreateFrame("Frame", "BambiUI"..i, UIParent)
+		local OmniCDKey = OmniCDKey["raid"..i]
+		OmniCDKey:ClearAllPoints()
+		OmniCDKey:SetSize(iconSize, iconSize)
+		OmniCDKey.texture = OmniCDKey:CreateTexture(nil, "BACKGROUND")
+		OmniCDKey.texture:SetAllPoints(true)
+		OmniCDKey.texture:SetColorTexture(1.0, 1.0, 1.0, alphaOmni)
+		OmniCDKey.t = OmniCDKey:CreateFontString(nil, "OVERLAY", "GameTooltipText")
+		OmniCDKey.t:SetParent(OmniCDKey)
+		OmniCDKey.t:SetText(OmniCDKey:GetName())
+		OmniCDKey.t:SetFont("Fonts\\FRIZQT__.TTF", 9 )
+		OmniCDKey.t:SetPoint("TOPLEFT", OmniCDKey, "TOPRIGHT", 2, 0)
+		OmniCDKey.t:SetTextColor(1, 1, 1, alphaOmni)
+		OmniCDKey.yourUnitKey = "raid"..i
+	end
+
+	for i = 1, 5 do 
+		if i == 5 then 
+			OmniCDKey["player"] = CreateFrame("Frame", "BambiUI"..45, UIParent)
+			local OmniCDKey = OmniCDKey["player"]
+			OmniCDKey:ClearAllPoints()
+			OmniCDKey:SetSize(iconSize, iconSize)
+			OmniCDKey.texture = OmniCDKey:CreateTexture(nil, "BACKGROUND")
+			OmniCDKey.texture:SetAllPoints(OmniCDKey)
+			OmniCDKey.texture:SetColorTexture(1.0, 1.0, 1.0, alphaOmni)
+			OmniCDKey.t = OmniCDKey:CreateFontString(nil, "OVERLAY", "GameTooltipText")
+			OmniCDKey.t:SetParent(OmniCDKey)
+			OmniCDKey.t:SetText(OmniCDKey:GetName())
+			OmniCDKey.t:SetFont("Fonts\\FRIZQT__.TTF", 9 )
+			OmniCDKey.t:SetPoint("TOPLEFT", OmniCDKey, "TOPRIGHT", 2, 0)
+			OmniCDKey.t:SetTextColor(1, 1, 1, alphaOmni)
+			OmniCDKey.yourUnitKey = "player"
+		else	
+			local x = 40 + i
+			OmniCDKey["party"..i] = CreateFrame("Frame", "BambiUI"..x, UIParent)
+			local OmniCDKey = OmniCDKey["party"..i]
+			OmniCDKey:ClearAllPoints()
+			OmniCDKey:SetSize(iconSize, iconSize)
+			OmniCDKey.texture = OmniCDKey:CreateTexture(nil, "BACKGROUND")
+			OmniCDKey.texture:SetAllPoints(OmniCDKey)
+			OmniCDKey.texture:SetColorTexture(1.0, 1.0, 1.0, alphaOmni)
+			OmniCDKey.t = OmniCDKey:CreateFontString(nil, "OVERLAY", "GameTooltipText")
+			OmniCDKey.t:SetParent(OmniCDKey)
+			OmniCDKey.t:SetText(OmniCDKey:GetName())
+			OmniCDKey.t:SetFont("Fonts\\FRIZQT__.TTF", 9 )
+			OmniCDKey.t:SetPoint("TOPLEFT", OmniCDKey, "TOPRIGHT", 2, 0)
+			OmniCDKey.t:SetTextColor(1, 1, 1, alphaOmni)
+			OmniCDKey.yourUnitKey = "party"..i
+		end
+	end
+
+	local lastPartyAnchor
+
+	function  BambiUI:OmniCDAnchor(forced)
+		local frames = {}
+		local groups = {}
+		local RaidFrameShown
+
+		local inInstance, instanceType = IsInInstance()
+
+		if EditModeManagerFrame:UseRaidStylePartyFrames() then
+
+			if not EditModeManagerFrame:ShouldRaidFrameShowSeparateGroups() then
+				for i = 1, 40 do
+					local compactRaidFrame = _G["CompactRaidFrame"..i]
+					OmniCDAnchor["CompactRaidFrame"..i]:ClearAllPoints()
+					OmniCDAnchor["CompactRaidFrame"..i]:Hide()
+					if instanceType ~= "arena" and IsInRaid() and compactRaidFrame and compactRaidFrame.unit and compactRaidFrame:IsShown() then
+						tblinsert(frames, compactRaidFrame)
+						RaidFrameShown = true
+					end
+				end
+			elseif EditModeManagerFrame:ShouldRaidFrameShowSeparateGroups() then
+				for i = 1, 8 do
+					for j = 1, 5 do
+						local compactRaidFrame = _G["CompactRaidGroup"..i.."Member"..j]
+						OmniCDAnchor["CompactRaidGroup"..i.."Member"..j]:ClearAllPoints()
+						OmniCDAnchor["CompactRaidGroup"..i.."Member"..j]:Hide()
+						if instanceType ~= "arena" and IsInRaid() and compactRaidFrame and compactRaidFrame.unit and compactRaidFrame:IsShown() then
+							tblinsert(frames, compactRaidFrame)
+							RaidFrameShown = true
+						end
+					end
+				end
+			end
+
+			for i = 1, 5 do
+				local compactRaidFrame = _G["CompactPartyFrameMember"..i]
+				if not RaidFrameShown and compactRaidFrame and compactRaidFrame.unit and compactRaidFrame:IsShown() then
+					tblinsert(frames, compactRaidFrame)
+				else
+					OmniCDAnchor["CompactPartyFrameMember"..i]:ClearAllPoints()
+					OmniCDAnchor["CompactPartyFrameMember"..i]:Hide()
+				end
+			end
+
+			for i = 1, 5 do
+				local compactRaidFrame = _G["CompactPartyFramePet"..i]
+				if not RaidFrameShown and compactRaidFrame and compactRaidFrame.unit and compactRaidFrame:IsShown() then
+					tblinsert(frames, compactRaidFrame)
+				end
+			end
+
+			table.sort(frames, function(x, y)
+				if x:GetLeft() ~= y:GetLeft() then
+					return x:GetLeft() < y:GetLeft()
+				end
+					return x:GetLeft() > y:GetLeft()
+			end)
+
+			for i = 1 , 8 do 
+				groups[i] = {}
+			end
+			
+			for i, frame in ipairs(frames) do
+				if RaidFrameShown and EditModeManagerFrame:ShouldRaidFrameShowSeparateGroups() then
+					if strfind(frame:GetName(), "CompactRaidGroup1") then
+						tblinsert(groups[1], frame)
+					end
+					if strfind(frame:GetName(), "CompactRaidGroup2") then
+						tblinsert(groups[2], frame)
+					end
+					if strfind(frame:GetName(), "CompactRaidGroup3") then
+						tblinsert(groups[3], frame)
+					end
+					if strfind(frame:GetName(), "CompactRaidGroup4") then
+						tblinsert(groups[4], frame)
+					end
+					if strfind(frame:GetName(), "CompactRaidGroup5") then
+						tblinsert(groups[5], frame)
+					end
+					if strfind(frame:GetName(), "CompactRaidGroup6") then
+						tblinsert(groups[6], frame)
+					end
+					if strfind(frame:GetName(), "CompactRaidGroup7") then
+						tblinsert(groups[7], frame)
+					end
+					if strfind(frame:GetName(), "CompactRaidGroup8") then
+						tblinsert(groups[8], frame)
+					end
+				elseif RaidFrameShown and not EditModeManagerFrame:ShouldRaidFrameShowSeparateGroups() then
+					if i <= 5 then
+						tblinsert(groups[1], frame)
+					end
+					if i > 5 and i <= 10 then
+						tblinsert(groups[2], frame)
+					end
+					if i > 10 and i <= 15 then
+						tblinsert(groups[3], frame)
+					end
+					if i > 15 and i <= 20 then
+						tblinsert(groups[4], frame)
+					end
+					if i > 20 and i <= 25 then
+						tblinsert(groups[5], frame)
+					end
+					if i > 25 and i <= 30 then
+						tblinsert(groups[6], frame)
+					end
+					if i > 30 and i <= 35 then 
+						tblinsert(groups[7], frame)
+					end
+					if i > 35 and i <= 40 then 
+						tblinsert(groups[8], frame)
+					end
+				elseif not RaidFrameShown then 
+					tblinsert(groups[1], frame)
+				end
+			end
+
+			for i = 1 , 8 do 	
+				if #groups[i] > 0 then 
+					table.sort(groups[i], function(x, y)
+						return x:GetTop() > y:GetTop()
+					end)
+
+					local Anchor = groups[i][#groups[i]]
+					print(groups[i][#groups[i]]:GetName())
+		
+					if strfind(Anchor:GetName(), "pet") then
+						yPadding = petpadding
+					else
+						yPadding = playerpadding
+					end
+
+					local count = 1 
+					local lastanchorFrame
+					if RaidFrameShown or forced or lastPartyAnchor ~= Anchor then
+						for _, frame in ipairs(groups[i]) do
+							if frame and frame.unit and not strfind(frame.unit, "pet") then 
+								local anchorFrame = OmniCDAnchor[frame:GetName()]
+								local keyFrame = OmniCDKey[frame.unit]
+								anchorFrame:ClearAllPoints()
+								keyFrame:ClearAllPoints()
+								if count == 1 then 
+									anchorFrame:SetPoint("TOPLEFT", Anchor, "BOTTOMLEFT", 1, yPadding)
+									lastPartyAnchor = Anchor
+								else
+									anchorFrame:SetPoint("TOPLEFT", lastanchorFrame , "BOTTOMLEFT", 0, yPadding)
+								end
+								anchorFrame:Show()
+								keyFrame:SetParent(anchorFrame)
+								keyFrame:SetPoint("CENTER", anchorFrame, "CENTER", 0, nil)
+								count = count + 1
+								lastanchorFrame = anchorFrame
+								--print(frame:GetName() .. " = " .. frame.unit)
+							end
+						end
+					end
+				end
+			end
+		end
+	end
 
 	local function OmniCDKey(arg1)
-		if arg1 == "BambiUI" or arg1 == "OmniCD" then
-			if OmniCD then
-				OmniCD.AddUnitFrameData("BambiUI", "OmniCD", "yourUnitKey", 1)
-			end
+		if arg1 == "OmniCD" then
+				--OmniCD.AddUnitFrameData("BambiUI", "BambiUI", "yourUnitKey", 1, 45)
 		end
 		C_Timer.After(8, function()	-- delay checking to make sure all variables of the other addons are loaded
 			OmniCDKey(arg1)
@@ -842,61 +792,82 @@ end)
 --Handler's
 --------------------------------------------------------------------------------------------------------------------------------
 
-	EditModeManagerFrame:HookScript("OnHide", function() Ctimer(.002, function() OmniCDAnchor() UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() end) end)
+	EditModeManagerFrame:HookScript("OnHide", function() 
+		Ctimer(1, function() 		 
+			BambiUI:OmniCDAnchor()
+			BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
+		end) 
+	end)
 
 	hooksecurefunc(EditModeManagerFrame, "UpdateRaidContainerFlow", function(groupMode)
 		--print("EditModeManagerFrame: UpdateRaidContainerFlow")
-		OmniCDAnchor()
-		UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
+		Ctimer(1, function() 		 
+			BambiUI:OmniCDAnchor()
+			BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
+		end) 
 	end)
 
 	hooksecurefunc(CompactRaidFrameContainer, "SetGroupMode", function(groupMode)
 		--print("SetGroupMode")
-		OmniCDAnchor()
-		UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
+		Ctimer(1, function() 		 
+			BambiUI:OmniCDAnchor()
+			BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
+		end) 
 	end)
 
 	hooksecurefunc(CompactRaidFrameContainer, "SetFlowFilterFunction", function(flowFilterFunc)
 		--print("SetFlowFilterFunction")
-		OmniCDAnchor()
-		UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
+		Ctimer(1, function() 		 
+			BambiUI:OmniCDAnchor()
+			BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
+		end) 
 	end)
 
 	hooksecurefunc(CompactRaidFrameContainer, "SetGroupFilterFunction", function(groupFilterFunc)
 		--print("SetGroupFilterFunction")
-		OmniCDAnchor()
-		UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
+		Ctimer(1, function() 		 
+			BambiUI:OmniCDAnchor()
+			BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
+		end) 
 	end)
 
 	hooksecurefunc(CompactRaidFrameContainer, "SetFlowSortFunction", function(flowSortFunc)
 		--print("SetFlowSortFunction")
-		OmniCDAnchor()
-		UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
+		Ctimer(1, function() 		 
+			BambiUI:OmniCDAnchor()
+			BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
+		end) 
 	end)
 
 	hooksecurefunc(CompactPartyFrame, "SetFlowSortFunction", function()
 		--print("CompactPartyFrame_SetFlowSortFunction")
-		OmniCDAnchor()
-		UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
+		Ctimer(1, function() 		 
+			BambiUI:OmniCDAnchor()
+			BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
+		end) 
 	end)
 
 	hooksecurefunc("CompactUnitFrame_OnLoad", function(self)
-		OmniCDAnchor()
-		UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
+		Ctimer(1, function() 		 
+			BambiUI:OmniCDAnchor()
+			BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
+		end) 
 	end)
 
-	hooksecurefunc("CompactUnitFrame_UpdateAll", function(self)
-		OmniCDAnchor()
-		UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
-	end)
+	
 
 	function BambiUI:GROUP_ROSTER_UPDATE()
-		OmniCDAnchor()
-		UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
+		Ctimer(1, function() 		 
+			BambiUI:OmniCDAnchor()
+			BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
+		end) 
 	end
 
 	function BambiUI:UNIT_PET()
-		OmniCDAnchor()
+		Ctimer(1, function() 		 
+			BambiUI:OmniCDAnchor()
+			--BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
+		end) 
 	end
 
 	function BambiUI:ADDON_LOADED(arg1)
@@ -906,11 +877,18 @@ end)
 	function BambiUI:PLAYER_ENTERING_WORLD()
 		 ReSizeRaidFrames()
 		 MoveFrameRate()
-		 UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
+		 Ctimer(2, function() 		 
+			BambiUI:OmniCDAnchor(true)
+			BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
+		end) 
 	end
 
 	function BambiUI:ARENA_OPPONENT_UPDATE()
 		ArenaHide()
+	end
+
+	function BambiUI:ARENA_PREP_OPPONENT_SPECIALIZATIONS()
+		--ArenaHide()
 	end
 
 	BambiUI:RegisterEvent("ADDON_LOADED")
@@ -918,4 +896,6 @@ end)
 	BambiUI:RegisterEvent("PLAYER_ENTERING_WORLD")
 	BambiUI:RegisterEvent("UNIT_PET")
 	BambiUI:RegisterEvent("ARENA_OPPONENT_UPDATE")
+	BambiUI:RegisterEvent("ARENA_PREP_OPPONENT_SPECIALIZATIONS")
 	BambiUI:SetScript("OnEvent",function(self,event,...) if self[event] then self[event](self,...) end end)
+
