@@ -964,17 +964,6 @@ end)
 		end)
 	end
 
-	local function FireAnchors()
-		Ctimer(.1, function()
-			BambiUI:OmniCDAnchor(true)
-			BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
-		end)
-	end
-
-	BambiOmni = CreateFrame("Frame", nil, UIParent)
-	function BambiOmni:Omni()
-		BambiUI:OmniCDAnchor()
-	end
 --------------------------------------------------------------------------------------------------------------------------------
 --Handler's
 --------------------------------------------------------------------------------------------------------------------------------
@@ -1045,6 +1034,11 @@ end)
 
 	function BambiUI:ADDON_LOADED(arg1)
 		 OmniCDKey(arg1)
+	end
+
+	BambiOmni = CreateFrame("Frame", nil, UIParent)
+	function BambiOmni:Omni()
+		BambiUI:OmniCDAnchor()
 	end
 
 	function BambiUI:PLAYER_ENTERING_WORLD()
