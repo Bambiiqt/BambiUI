@@ -6,6 +6,7 @@ local strfind = string.find
 local tblinsert = table.insert
 local tremove = table.remove
 
+
 --------------------------------------------------------------------------------------------------------------------------------
 --Move Frame rate
 --------------------------------------------------------------------------------------------------------------------------------
@@ -161,33 +162,33 @@ end)
 	BambiUI_ShowEnemyMinus:SetScript('OnClick', function() ShowEnemyMinus()	end)
 
 	local function MoveRaidUpperRight()
-	if InCombatLockdown() then
-		print("InCombatLockdown: MoveRaid (Standard)")
-		return
-	else
-		local f,s,p=CompactRaidFrameContainer,EditModeManagerFrame,PartyFrame
-		f:SetScale(1); --Helps if Anything Happens and When ReSizing Down
-		f:ClearAllPoints();
-		f:SetPoint("TOPLEFT",UIParent,"TOPRIGHT",-725,-499 + yOffSet);
-		p:SetScale(1);
-		p:ClearAllPoints();
-		p:SetPoint("TOPLEFT", UIParent,"TOPRIGHT",-727,-483.5 + yOffSet) --2, +14 offset from raid
-		s:OnSystemPositionChange(f);
-		s:OnSystemPositionChange(p);
-		s:SaveLayoutChanges();
-		f:SetClampedToScreen(false)
-		p:SetClampedToScreen(false)
-		f:SetScale(sizeStandard);
-		p:SetScale(sizeStandard);
-		print("RaidFrames Position (Standard)")
-			--Would be nice to ENABLE pets here
-			--2, +14 offset from raid
-			--Would be nice to ENABLE pets here
-		FramerateAnchor:ClearAllPoints()
-		FramerateAnchor:SetPoint("CENTER",UIParent,"CENTER", 0, yFramerateAnchor)
+		if InCombatLockdown() then
+			print("InCombatLockdown: MoveRaid (Standard)")
+			return
+		else
+			local f,s,p=CompactRaidFrameContainer,EditModeManagerFrame,PartyFrame
+			f:SetScale(1); --Helps if Anything Happens and When ReSizing Down
+			f:ClearAllPoints();
+			f:SetPoint("TOPLEFT",UIParent,"TOPRIGHT",-725,-499 + yOffSet);
+			p:SetScale(1);
+			p:ClearAllPoints();
+			p:SetPoint("TOPLEFT", UIParent,"TOPRIGHT",-727,-483.5 + yOffSet) --2, +14 offset from raid
+			s:OnSystemPositionChange(f);
+			s:OnSystemPositionChange(p);
+			s:SaveLayoutChanges();
+			f:SetClampedToScreen(false)
+			p:SetClampedToScreen(false)
+			f:SetScale(sizeStandard);
+			p:SetScale(sizeStandard);
+			print("RaidFrames Position (Standard)")
+				--Would be nice to ENABLE pets here
+				--2, +14 offset from raid
+				--Would be nice to ENABLE pets here
+			FramerateAnchor:ClearAllPoints()
+			FramerateAnchor:SetPoint("CENTER",UIParent,"CENTER", 0, yFramerateAnchor)
 		end
-		BambiUI:OmniCDAnchor(true)
-		BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
+			BambiUI:OmniCDAnchor(true)
+			BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
 	end
 	BambiUI_MoveRaidUpperRight = CreateFrame('CheckButton', 'BambiUI_MoveRaidUpperRight', BambiUI_MoveRaidUpperRight, 'UICheckButtonTemplate')
 	BambiUI_MoveRaidUpperRight:SetScript('OnClick', function() MoveRaidUpperRight()	end)
@@ -215,6 +216,7 @@ end)
 		BambiUI:OmniCDAnchor(true)
 		BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
 	end
+
 	BambiUI_MoveRaidCenter = CreateFrame('CheckButton', 'BambiUI_MoveRaidCenter', BambiUI_MoveRaidCenter, 'UICheckButtonTemplate')
 	BambiUI_MoveRaidCenter:SetScript('OnClick', function() MoveRaidCenter()	end)
 
@@ -511,10 +513,11 @@ end)
 
 	local OmniCDAnchor = {}
 
-	for i = 1, 40 do
+	for i = 1, 80 do
 		OmniCDAnchor["CompactRaidFrame"..i] = CreateFrame("Frame", "OmniCDRaid"..i, UIParent)
 		local OmniCDAnchor = OmniCDAnchor["CompactRaidFrame"..i]
 		OmniCDAnchor:ClearAllPoints()
+		OmniCDAnchor:SetFrameStrata("HIGH")
 		OmniCDAnchor:SetSize(iconSize, iconSize)
 		OmniCDAnchor.texture = OmniCDAnchor:CreateTexture(nil, "BACKGROUND")
 		OmniCDAnchor.texture:SetAllPoints(true)
@@ -616,32 +619,37 @@ end)
 		end
 	end
 
+	local lastPartyanchorFrame
 	local lastgroupAnchor = {}
+	local lastparty = {}
+	local partyFrames = {
+		CompactPartyFrameMember1,
+		CompactPartyFrameMember2,
+		CompactPartyFrameMember3,
+		CompactPartyFrameMember4,
+		CompactPartyFrameMember5,
+	}
 
 	function  BambiUI:OmniCDAnchor(forced)
 		local frames = {}
+		local party = {}
 		local groups = {}
-		local RaidFrameShown
-
-		local inInstance, instanceType = IsInInstance()
-
+	
 		if EditModeManagerFrame:UseRaidStylePartyFrames() then
 
 			if not EditModeManagerFrame:ShouldRaidFrameShowSeparateGroups() then
 				for i = 1, 80 do
 					local compactRaidFrame = _G["CompactRaidFrame"..i]
-					if instanceType ~= "arena" and IsInRaid() and compactRaidFrame and compactRaidFrame.unit and compactRaidFrame:IsShown() then
+					if compactRaidFrame and compactRaidFrame.unit and compactRaidFrame:IsVisible() then
 						tblinsert(frames, compactRaidFrame)
-						RaidFrameShown = true
 					end
 				end
 			elseif EditModeManagerFrame:ShouldRaidFrameShowSeparateGroups() then
 				for i = 1, 8 do
 					for j = 1, 5 do
 						local compactRaidFrame = _G["CompactRaidGroup"..i.."Member"..j]
-						if instanceType ~= "arena" and IsInRaid() and compactRaidFrame and compactRaidFrame.unit and compactRaidFrame:IsShown() then
+						if  compactRaidFrame and compactRaidFrame.unit and compactRaidFrame:IsVisible() then
 							tblinsert(frames, compactRaidFrame)
-							RaidFrameShown = true
 						end
 					end
 				end
@@ -649,15 +657,15 @@ end)
 
 			for i = 1, 5 do
 				local compactRaidFrame = _G["CompactPartyFrameMember"..i]
-				if not RaidFrameShown and compactRaidFrame and compactRaidFrame.unit and compactRaidFrame:IsShown() then
-					tblinsert(frames, compactRaidFrame)
+				if compactRaidFrame and compactRaidFrame.unit and compactRaidFrame:IsVisible() then
+					tblinsert(party, compactRaidFrame)
 				end
 			end
 
 			for i = 1, 5 do
 				local compactRaidFrame = _G["CompactPartyFramePet"..i]
-				if not RaidFrameShown and compactRaidFrame and compactRaidFrame.unit and compactRaidFrame:IsShown() then
-					tblinsert(frames, compactRaidFrame)
+				if  compactRaidFrame and compactRaidFrame.unit and compactRaidFrame:IsVisible() then
+					tblinsert(party, compactRaidFrame)
 				end
 			end
 
@@ -670,129 +678,158 @@ end)
 				end
 			end)
 
-			for i = 1 , 8 do 
-				groups[i] = {}
-			end
-			
-			for i, frame in ipairs(frames) do
-				if RaidFrameShown and EditModeManagerFrame:ShouldRaidFrameShowSeparateGroups() then
-					if strfind(frame:GetName(), "CompactRaidGroup1") then
-						tblinsert(groups[1], frame)
-					end
-					if strfind(frame:GetName(), "CompactRaidGroup2") then
-						tblinsert(groups[2], frame)
-					end
-					if strfind(frame:GetName(), "CompactRaidGroup3") then
-						tblinsert(groups[3], frame)
-					end
-					if strfind(frame:GetName(), "CompactRaidGroup4") then
-						tblinsert(groups[4], frame)
-					end
-					if strfind(frame:GetName(), "CompactRaidGroup5") then
-						tblinsert(groups[5], frame)
-					end
-					if strfind(frame:GetName(), "CompactRaidGroup6") then
-						tblinsert(groups[6], frame)
-					end
-					if strfind(frame:GetName(), "CompactRaidGroup7") then
-						tblinsert(groups[7], frame)
-					end
-					if strfind(frame:GetName(), "CompactRaidGroup8") then
-						tblinsert(groups[8], frame)
-					end
-				elseif RaidFrameShown and not EditModeManagerFrame:ShouldRaidFrameShowSeparateGroups() then
-					if i <= 5 then
-						tblinsert(groups[1], frame)
-					end
-					if i > 5 and i <= 10 then
-						tblinsert(groups[2], frame)
-					end
-					if i > 10 and i <= 15 then
-						tblinsert(groups[3], frame)
-					end
-					if i > 15 and i <= 20 then
-						tblinsert(groups[4], frame)
-					end
-					if i > 20 and i <= 25 then
-						tblinsert(groups[5], frame)
-					end
-					if i > 25 and i <= 30 then
-						tblinsert(groups[6], frame)
-					end
-					if i > 30 and i <= 35 then 
-						tblinsert(groups[7], frame)
-					end
-					if i > 35 and i <= 40 then 
-						tblinsert(groups[8], frame)
-					end
-				elseif not RaidFrameShown then 
-					tblinsert(groups[1], frame)
+
+			local CRFC = _G["CompactRaidFrameContainer"]
+			local cols = CRFC.flowMaxPerLine
+
+			if cols then
+				local n = 40/cols
+				local numberofgroups = ceil(n)
+
+				for i = 1 , numberofgroups do 
+					groups[i] = {}
 				end
-			end
-
-			for i = 1 , 8 do 	
-				if #groups[i] > 0 then 
-					table.sort(groups[i], function(x, y)
-						if x:GetLeft() and y:GetLeft() then 
-							return x:GetTop() > y:GetTop()
+				
+				for i, frame in ipairs(frames) do
+					local name = frame:GetName()
+					local unit = frame.unit
+					local unitName = UnitName(unit)
+					if EditModeManagerFrame:ShouldRaidFrameShowSeparateGroups() and strfind(name, "CompactRaidGroup") then
+						if strfind(name, "CompactRaidGroup1") then
+							tblinsert(groups[1], frame)
+						elseif strfind(name, "CompactRaidGroup2") then
+							tblinsert(groups[2], frame)
+						elseif strfind(name, "CompactRaidGroup3") then
+							tblinsert(groups[3], frame)
+						elseif strfind(name, "CompactRaidGroup4") then
+							tblinsert(groups[4], frame)
+						elseif strfind(name, "CompactRaidGroup5") then
+							tblinsert(groups[5], frame)
+						elseif strfind(name, "CompactRaidGroup6") then
+							tblinsert(groups[6], frame)
+						elseif strfind(name, "CompactRaidGroup7") then
+							tblinsert(groups[7], frame)
+						elseif strfind(name, "CompactRaidGroup8") then
+							tblinsert(groups[8], frame)
 						end
-					end)
+					elseif not EditModeManagerFrame:ShouldRaidFrameShowSeparateGroups() and strfind(name, "CompactRaidFrame") then
+						--print(i.." "..name.." "..unitName)
+						if i <= cols then
+							tblinsert(groups[1], frame)
+						elseif (i > cols and i <= cols*2) and groups[2]  then
+							tblinsert(groups[2], frame)
+						elseif (i > cols*2 and i <= cols*3) and groups[3]  then
+							tblinsert(groups[3], frame)
+						elseif (i > cols*3 and i <= cols*4) and groups[4]  then
+							tblinsert(groups[4], frame)
+						elseif (i > cols*4  and i <= cols*5) and groups[5]  then
+							tblinsert(groups[5], frame)
+						elseif (i > cols*5 and i <= cols*6) and groups[6]  then
+							tblinsert(groups[6], frame)
+						elseif (i > cols*6  and i <= cols*7) and groups[7]  then 
+							tblinsert(groups[7], frame)
+						elseif (i > cols*7 and i <= cols*8) and groups[8] then 
+							tblinsert(groups[8], frame)
+						elseif (i > cols*8 and i <= cols*9) and groups[9]  then 
+							tblinsert(groups[9], frame)
+						elseif (i > cols*9 and i <= cols*10) and groups[10]  then 
+							tblinsert(groups[10], frame)
+						elseif (i > cols*10 and i <= cols*11) and groups[11]  then 
+							tblinsert(groups[11], frame)
+						elseif (i > cols*11 and i <= cols*12) and groups[12]  then 
+							tblinsert(groups[12], frame)
+						elseif (i > cols*12 and i <= cols*13) and groups[13]  then 
+							tblinsert(groups[13], frame)
+						elseif (i > cols*13 and i <= cols*14) and groups[14]  then 
+							tblinsert(groups[14], frame)
+						elseif (i > cols*14 and i <= cols*15) and groups[15]  then 
+							tblinsert(groups[15], frame)
+						elseif (i > cols*15 and i <= cols*16) and groups[16]  then 
+							tblinsert(groups[16], frame)
+						elseif (i > cols*16 and i <= cols*17) and groups[17]  then 
+							tblinsert(groups[17], frame)
+						elseif (i > cols*17 and i <= cols*18) and groups[18]  then 
+							tblinsert(groups[18], frame)
+						elseif (i > cols*18 and i <= cols*19) and groups[19]  then 
+							tblinsert(groups[19], frame)
+						elseif (i > cols*19 and i <= cols*20) and groups[20]  then 
+							tblinsert(groups[20], frame)
+						elseif (i > cols*20 and i <= cols*21) and groups[21]  then 
+							tblinsert(groups[21], frame)
+						end
+					end
+				end
 
-					local Anchor = groups[i][#groups[i]]
-					--print(groups[i][#groups[i]]:GetName())
+				local groupChangesAll
+				local groupChangesTable = {}
+
+
+				-- for Raid Frames
+				for i = 1, numberofgroups do 	
+					local group = groups[i]
+					local x = cols 
+					if #group > 0 then 
+						table.sort(group, function(x, y)
+							if x:GetTop() and y:GetTop() then
+								return x:GetTop() > y:GetTop()
+							end
+						end)
+					end
+
+				-- finds if anything changed in the group	
+					for k = 1, x do 
+						local name, unitId, oldname, oldunitId
+						if group and group[k] then name = group[k]:GetName(); unitId = group[k].unit end
+						if lastgroupAnchor[i] and lastgroupAnchor[i][k] then oldname = lastgroupAnchor[i][k][1]; oldunitId = lastgroupAnchor[i][k][2] end
+						if (name and oldname and name ~= oldname) or (unitId and oldunitId and unitId ~= oldunitId) or (group and lastgroupAnchor[i] and #group ~= #lastgroupAnchor[i]) or not lastgroupAnchor[i] then 
+							--groupChangesAll = true
+							groupChangesTable[i] = true
+						end
+					end
+
+					if (forced or groupChangesAll or groupChangesTable[i]) and lastgroupAnchor[i] then 
+						for _, frame in ipairs(lastgroupAnchor[i]) do
+							local name = frame[1]
+							local unitId = frame[2]
+							local frame = frame[3]
+							if not frame:IsVisible() then 
+								local anchorFrame = OmniCDAnchor[name]
+								if anchorFrame then anchorFrame:ClearAllPoints(); anchorFrame:Hide() end
+								local keyFrame = OmniCDKey[unitId]
+								if keyFrame then keyFrame:ClearAllPoints(); keyFrame:Hide() end
+							end
+						end
+						lastgroupAnchor[i] = nil
+					end
+
+					local anchor = group[#group]
+					
+					local lastanchorFrame
 		
-					if strfind(Anchor:GetName(), "pet") then
+					if anchor and strfind(anchor:GetName(), "pet") then
 						yPadding = petpadding
 					else
 						yPadding = playerpadding
 					end
 
-					local groupChanges, x
-					if not RaidFrameShown then x = 10 else x = 5 end  
-
-					-- finds if anything changed in the group	
-					for k = 1, x do 
-						local name, unitId, oldname, oldunitId
-						if groups[i] and groups[i][k] then name = groups[i][k]:GetName(); unitId = groups[i][k].unit end
-						if lastgroupAnchor[i] and lastgroupAnchor[i][k] then oldname = lastgroupAnchor[i][k][1]; oldunitId = lastgroupAnchor[i][k][2] end
-						if (name and oldname and name ~= oldname) or (unitId and oldunitId and unitId ~= oldunitId) then 
-							groupChanges = true
-						elseif not name or not unitId or not oldname or not oldunitId then 
-							groupChanges = true
-						end
-					end
-
-					--will clear all the frames
-					if groupChanges and lastgroupAnchor[i] then 
-						for _, frame in ipairs(lastgroupAnchor[i]) do
-							local name = frame[1]
-							local unitId = frame[2]
-							local anchorFrame = OmniCDAnchor[name]
-							local keyFrame = OmniCDKey[unitId]
-							if anchorFrame then anchorFrame:ClearAllPoints(); anchorFrame:Hide() end
-							if keyFrame then keyFrame:ClearAllPoints(); keyFrame:Hide() end
-						end
-						lastgroupAnchor[i] = nil
-					end
-
-					local lastanchorFrame
-					if groupChanges or forced then
-						for j, frame in ipairs(groups[i]) do
+					if forced or groupChangesAll or groupChangesTable[i] then
+						for j, frame in ipairs(group) do
 							local name = frame:GetName()
 							local unitId = frame.unit
-							if not lastgroupAnchor[i] then 
+							if not lastgroupAnchor[i] then
 								lastgroupAnchor[i] = {} 
-								lastgroupAnchor[i][j] = {} 
 							end
-							lastgroupAnchor[i][j] = { name, unitId }
-							if name and unitId and not strfind(unitId, "pet") then 
+							lastgroupAnchor[i][j] = { name, unitId, frame }
+							if anchor and not strfind(unitId, "pet") then 
 								local anchorFrame = OmniCDAnchor[name]
 								local keyFrame = OmniCDKey[unitId]
 								anchorFrame:ClearAllPoints()
 								keyFrame:ClearAllPoints()
 								if j == 1 then 
-									anchorFrame:SetPoint("TOPLEFT", Anchor, "BOTTOMLEFT", 1, yPadding)
-								else
+									print(i..":"..j.." "..name.." "..anchorFrame:GetName().." - "..(UnitName(unitId) or "").." "..unitId)
+									anchorFrame:SetPoint("TOPLEFT", anchor, "BOTTOMLEFT", 1, yPadding)
+								elseif lastanchorFrame then
+									print(i..":"..j.." "..name.." "..anchorFrame:GetName().." - "..(UnitName(unitId) or "").." "..unitId.." "..(lastanchorFrame:GetName() or ""))
 									anchorFrame:SetPoint("TOPLEFT", lastanchorFrame , "BOTTOMLEFT", 0, yPadding)
 								end
 								lastanchorFrame = anchorFrame
@@ -805,8 +842,118 @@ end)
 					end
 				end
 			end
+
+
+
+			if party then 
+				table.sort(party, function(x, y)
+					if x:GetTop() and y:GetTop() then
+						return x:GetTop() > y:GetTop()
+					end
+				end)
+
+				
+
+				local anchor = party[#party]
+				local redoAnchor
+				
+				for k = 1, 10 do 
+					local name, unitId, oldname, oldunitId
+					if party and party[k] then name = party[k]:GetName(); unitId = party[k].unit end
+					if unitId then
+						if UnitIsUnit(unitId, "party1") then 
+							unitId = "party1"
+						elseif UnitIsUnit(unitId, "party2") then  
+							unitId = "party2"
+						elseif UnitIsUnit(unitId, "party3") then 
+							unitId = "party3"
+						elseif UnitIsUnit(unitId, "party4") then 
+							unitId = "party4"
+						elseif UnitIsUnit(unitId, "player") then 
+							unitId = "player"
+						else
+							unitId = unitId
+						end
+					end
+					if lastparty and lastparty[k] then oldname = lastparty[k][1]; oldunitId = lastparty[k][2] end
+					if (name and oldname and name ~= oldname) or (unitId and oldunitId and unitId ~= oldunitId) or (party and lastparty and #party ~= #lastparty) or not lastparty or (lastPartyanchorFrame and lastPartyanchorFrame ~= anchor) then 
+						redoAnchor = true
+					end
+				end
+
+				if redoAnchor or not lastPartyanchorFrame or forced  then 
+					for _, frame in ipairs(partyFrames) do
+						local name = frame:GetName()
+						local anchorFrame = OmniCDAnchor[name]
+						if not frame:IsVisible() then 
+							anchorFrame:ClearAllPoints()
+							anchorFrame:Hide()
+						end
+					end
+					if lastparty then
+						for i = 1, #lastparty do 
+							if lastparty[i] then
+								lastparty[i] = nil
+							end
+						end
+					end
+				end
+
+				
+
+
+				lastPartyanchorFrame = anchor
+
+				local lastanchorFrame
+				if redoAnchor or forced then
+					for j, frame in ipairs(party) do
+						local name = frame:GetName()
+						local unitId = frame.unit
+						if not lastparty[j] then
+							lastparty[j] = {} 
+						end
+						if UnitIsUnit(unitId, "party1") then 
+							unitId = "party1"
+						elseif UnitIsUnit(unitId, "party2") then  
+							unitId = "party2"
+						elseif UnitIsUnit(unitId, "party3") then 
+							unitId = "party3"
+						elseif UnitIsUnit(unitId, "party4") then 
+							unitId = "party4"
+						elseif UnitIsUnit(unitId, "player") then 
+							unitId = "player"
+						else
+							unitId = unitId
+						end
+						lastparty[j] = { name, unitId, frame }
+						if anchor and not strfind(unitId, "pet") then 
+							local anchorFrame = OmniCDAnchor[name]
+							anchorFrame:ClearAllPoints()
+							if j == 1 then 
+								print(j.." "..name.." "..anchorFrame:GetName().." - "..(UnitName(unitId) or "").." "..unitId)
+								anchorFrame:SetPoint("TOPLEFT", anchor, "BOTTOMLEFT", 1, yPadding)
+							elseif lastanchorFrame then
+								print(j.." "..name.." "..anchorFrame:GetName().." - "..(UnitName(unitId) or "").." "..unitId.." "..(lastanchorFrame:GetName() or ""))
+								anchorFrame:SetPoint("TOPLEFT", lastanchorFrame , "BOTTOMLEFT", 0, yPadding)
+							end
+							lastanchorFrame = anchorFrame
+							anchorFrame:Show()
+							local keyFrame = OmniCDKey[unitId]
+							keyFrame:ClearAllPoints()
+							keyFrame:Show()
+							keyFrame:SetParent(anchorFrame)
+							keyFrame:SetPoint("CENTER", anchorFrame, "CENTER", 0, nil)
+								--print(frame:GetName() .. " = " .. frame.unit)
+						end
+					end
+				end
+			end
 		end
+
+		--print(EditModeManagerFrame:GetSettingValue(Enum.EditModeSystem.UnitFrame, Enum.EditModeUnitFrameSystemIndices.Raid, Enum.EditModeUnitFrameSetting.RowSize))
 	end
+
+
 
 	local function OmniCDKey(arg1)
 		if arg1 == "OmniCD" then
@@ -817,66 +964,83 @@ end)
 		end)
 	end
 
+	local function FireAnchors()
+		Ctimer(.1, function()
+			BambiUI:OmniCDAnchor(true)
+			BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
+		end)
+	end
+
+	BambiOmni = CreateFrame("Frame", nil, UIParent)
+	function BambiOmni:Omni()
+		BambiUI:OmniCDAnchor()
+	end
 --------------------------------------------------------------------------------------------------------------------------------
 --Handler's
 --------------------------------------------------------------------------------------------------------------------------------
 
 	EditModeManagerFrame:HookScript("OnHide", function() 	 
-		BambiUI:OmniCDAnchor()
-		BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
+		--print("EditModeManagerFrame_OnHide")
+			BambiUI:OmniCDAnchor()
+			BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
 	end)
 
-	hooksecurefunc(EditModeManagerFrame, "UpdateRaidContainerFlow", function(groupMode)
-		--print("EditModeManagerFrame: UpdateRaidContainerFlow")	 
-		BambiUI:OmniCDAnchor()
+	EditModeManagerFrame:HookScript("OnShow", function() 	 
+		--print("EditModeManagerFrame_OnShow")
+		BambiUI:OmniCDAnchor(true)
 		BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
+		hooksecurefunc("CompactUnitFrame_UpdateAll", function()
+			if EditModeManagerFrame:IsVisible() then
+				Ctimer(.1, function()
+					BambiUI:OmniCDAnchor(true)
+					BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
+				end)
+			end
+		end)
 	end)
+
 
 	hooksecurefunc(CompactRaidFrameContainer, "SetGroupMode", function(groupMode)
-		--print("SetGroupMode")		 
+		--print("SetGroupMode")
 		BambiUI:OmniCDAnchor()
 		BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
 	end)
 
 	hooksecurefunc(CompactRaidFrameContainer, "SetFlowFilterFunction", function(flowFilterFunc)
-		--print("SetFlowFilterFunction")		 
+		--print("SetFlowFilterFunction")
 		BambiUI:OmniCDAnchor()
 		BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
 	end)
 
 	hooksecurefunc(CompactRaidFrameContainer, "SetGroupFilterFunction", function(groupFilterFunc)
-		--print("SetGroupFilterFunction")		 
+		--print("SetGroupFilterFunction")
 		BambiUI:OmniCDAnchor()
 		BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
 	end)
 
 	hooksecurefunc(CompactRaidFrameContainer, "SetFlowSortFunction", function(flowSortFunc)
-		--print("SetFlowSortFunction")		 
+		--print("SetFlowSortFunction")
 		BambiUI:OmniCDAnchor()
 		BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
 	end)
 
 	hooksecurefunc(CompactPartyFrame, "SetFlowSortFunction", function()
-		--print("CompactPartyFrame_SetFlowSortFunction")		 
+		--print("CompactPartyFrame_SetFlowSortFunction")
 		BambiUI:OmniCDAnchor()
 		BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
 	end)
 
-	hooksecurefunc("CompactUnitFrame_OnLoad", function(self) 
-		BambiUI:OmniCDAnchor()
-		BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
-	end)
-
-	
 
 	function BambiUI:GROUP_ROSTER_UPDATE()	 
+		print("GROUP_ROSTER_UPDATE")
 		BambiUI:OmniCDAnchor()
 		BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
 	end
 
 	function BambiUI:UNIT_PET() 
+		print("UNIT_PET")
 		BambiUI:OmniCDAnchor()
-		--BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
+		BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
 	end
 
 	function BambiUI:ADDON_LOADED(arg1)
