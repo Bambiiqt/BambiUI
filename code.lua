@@ -67,6 +67,7 @@ end)
 	local yOffSet = 12
 
 	local function RunScripts()
+		
 		COMBAT_TEXT_HEIGHT = 25;
 		COMBAT_TEXT_STAGGER_RANGE = 0;
 		COMBAT_TEXT_SPACING = 5;
@@ -187,8 +188,15 @@ end)
 			FramerateAnchor:ClearAllPoints()
 			FramerateAnchor:SetPoint("CENTER",UIParent,"CENTER", 0, yFramerateAnchor)
 		end
-			BambiUI:OmniCDAnchor(true)
-			BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
+		if FrameSort then 
+			FrameSortDB.Options.World.PlayerSortMode = FrameSort.PlayerSortMode.Bottom
+			FrameSortDB.Options.Raid.PlayerSortMode = FrameSort.PlayerSortMode.Bottom
+			FrameSortDB.Options.Dungeon.PlayerSortMode = FrameSort.PlayerSortMode.Bottom
+			FrameSortDB.Options.Arena.PlayerSortMode = FrameSort.PlayerSortMode.Bottom
+			FrameSort.Sorting:TrySort()
+		end
+		BambiUI:OmniCDAnchor(true)
+		BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
 	end
 	BambiUI_MoveRaidUpperRight = CreateFrame('CheckButton', 'BambiUI_MoveRaidUpperRight', BambiUI_MoveRaidUpperRight, 'UICheckButtonTemplate')
 	BambiUI_MoveRaidUpperRight:SetScript('OnClick', function() MoveRaidUpperRight()	end)
@@ -213,6 +221,13 @@ end)
 			FramerateAnchor:ClearAllPoints()
 			FramerateAnchor:SetPoint("CENTER",UIParent,"CENTER", 0, -85)
 		end
+		if FrameSort then 
+			FrameSortDB.Options.World.PlayerSortMode = FrameSort.PlayerSortMode.Top
+			FrameSortDB.Options.Raid.PlayerSortMode = FrameSort.PlayerSortMode.Top
+			FrameSortDB.Options.Dungeon.PlayerSortMode = FrameSort.PlayerSortMode.Top
+			FrameSortDB.Options.Arena.PlayerSortMode = FrameSort.PlayerSortMode.Top
+			FrameSort.Sorting:TrySort()
+		end
 		BambiUI:OmniCDAnchor(true)
 		BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
 	end
@@ -228,6 +243,13 @@ end)
 			CompactRaidFrameContainer:SetScale(sizeRaid)
 			PartyFrame:SetScale(sizeRaid)
 			print("FramesScaled ("..sizeRaid..")")
+		end
+		if FrameSort then 
+			FrameSortDB.Options.World.PlayerSortMode = FrameSort.PlayerSortMode.Top
+			FrameSortDB.Options.Raid.PlayerSortMode = FrameSort.PlayerSortMode.Top
+			FrameSortDB.Options.Dungeon.PlayerSortMode = FrameSort.PlayerSortMode.Top
+			FrameSortDB.Options.Arena.PlayerSortMode = FrameSort.PlayerSortMode.Top
+			FrameSort.Sorting:TrySort()
 		end
 		BambiUI:OmniCDAnchor(true)
 		BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
@@ -265,10 +287,15 @@ end)
 --ReSizeRaidFrames
 --------------------------------------------------------------------------------------------------------------------------------
 
-	local function ReSizeRaidFrames()
+	local function ReSizeRaidFrames(party)
 		Ctimer(1, function()
-			CompactRaidFrameContainer:SetScale(sizeStandard) --works in combat
-			PartyFrame:SetScale(sizeStandard)
+			if party then
+				CompactRaidFrameContainer:SetScale(sizeStandard) --works in combat
+				PartyFrame:SetScale(sizeStandard)
+			else
+				CompactRaidFrameContainer:SetScale(sizeRaid)
+				PartyFrame:SetScale(sizeRaid)
+			end
 			CompactRaidFrameContainer:SetClampedToScreen(false) --Allows RaidFrame to Move OffScreen
 			if CompactPartyFrameTitle then --Hides Party on PartyFrame
 				CompactPartyFrameTitle:SetAlpha(0)
@@ -507,8 +534,11 @@ end)
 	local iconSize = 20 -- Needs to be same size as the OmniCD Icon
 	local alphaOmni = 1
 	local yPadding = -10
+	local raidplayerpadding = -7
+	local raidpetpadding = -8
 	local playerpadding = -10
 	local petpadding = -11
+	local RaidiconSize = 10
 
 
 	local OmniCDAnchor = {}
@@ -517,15 +547,15 @@ end)
 		OmniCDAnchor["CompactRaidFrame"..i] = CreateFrame("Frame", "OmniCDRaid"..i, UIParent)
 		local OmniCDAnchor = OmniCDAnchor["CompactRaidFrame"..i]
 		OmniCDAnchor:ClearAllPoints()
-		OmniCDAnchor:SetFrameStrata("HIGH")
-		OmniCDAnchor:SetSize(iconSize, iconSize)
+		OmniCDAnchor:SetFrameStrata("LOW")
+		OmniCDAnchor:SetSize(RaidiconSize, RaidiconSize)
 		OmniCDAnchor.texture = OmniCDAnchor:CreateTexture(nil, "BACKGROUND")
 		OmniCDAnchor.texture:SetAllPoints(true)
 		OmniCDAnchor.texture:SetColorTexture(1.0, 1.0, 1.0, alphaOmni)
 		OmniCDAnchor.t = OmniCDAnchor:CreateFontString(nil, "OVERLAY", "GameTooltipText")
 		OmniCDAnchor.t:SetParent(OmniCDAnchor)
 		OmniCDAnchor.t:SetText(OmniCDAnchor:GetName())
-		OmniCDAnchor.t:SetFont("Fonts\\FRIZQT__.TTF", 9 )
+		OmniCDAnchor.t:SetFont("Fonts\\FRIZQT__.TTF", 6)
 		OmniCDAnchor.t:SetPoint("BOTTOMLEFT", OmniCDAnchor, "BOTTOMRIGHT", 2, 0)
 		OmniCDAnchor.t:SetTextColor(1, 1, 1, alphaOmni)
 		
@@ -536,14 +566,14 @@ end)
 			OmniCDAnchor["CompactRaidGroup"..i.."Member"..j] = CreateFrame("Frame", "OmniCDRaid"..i.."Member"..j, UIParent)
 			local OmniCDAnchor = OmniCDAnchor["CompactRaidGroup"..i.."Member"..j]
 			OmniCDAnchor:ClearAllPoints()
-			OmniCDAnchor:SetSize(iconSize, iconSize)
+			OmniCDAnchor:SetSize(RaidiconSize, RaidiconSize)
 			OmniCDAnchor.texture = OmniCDAnchor:CreateTexture(nil, "BACKGROUND")
 			OmniCDAnchor.texture:SetAllPoints(OmniCDAnchor)
 			OmniCDAnchor.texture:SetColorTexture(1.0, 1.0, 1.0, alphaOmni)
 			OmniCDAnchor.t = OmniCDAnchor:CreateFontString(nil, "OVERLAY", "GameTooltipText")
 			OmniCDAnchor.t:SetParent(OmniCDAnchor)
 			OmniCDAnchor.t:SetText(OmniCDAnchor:GetName())
-			OmniCDAnchor.t:SetFont("Fonts\\FRIZQT__.TTF", 9 )
+			OmniCDAnchor.t:SetFont("Fonts\\FRIZQT__.TTF", 6 )
 			OmniCDAnchor.t:SetPoint("BOTTOMLEFT", OmniCDAnchor, "BOTTOMRIGHT", 2, 0)
 			OmniCDAnchor.t:SetTextColor(1, 1, 1, alphaOmni)
 		end
@@ -571,14 +601,14 @@ end)
 		OmniCDKey["raid"..i] = CreateFrame("Frame", "BambiUI"..i, UIParent)
 		local OmniCDKey = OmniCDKey["raid"..i]
 		OmniCDKey:ClearAllPoints()
-		OmniCDKey:SetSize(iconSize, iconSize)
+		OmniCDKey:SetSize(RaidiconSize, RaidiconSize)
 		OmniCDKey.texture = OmniCDKey:CreateTexture(nil, "BACKGROUND")
 		OmniCDKey.texture:SetAllPoints(true)
 		OmniCDKey.texture:SetColorTexture(1.0, 1.0, 1.0, alphaOmni)
 		OmniCDKey.t = OmniCDKey:CreateFontString(nil, "OVERLAY", "GameTooltipText")
 		OmniCDKey.t:SetParent(OmniCDKey)
 		OmniCDKey.t:SetText(OmniCDKey:GetName())
-		OmniCDKey.t:SetFont("Fonts\\FRIZQT__.TTF", 9 )
+		OmniCDKey.t:SetFont("Fonts\\FRIZQT__.TTF", 6 )
 		OmniCDKey.t:SetPoint("TOPLEFT", OmniCDKey, "TOPRIGHT", 2, 0)
 		OmniCDKey.t:SetTextColor(1, 1, 1, alphaOmni)
 		OmniCDKey.yourUnitKey = "raid"..i
@@ -636,6 +666,7 @@ end)
 		local groups = {}
 	
 		if EditModeManagerFrame:UseRaidStylePartyFrames() then
+			local inInstance, instanceType = IsInInstance()
 
 			if not EditModeManagerFrame:ShouldRaidFrameShowSeparateGroups() then
 				for i = 1, 80 do
@@ -807,9 +838,9 @@ end)
 					local lastanchorFrame
 		
 					if anchor and strfind(anchor:GetName(), "pet") then
-						yPadding = petpadding
+						yPadding = raidpetpadding
 					else
-						yPadding = playerpadding
+						yPadding = raidplayerpadding
 					end
 
 					if forced or groupChangesAll or groupChangesTable[i] then
@@ -841,6 +872,14 @@ end)
 						end
 					end
 				end
+
+				for i = 1 , 40 do 
+					local Bar = _G["OmniCDBar"..i.."Icons"]
+					if Bar and Bar:GetScale() ~= .45 then
+						Bar:SetScale(.45)
+					end
+				end
+
 			end
 
 
@@ -850,17 +889,22 @@ end)
 					if x:GetTop() and y:GetTop() then
 						return x:GetTop() > y:GetTop()
 					end
-				end)
-
-				
+				end)			
 
 				local anchor = party[#party]
 				local redoAnchor
+
+				if anchor and strfind(anchor:GetName(), "pet") then
+					yPadding = petpadding
+				else
+					yPadding = playerpadding
+				end
 				
 				for k = 1, 10 do 
 					local name, unitId, oldname, oldunitId
 					if party and party[k] then name = party[k]:GetName(); unitId = party[k].unit end
-					if unitId then
+					local instanceType 
+					if instanceType ~= "arena" then --forces party frames
 						if UnitIsUnit(unitId, "party1") then 
 							unitId = "party1"
 						elseif UnitIsUnit(unitId, "party2") then  
@@ -890,13 +934,6 @@ end)
 							anchorFrame:Hide()
 						end
 					end
-					if lastparty then
-						for i = 1, #lastparty do 
-							if lastparty[i] then
-								lastparty[i] = nil
-							end
-						end
-					end
 				end
 
 				
@@ -912,18 +949,21 @@ end)
 						if not lastparty[j] then
 							lastparty[j] = {} 
 						end
-						if UnitIsUnit(unitId, "party1") then 
-							unitId = "party1"
-						elseif UnitIsUnit(unitId, "party2") then  
-							unitId = "party2"
-						elseif UnitIsUnit(unitId, "party3") then 
-							unitId = "party3"
-						elseif UnitIsUnit(unitId, "party4") then 
-							unitId = "party4"
-						elseif UnitIsUnit(unitId, "player") then 
-							unitId = "player"
-						else
-							unitId = unitId
+						local instanceType 
+						if instanceType ~= "arena" then --forces party frames
+							if UnitIsUnit(unitId, "party1") then 
+								unitId = "party1"
+							elseif UnitIsUnit(unitId, "party2") then  
+								unitId = "party2"
+							elseif UnitIsUnit(unitId, "party3") then 
+								unitId = "party3"
+							elseif UnitIsUnit(unitId, "party4") then 
+								unitId = "party4"
+							elseif UnitIsUnit(unitId, "player") then 
+								unitId = "player"
+							else
+								unitId = unitId
+							end
 						end
 						lastparty[j] = { name, unitId, frame }
 						if anchor and not strfind(unitId, "pet") then 
@@ -943,14 +983,12 @@ end)
 							keyFrame:Show()
 							keyFrame:SetParent(anchorFrame)
 							keyFrame:SetPoint("CENTER", anchorFrame, "CENTER", 0, nil)
-								--print(frame:GetName() .. " = " .. frame.unit)
+							--print(frame:GetName() .. " = " .. frame.unit)
 						end
 					end
 				end
 			end
 		end
-
-		--print(EditModeManagerFrame:GetSettingValue(Enum.EditModeSystem.UnitFrame, Enum.EditModeUnitFrameSystemIndices.Raid, Enum.EditModeUnitFrameSetting.RowSize))
 	end
 
 
@@ -1033,6 +1071,29 @@ end)
 	end
 
 	function BambiUI:ADDON_LOADED(arg1)
+		if arg1 == "FrameSort" then
+			Ctimer(1, function() 	
+				local CRFC =_G["CompactRaidFrameContainer"]
+				local CPF = _G["CompactPartyFrame"]
+				if (CRFC and CRFC:GetLeft() and CRFC:GetLeft() < 1000) or (CPF and CPF:GetLeft() and CPF:GetLeft() < 1000) or GetNumGroupMembers() > 10 then 
+					if FrameSort then 
+						FrameSortDB.Options.World.PlayerSortMode = FrameSort.PlayerSortMode.Top
+						FrameSortDB.Options.Raid.PlayerSortMode = FrameSort.PlayerSortMode.Top
+						FrameSortDB.Options.Dungeon.PlayerSortMode = FrameSort.PlayerSortMode.Top
+						FrameSortDB.Options.Arena.PlayerSortMode = FrameSort.PlayerSortMode.Top
+						FrameSort.Sorting:TrySort()
+					end
+				else
+					if FrameSort then 
+						FrameSortDB.Options.World.PlayerSortMode = FrameSort.PlayerSortMode.Bottom
+						FrameSortDB.Options.Raid.PlayerSortMode = FrameSort.PlayerSortMode.Bottom
+						FrameSortDB.Options.Dungeon.PlayerSortMode = FrameSort.PlayerSortMode.Bottom
+						FrameSortDB.Options.Arena.PlayerSortMode = FrameSort.PlayerSortMode.Bottom
+						FrameSort.Sorting:TrySort()
+					end
+				end
+			end)
+		end
 		 OmniCDKey(arg1)
 	end
 
@@ -1042,8 +1103,13 @@ end)
 	end
 
 	function BambiUI:PLAYER_ENTERING_WORLD()
-		ReSizeRaidFrames()
-		MoveFrameRate()
+		local CRFC =_G["CompactRaidFrameContainer"]
+		local CPF = _G["CompactPartyFrame"]
+		if (CRFC and CRFC:GetLeft() and CRFC:GetLeft() < 1000) or (CPF and CPF:GetLeft() and CPF:GetLeft() < 1000) or GetNumGroupMembers() > 10 then 
+			ReSizeRaidFrames()
+		else
+			ReSizeRaidFrames(true)
+		end
 		 Ctimer(1, function() 		 
 			BambiUI:OmniCDAnchor(true)
 			BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
