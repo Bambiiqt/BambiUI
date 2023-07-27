@@ -607,7 +607,7 @@ end)
 		OmniCDKey.texture:SetColorTexture(1.0, 1.0, 1.0, alphaOmni)
 		OmniCDKey.t = OmniCDKey:CreateFontString(nil, "OVERLAY", "GameTooltipText")
 		OmniCDKey.t:SetParent(OmniCDKey)
-		OmniCDKey.t:SetText(OmniCDKey:GetName())
+		OmniCDKey.t:SetText("raid"..i)
 		OmniCDKey.t:SetFont("Fonts\\FRIZQT__.TTF", 6 )
 		OmniCDKey.t:SetPoint("TOPLEFT", OmniCDKey, "TOPRIGHT", 2, 0)
 		OmniCDKey.t:SetTextColor(1, 1, 1, alphaOmni)
@@ -625,7 +625,7 @@ end)
 			OmniCDKey.texture:SetColorTexture(1.0, 1.0, 1.0, alphaOmni)
 			OmniCDKey.t = OmniCDKey:CreateFontString(nil, "OVERLAY", "GameTooltipText")
 			OmniCDKey.t:SetParent(OmniCDKey)
-			OmniCDKey.t:SetText(OmniCDKey:GetName())
+			OmniCDKey.t:SetText("player")
 			OmniCDKey.t:SetFont("Fonts\\FRIZQT__.TTF", 9 )
 			OmniCDKey.t:SetPoint("TOPLEFT", OmniCDKey, "TOPRIGHT", 2, 0)
 			OmniCDKey.t:SetTextColor(1, 1, 1, alphaOmni)
@@ -641,7 +641,7 @@ end)
 			OmniCDKey.texture:SetColorTexture(1.0, 1.0, 1.0, alphaOmni)
 			OmniCDKey.t = OmniCDKey:CreateFontString(nil, "OVERLAY", "GameTooltipText")
 			OmniCDKey.t:SetParent(OmniCDKey)
-			OmniCDKey.t:SetText(OmniCDKey:GetName())
+			OmniCDKey.t:SetText("party"..i)
 			OmniCDKey.t:SetFont("Fonts\\FRIZQT__.TTF", 9 )
 			OmniCDKey.t:SetPoint("TOPLEFT", OmniCDKey, "TOPRIGHT", 2, 0)
 			OmniCDKey.t:SetTextColor(1, 1, 1, alphaOmni)
@@ -872,14 +872,6 @@ end)
 						end
 					end
 				end
-
-				for i = 1 , 40 do 
-					local Bar = _G["OmniCDBar"..i.."Icons"]
-					if Bar and Bar:GetScale() ~= .45 then
-						Bar:SetScale(.45)
-					end
-				end
-
 			end
 
 
@@ -903,8 +895,7 @@ end)
 				for k = 1, 10 do 
 					local name, unitId, oldname, oldunitId
 					if party and party[k] then name = party[k]:GetName(); unitId = party[k].unit end
-					local instanceType 
-					if instanceType ~= "arena" then --forces party frames
+					if unitId then
 						if UnitIsUnit(unitId, "party1") then 
 							unitId = "party1"
 						elseif UnitIsUnit(unitId, "party2") then  
@@ -934,6 +925,13 @@ end)
 							anchorFrame:Hide()
 						end
 					end
+					if lastparty then
+						for i = 1, #lastparty do 
+							if lastparty[i] then
+								lastparty[i] = nil
+							end
+						end
+					end
 				end
 
 				
@@ -949,21 +947,18 @@ end)
 						if not lastparty[j] then
 							lastparty[j] = {} 
 						end
-						local instanceType 
-						if instanceType ~= "arena" then --forces party frames
-							if UnitIsUnit(unitId, "party1") then 
-								unitId = "party1"
-							elseif UnitIsUnit(unitId, "party2") then  
-								unitId = "party2"
-							elseif UnitIsUnit(unitId, "party3") then 
-								unitId = "party3"
-							elseif UnitIsUnit(unitId, "party4") then 
-								unitId = "party4"
-							elseif UnitIsUnit(unitId, "player") then 
-								unitId = "player"
-							else
-								unitId = unitId
-							end
+						if UnitIsUnit(unitId, "party1") then 
+							unitId = "party1"
+						elseif UnitIsUnit(unitId, "party2") then  
+							unitId = "party2"
+						elseif UnitIsUnit(unitId, "party3") then 
+							unitId = "party3"
+						elseif UnitIsUnit(unitId, "party4") then 
+							unitId = "party4"
+						elseif UnitIsUnit(unitId, "player") then 
+							unitId = "player"
+						else
+							unitId = unitId
 						end
 						lastparty[j] = { name, unitId, frame }
 						if anchor and not strfind(unitId, "pet") then 
