@@ -989,8 +989,10 @@ end)
 
 	EditModeManagerFrame:HookScript("OnHide", function() 	 
 		--print("EditModeManagerFrame_OnHide")
-			BambiUI:OmniCDAnchor()
+		Ctimer(.1, function() 
+			BambiUI:OmniCDAnchor(true)
 			BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
+		end)
 	end)
 
 	EditModeManagerFrame:HookScript("OnShow", function() 	 
