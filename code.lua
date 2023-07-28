@@ -165,7 +165,7 @@ end)
 
 	local function MoveRaidUpperRight()
 		if InCombatLockdown() then
-			print("InCombatLockdown: MoveRaid (Standard)")
+			print("InCombatLockdown: MoveRaid (Standard Bottom)")
 			return
 		else
 			local f,s,p=CompactRaidFrameContainer,EditModeManagerFrame,PartyFrame
@@ -182,7 +182,7 @@ end)
 			p:SetClampedToScreen(false)
 			f:SetScale(sizeStandard);
 			p:SetScale(sizeStandard);
-			print("RaidFrames Position (Standard)")
+			print("RaidFrames Position (Standard Bottom)")
 				--Would be nice to ENABLE pets here
 				--2, +14 offset from raid
 				--Would be nice to ENABLE pets here
@@ -201,9 +201,47 @@ end)
 	BambiUI_MoveRaidUpperRight = CreateFrame('CheckButton', 'BambiUI_MoveRaidUpperRight', BambiUI_MoveRaidUpperRight, 'UICheckButtonTemplate')
 	BambiUI_MoveRaidUpperRight:SetScript('OnClick', function() MoveRaidUpperRight()	end)
 
+	local function MoveRaidUpperRightTop()
+		if InCombatLockdown() then
+			print("InCombatLockdown: MoveRaid (Standard Top)")
+			return
+		else
+			local f,s,p=CompactRaidFrameContainer,EditModeManagerFrame,PartyFrame
+			f:SetScale(1); --Helps if Anything Happens and When ReSizing Down
+			f:ClearAllPoints();
+			f:SetPoint("TOPLEFT",UIParent,"TOPRIGHT",-725,-499 + yOffSet);
+			p:SetScale(1);
+			p:ClearAllPoints();
+			p:SetPoint("TOPLEFT", UIParent,"TOPRIGHT",-727,-483.5 + yOffSet) --2, +14 offset from raid
+			s:OnSystemPositionChange(f);
+			s:OnSystemPositionChange(p);
+			s:SaveLayoutChanges();
+			f:SetClampedToScreen(false)
+			p:SetClampedToScreen(false)
+			f:SetScale(sizeStandard);
+			p:SetScale(sizeStandard);
+			print("RaidFrames Position (Standard Top)")
+				--Would be nice to ENABLE pets here
+				--2, +14 offset from raid
+				--Would be nice to ENABLE pets here
+			FramerateAnchor:ClearAllPoints()
+			FramerateAnchor:SetPoint("CENTER",UIParent,"CENTER", 0, yFramerateAnchor)
+		end
+		if fs then 
+			fs.Options:SetPlayerSortMode("Arena", "Top")
+			fs.Options:SetPlayerSortMode("Dungeon", "Top")
+			fs.Options:SetPlayerSortMode("Raid", "Top")
+			fs.Options:SetPlayerSortMode("World", "Top")
+		end
+		BambiUI:OmniCDAnchor(true)
+		BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
+	end
+	BambiUI_MoveRaidUpperRightTop = CreateFrame('CheckButton', 'BambiUI_MoveRaidUpperRightTop', BambiUI_MoveRaidUpperRightTop, 'UICheckButtonTemplate')
+	BambiUI_MoveRaidUpperRightTop:SetScript('OnClick', function() MoveRaidUpperRightTop()	end)
+
 	local function MoveRaidCenter()
 		if InCombatLockdown() then
-			print("InCombatLockdown: MoveRaid (Standard)")
+			print("InCombatLockdown: MoveRaid (Center)")
 			return
 		else
 			local f,s,p=CompactRaidFrameContainer,EditModeManagerFrame,PartyFrame
@@ -274,6 +312,7 @@ end)
 	local function ArenaHide()
 		local inInstance, instanceType = IsInInstance()
 		if instanceType == "arena"  then
+			local CompactArenaFrame = _G["CompactArenaFrame"]
 			CompactArenaFrame:Hide()
 		end
 	end
@@ -285,20 +324,15 @@ end)
 --SetUI_OnLoad
 --------------------------------------------------------------------------------------------------------------------------------
 
-	local function SetUI_OnLoad(party)
-		Ctimer(1, function()
-			if party then
-				CompactRaidFrameContainer:SetScale(sizeStandard) --works in combat
-				PartyFrame:SetScale(sizeStandard)
-			else
-				CompactRaidFrameContainer:SetScale(sizeRaid)
-				PartyFrame:SetScale(sizeRaid)
-			end
-			CompactRaidFrameContainer:SetClampedToScreen(false) --Allows RaidFrame to Move OffScreen
-			if CompactPartyFrameTitle then --Hides Party on PartyFrame
-				CompactPartyFrameTitle:SetAlpha(0)
-			end
-		end)
+	local function SetUI_OnLoad()
+		MoveRaidUpperRight()
+		MoveFrameRate()
+		CompactRaidFrameContainer:SetScale(sizeStandard) --works in combat
+		PartyFrame:SetScale(sizeStandard)
+		CompactRaidFrameContainer:SetClampedToScreen(false) --Allows RaidFrame to Move OffScreen
+		if CompactPartyFrameTitle then --Hides Party on PartyFrame
+			CompactPartyFrameTitle:SetAlpha(0)
+		end
 	end
 
 --------------------------------------------------------------------------------------------------------------------------------
@@ -530,7 +564,7 @@ end)
 
 
 	local iconSize = 20 -- Needs to be same size as the OmniCD Icon
-	local alphaOmni =.8
+	local alphaOmni = 0
 	local yPadding = -10
 	local raidplayerpadding = -7
 	local raidpetpadding = -8
@@ -657,15 +691,25 @@ end)
 		local fsPartyframes
 		local fsRaidframes
 
-		if fs then 
-			--fsPartyframes = fs.Sorting:GetPartyFrames()
-			--fsRaidframes = fs.Sorting:GetRaidFrames()
+		--[[if fs then 
+			fsPartyframes = fs.Sorting:GetPartyFrames()
+			fsRaidframes = fs.Sorting:GetRaidFrames()
 		end
 		if fsRaidframes then 
 			for i, frame in ipairs(fsRaidframes) do
-				print(i..":"..frame)
+				if frame then 
+					print(i..":"..frame:GetName())
+				end
 			end
 		end
+		if fsPartyframes  then 
+			for i, frame in ipairs(fsPartyframes) do
+				if frame then 
+					print(i..":"..frame:GetName())
+				end
+			end
+		end]]
+
 
 		local frames = {}
 		local party = {}
@@ -843,11 +887,21 @@ end)
 					
 					local lastanchorFrame
 		
-					if anchor and strfind(anchor:GetName(), "pet") then
-						yPadding = raidpetpadding
+	
+					if GetNumGroupMembers() <= 5 then 
+						if anchor and strfind(anchor:GetName(), "pet") then
+							yPadding = petpadding
+						else
+							yPadding = playerpadding
+						end
 					else
-						yPadding = raidplayerpadding
+						if anchor and strfind(anchor:GetName(), "pet") then
+							yPadding = raidpetpadding
+						else
+							yPadding = raidplayerpadding
+						end
 					end
+
 			
 
 					if forced or groupChangesAll or groupChangesTable[i] then
@@ -871,12 +925,21 @@ end)
 									anchorFrame:SetPoint("TOPLEFT", lastanchorFrame , "BOTTOMLEFT", 0, yPadding)
 								end
 								lastanchorFrame = anchorFrame
-								anchorFrame:Show()
 								keyFrame:SetParent(anchorFrame)
 								keyFrame:SetPoint("CENTER", anchorFrame, "CENTER", 0, nil)
-								keyFrame.t:SetFont("Fonts\\FRIZQT__.TTF", 6 )
-								keyFrame:SetSize(RaidiconSize, RaidiconSize)
-								keyFrame:Show()
+								if GetNumGroupMembers() <= 5 then 
+									keyFrame.t:SetFont("Fonts\\FRIZQT__.TTF", 9 )
+									anchorFrame.t:SetFont("Fonts\\FRIZQT__.TTF", 9 )
+									keyFrame:SetSize(iconSize, iconSize)
+									anchorFrame:SetSize(iconSize, iconSize)
+								else
+									keyFrame.t:SetFont("Fonts\\FRIZQT__.TTF", 6 )
+									anchorFrame.t:SetFont("Fonts\\FRIZQT__.TTF", 6 )
+									keyFrame:SetSize(RaidiconSize, RaidiconSize)
+									anchorFrame:SetSize(RaidiconSize, RaidiconSize)
+								end
+									keyFrame:Show()
+									anchorFrame:Show()
 								--print(frame:GetName() .. " = " .. frame.unit)
 							end
 						end
@@ -1055,33 +1118,19 @@ end)
 
 	function BambiUI:ADDON_LOADED(arg1)
 		if arg1 == "FrameSort" then
-			
-		Ctimer(1, function() 	
-			fs = FrameSortApi.v1
-			-- register some code to run after sorting
-			fs.Sorting:RegisterPostSortCallback(function()
-				BambiUI:OmniCDAnchor()
-				BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
-			end)
-		end)
-		
 			Ctimer(1, function() 	
-				local CRFC =_G["CompactRaidFrameContainer"]
-				local CPF = _G["CompactPartyFrame"]
-				if (CRFC and CRFC:GetLeft() and CRFC:GetLeft() < 1000) or (CPF and CPF:GetLeft() and CPF:GetLeft() < 1000) or GetNumGroupMembers() > 10 then 
-					if fs then 
-						fs.Options:SetPlayerSortMode("Arena", "Top")
-						fs.Options:SetPlayerSortMode("Dungeon", "Top")
-						fs.Options:SetPlayerSortMode("Raid", "Top")
-						fs.Options:SetPlayerSortMode("World", "Top")
-					end
-				else
-					if fs then 
-						fs.Options:SetPlayerSortMode("Arena", "Bottom")
-						fs.Options:SetPlayerSortMode("Dungeon", "Bottom")
-						fs.Options:SetPlayerSortMode("Raid", "Bottom")
-						fs.Options:SetPlayerSortMode("World", "Bottom")
-					end
+				fs = FrameSortApi.v1
+				if fs then 
+					-- register some code to run after sorting
+					fs.Sorting:RegisterPostSortCallback(function()
+						BambiUI:OmniCDAnchor()
+						BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
+					end)
+
+					fs.Options:SetPlayerSortMode("Arena", "Bottom")
+					fs.Options:SetPlayerSortMode("Dungeon", "Bottom")
+					fs.Options:SetPlayerSortMode("Raid", "Bottom")
+					fs.Options:SetPlayerSortMode("World", "Bottom")
 				end
 			end)
 		end
@@ -1094,14 +1143,9 @@ end)
 	end
 
 	function BambiUI:PLAYER_ENTERING_WORLD()
-		local CRFC =_G["CompactRaidFrameContainer"]
-		local CPF = _G["CompactPartyFrame"]
-		if (CRFC and CRFC:GetLeft() and CRFC:GetLeft() < 1000) or (CPF and CPF:GetLeft() and CPF:GetLeft() < 1000) or GetNumGroupMembers() > 10 then 
-			SetUI_OnLoad()
-		else
-			SetUI_OnLoad(true)
-		end
-		 Ctimer(1, function() 		 
+		SetUI_OnLoad()
+		 Ctimer(1, function() 	
+			SetUI_OnLoad()	 
 			BambiUI:OmniCDAnchor(true)
 			BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
 		end) 
