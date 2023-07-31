@@ -312,7 +312,6 @@ end)
 	local function ArenaHide()
 		local inInstance, instanceType = IsInInstance()
 		if instanceType == "arena"  then
-			local CompactArenaFrame = _G["CompactArenaFrame"]
 			CompactArenaFrame:Hide()
 		end
 	end
