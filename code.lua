@@ -313,7 +313,8 @@ end)
 		local inInstance, instanceType = IsInInstance()
 		if instanceType == "arena"  then
 			CompactArenaFrame:Hide()
-			CompactArenaFrame:HookScript("OnShow", function(self) CompactArenaFrame:Hide() end)
+			--CompactArenaFrame:HookScript("OnShow", function() CompactArenaFrame:Hide() end)
+			hooksecurefunc(CompactArenaFrame, "UpdateVisibility", function() CompactArenaFrame:Hide() end)
 		end
 	end
 
