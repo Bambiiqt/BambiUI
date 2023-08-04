@@ -313,8 +313,10 @@ end)
 		local inInstance, instanceType = IsInInstance()
 		if instanceType == "arena"  then
 			CompactArenaFrame:Hide()
+			CompactArenaFrame:HookScript("OnShow", function(self) CompactArenaFrame:Hide() end)
 		end
 	end
+
 
 	--CompactArenaFrame:HookScript("OnShow", function(self) CompactArenaFrame:Hide() end)
 	--CompactArenaFrame:HookScript("OnEvent", function(self) CompactArenaFrame:Hide() end)
@@ -1145,6 +1147,7 @@ end)
 		SetUI_OnLoad()
 		 Ctimer(1, function() 	
 			SetUI_OnLoad()	 
+			ArenaHide()
 			BambiUI:OmniCDAnchor(true)
 			BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
 		end) 
@@ -1155,7 +1158,13 @@ end)
 	end
 
 	function BambiUI:ARENA_PREP_OPPONENT_SPECIALIZATIONS()
-		--ArenaHide()
+		ArenaHide()
+	end
+
+	function BambiUI:ZONE_CHANGED_NEW_AREA()
+		ArenaHide()
+		BambiUI:OmniCDAnchor(true)
+		BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
 	end
 
 	BambiUI:RegisterEvent("ADDON_LOADED")
@@ -1164,5 +1173,6 @@ end)
 	BambiUI:RegisterEvent("UNIT_PET")
 	BambiUI:RegisterEvent("ARENA_OPPONENT_UPDATE")
 	BambiUI:RegisterEvent("ARENA_PREP_OPPONENT_SPECIALIZATIONS")
+	BambiUI:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 	BambiUI:SetScript("OnEvent",function(self,event,...) if self[event] then self[event](self,...) end end)
 
