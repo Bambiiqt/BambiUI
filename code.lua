@@ -314,7 +314,7 @@ end)
 		if instanceType == "arena"  then
 			CompactArenaFrame:Hide()
 			--CompactArenaFrame:HookScript("OnShow", function() CompactArenaFrame:Hide() end)
-			hooksecurefunc(CompactArenaFrame, "UpdateVisibility", function() CompactArenaFrame:Hide() end)
+			--hooksecurefunc(CompactArenaFrame, "UpdateVisibility", function() CompactArenaFrame:Hide() end)
 		end
 	end
 
@@ -1148,22 +1148,22 @@ end)
 		SetUI_OnLoad()
 		 Ctimer(1, function() 	
 			SetUI_OnLoad()	 
-			ArenaHide()
+			--ArenaHide()
 			BambiUI:OmniCDAnchor(true)
 			BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
 		end) 
 	end
 
 	function BambiUI:ARENA_OPPONENT_UPDATE()
-		ArenaHide()
+		--ArenaHide()
 	end
 
 	function BambiUI:ARENA_PREP_OPPONENT_SPECIALIZATIONS()
-		ArenaHide()
+		--ArenaHide()
 	end
 
 	function BambiUI:ZONE_CHANGED_NEW_AREA()
-		ArenaHide()
+		--ArenaHide()
 		BambiUI:OmniCDAnchor(true)
 		BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
 	end
