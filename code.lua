@@ -101,7 +101,7 @@ end)
 		SetCVar("noBuffDebuffFilterOnTarget", 1)
 		SetCVar("fstack_preferParentKey", 0)
 		SetCVar("autoSelfCast", 0)
-		SetCVar("weatherdensity", 1)
+		SetCVar("weatherdensity", 2)
 		SetCVar("ffxspecial", 1) --Toggles Haze effects (Borean Tundra Haze).
 		SetCVar("ffxGlow", 1)
 		SetCVar("ffxnetherworld", 1) --Toggles Netherworld Glow (Mage Invis Spell Effect).
