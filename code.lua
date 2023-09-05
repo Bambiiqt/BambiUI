@@ -97,7 +97,7 @@ end)
 		SetCVar("nameplateOverlapV", 0.5)
 		SetCVar("NameplatePersonalShowAlways", 1)
 
-		SetCVar("SpellQueueWindow", 170)
+		--SetCVar("SpellQueueWindow", 260)
 		SetCVar("noBuffDebuffFilterOnTarget", 1)
 		SetCVar("fstack_preferParentKey", 0)
 		SetCVar("autoSelfCast", 0)
