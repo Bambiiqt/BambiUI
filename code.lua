@@ -68,21 +68,15 @@ end)
 	local yOffSet = 12
 
 	local function RunScripts()
-		
-		COMBAT_TEXT_HEIGHT = 25;
-		COMBAT_TEXT_STAGGER_RANGE = 0;
-		COMBAT_TEXT_SPACING = 5;
-		COMBAT_TEXT_MAX_OFFSET = 35;
-		NUM_COMBAT_TEXT_LINES = 10;
-		COMBAT_TEXT_X_ADJUSTMENT = 80;
-		OMBAT_TEXT_CRIT_MAXHEIGHT = 45;
-		MAX_TARGET_DEBUFFS = 32;
-		MAX_TARGET_BUFFS = 32;
+		if InCombatLockdown() then
+			print("InCombatLockdown: Scripts")
+			return
+		else
 
 		SetCVar("floatingCombatTextCombatDamageDirectionalScale", 1)
 		SetCVar("floatingCombatTextCombatHealing", 1)
 		SetCVar("floatingCombatTextCombatDamage", 1)
-
+		
 		SetCVar("nameplateMinAlpha",.9)
 		SetCVar("nameplateSelectedScale",1)
 		SetCVar("nameplateLargerScale",1)
@@ -96,8 +90,9 @@ end)
 		SetCVar("nameplateOverlapH", 0.4)
 		SetCVar("nameplateOverlapV", 0.5)
 		SetCVar("NameplatePersonalShowAlways", 1)
-
+		
 		--SetCVar("SpellQueueWindow", 260)
+		
 		SetCVar("noBuffDebuffFilterOnTarget", 1)
 		SetCVar("fstack_preferParentKey", 0)
 		SetCVar("autoSelfCast", 0)
@@ -105,7 +100,7 @@ end)
 		SetCVar("ffxspecial", 1) --Toggles Haze effects (Borean Tundra Haze).
 		SetCVar("ffxGlow", 1)
 		SetCVar("ffxnetherworld", 1) --Toggles Netherworld Glow (Mage Invis Spell Effect).
-
+		
 		SetCVar("lossOfControl", 1)
 		SetCVar("lossOfControlDisarm", 0)
 		SetCVar("lossOfControlFull", 0)
@@ -114,6 +109,7 @@ end)
 		SetCVar("lossOfControlSilence", 0)
 
 		print("UI Scripts Ran")
+		end
 	end
 	BambiUI_RunScripts = CreateFrame('CheckButton', 'BambiUI_RunScripts', BambiUI_RunScripts, 'UICheckButtonTemplate')
 	BambiUI_RunScripts:SetScript('OnClick', function() RunScripts()	end)
