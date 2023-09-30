@@ -179,6 +179,21 @@ end)
 			f:SetScale(sizeStandard);
 			p:SetScale(sizeStandard);
 			print("RaidFrames Position (Standard Bottom)")
+			
+			if MainCbBottom then
+				if MainCbBottom:GetChecked() then 
+					MainCbBottom:Click()
+					MainCbBottom:Click()
+				else
+					MainCbBottom:Click()
+				end
+				if MainCbBottomDescending:GetChecked() then 
+					MainCbBottomDescending:Click()
+					MainCbBottomDescending:Click()
+				else
+					MainCbBottomDescending:Click()
+				end
+			end
 				--Would be nice to ENABLE pets here
 				--2, +14 offset from raid
 				--Would be nice to ENABLE pets here
@@ -217,6 +232,21 @@ end)
 			f:SetScale(sizeStandard);
 			p:SetScale(sizeStandard);
 			print("RaidFrames Position (Standard Top)")
+
+			if MainCbTop then 
+				if MainCbTop:GetChecked() then 
+					MainCbTop:Click()
+					MainCbTop:Click()
+				else
+					MainCbTop:Click()
+				end
+				if MainCbTopDescending:GetChecked() then 
+					MainCbTopDescending:Click()
+					MainCbTopDescending:Click()
+				else
+					MainCbTopDescending:Click()
+				end
+			end
 				--Would be nice to ENABLE pets here
 				--2, +14 offset from raid
 				--Would be nice to ENABLE pets here
@@ -251,6 +281,20 @@ end)
 			s:OnSystemPositionChange(p);
 			s:SaveLayoutChanges();
 			print("RaidFrames Position (Center)")
+			if MainCbTop then 
+				if MainCbTop:GetChecked() then 
+					MainCbTop:Click()
+					MainCbTop:Click()
+				else
+					MainCbTop:Click()
+				end
+				if MainCbTopDescending:GetChecked() then 
+					MainCbTopDescending:Click()
+					MainCbTopDescending:Click()
+				else
+					MainCbTopDescending:Click()
+				end
+			end
 				--Would be nice to DISABLE pets here
 			FramerateAnchor:ClearAllPoints()
 			FramerateAnchor:SetPoint("CENTER",UIParent,"CENTER", 0, -85)
@@ -275,6 +319,22 @@ end)
 		else
 			CompactRaidFrameContainer:SetScale(sizeRaid)
 			PartyFrame:SetScale(sizeRaid)
+
+			if MainCbTop then 
+				if MainCbTop:GetChecked() then 
+					MainCbTop:Click()
+					MainCbTop:Click()
+				else
+					MainCbTop:Click()
+				end
+				if MainCbTopDescending:GetChecked() then 
+					MainCbTopDescending:Click()
+					MainCbTopDescending:Click()
+				else
+					MainCbTopDescending:Click()
+				end
+			end
+
 			print("FramesScaled ("..sizeRaid..")")
 		end
 		if fs then 
