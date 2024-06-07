@@ -8,6 +8,8 @@ local tremove = table.remove
 
 local fs
 
+
+
 --------------------------------------------------------------------------------------------------------------------------------
 --Move Frame rate
 --------------------------------------------------------------------------------------------------------------------------------
@@ -63,9 +65,9 @@ end)
 --Scripts and Macro
 --------------------------------------------------------------------------------------------------------------------------------
 
-	local sizeStandard = 1.1
+	local sizeStandard = 1.1 --Wrath is 1.25
 	local sizeRaid =.65
-	local yOffSet = 12
+	local yOffSet = 12 --Wrath is 40
 
 	local function RunScripts()
 		if InCombatLockdown() then
@@ -586,6 +588,10 @@ end)
 	end
 
 	function BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
+		local inInstance, instanceType = IsInInstance()
+		local members = GetNumGroupMembers();
+		if instanceType == "raid"  or members > 25 then return end
+
 		if not EditModeManagerFrame:ShouldRaidFrameShowSeparateGroups() then
 			for i = 1, 80 do
 				local compactRaidFrame = _G["CompactRaidFrame"..i]
@@ -745,6 +751,10 @@ end)
 	}
 
 	function  BambiUI:OmniCDAnchor(forced)
+
+		local inInstance, instanceType = IsInInstance()
+		local members = GetNumGroupMembers();
+		if instanceType == "raid"  or members > 25 then return end
 
 		local fsPartyframes
 		local fsRaidframes
