@@ -1107,7 +1107,7 @@ end)
 
 	local function OmniCDKey(arg1)
 		if arg1 == "OmniCD" then
-				--OmniCD.AddUnitFrameData("BambiUI", "BambiUI", "yourUnitKey", 1, 45)
+				OmniCD.AddUnitFrameData("BambiUI", "BambiUI", "yourUnitKey", 1, nil, 45)
 		end
 		C_Timer.After(8, function()	-- delay checking to make sure all variables of the other addons are loaded
 			OmniCDKey(arg1)
