@@ -79,24 +79,26 @@ end)
 		SetCVar("floatingCombatTextCombatHealing", 1)
 		SetCVar("floatingCombatTextCombatDamage", 1)
 		
+		SetCVar("nameplateMaxDistance", 60)
+
 		SetCVar("nameplateMinAlpha",.9)
 		SetCVar("nameplateSelectedScale",1)
 		SetCVar("nameplateLargerScale",1)
 		SetCVar("nameplateMinScale",1)
 		SetCVar("nameplateShowAll",1);
-		SetCVar("nameplateMaxDistance", 60)
+		
 		SetCVar("nameplateOtherTopInset", 0.05)
 		SetCVar("nameplateLargeTopInset", 0.05)
-		SetCVar("nameplateMotionSpeed", 0.025)
+		SetCVar("nameplateMotionSpeed", 0.05)
 		SetCVar("nameplateOtherBottomInset", 0.15)
-		SetCVar("nameplateOverlapH", 0.4)
-		SetCVar("nameplateOverlapV", 0.5)
+		SetCVar("nameplateOverlapH", 0.45)
+		SetCVar("nameplateOverlapV", 0.60)
 		SetCVar("NameplatePersonalShowAlways", 1)
 		
 		--SetCVar("SpellQueueWindow", 260)
 		
 		SetCVar("noBuffDebuffFilterOnTarget", 1)
-		SetCVar("fstack_preferParentKey", 0)
+		SetCVar("fstack_preferParentKey", 0) --  fixes fstack
 		SetCVar("autoSelfCast", 0)
 		SetCVar("weatherdensity", 2)
 		SetCVar("ffxspecial", 1) --Toggles Haze effects (Borean Tundra Haze).
