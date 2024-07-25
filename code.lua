@@ -92,8 +92,13 @@ end)
 		SetCVar("nameplateMotionSpeed", 0.05)
 		SetCVar("nameplateOtherBottomInset", 0.15)
 		SetCVar("nameplateOverlapH", 0.45)
-		SetCVar("nameplateOverlapV", 0.60)
+		SetCVar("nameplateOverlapV", 0.70)
 		SetCVar("NameplatePersonalShowAlways", 1)
+
+
+		SetCVar("SoftTargetForce", 0)
+		SetCVar("SoftTargetMatchLocked", 0)
+		SetCVar("SoftTargetWithLocked", 0)
 		
 		--SetCVar("SpellQueueWindow", 260)
 		
@@ -112,7 +117,7 @@ end)
 		SetCVar("lossOfControlRoot", 0)
 		SetCVar("lossOfControlSilence", 0)
 
-		print("UI Scripts Ran")
+		print("|cff00cccfBambiUI|r : Scripts Ran")
 		end
 	end
 	BambiUI_RunScripts = CreateFrame('CheckButton', 'BambiUI_RunScripts', BambiUI_RunScripts, 'UICheckButtonTemplate')
@@ -135,7 +140,7 @@ end)
 
 	local function ShowEnemyGuardians()
 		if InCombatLockdown() then
-			print("InCombatLockdown: ShowEnemyGuardians")
+			print("|cff00cccfBambiUI|r : InCombatLockdown: ShowEnemyGuardians")
 			return
 		else
 			if GetCVar("nameplateShowEnemyGuardians") == "1" then
@@ -150,7 +155,7 @@ end)
 
 	local function ShowEnemyMinus()
 		if InCombatLockdown() then
-			print("InCombatLockdown: ShowEnemyMinus")
+			print("|cff00cccfBambiUI|r : InCombatLockdown: ShowEnemyMinus")
 			return
 		else
 			if GetCVar("nameplateShowEnemyMinus") == "1" then
@@ -163,9 +168,26 @@ end)
 	BambiUI_ShowEnemyMinus = CreateFrame('CheckButton', 'BambiUI_ShowEnemyMinus', BambiUI_ShowEnemyMinus, 'UICheckButtonTemplate')
 	BambiUI_ShowEnemyMinus:SetScript('OnClick', function() ShowEnemyMinus()	end)
 
+	local function ShowPets()
+		if InCombatLockdown() then
+			print("InCombatLockdown: ShowPets")
+			return
+		else
+			if GetCVar("raidOptionDisplayPets") == "0" then
+				print("|cff00cccfBambiUI|r : Show Pets: On")
+				SetCVar("raidOptionDisplayPets", 1)
+			else
+				print("|cff00cccfBambiUI|r : Show Pets: Off")
+				SetCVar("raidOptionDisplayPets", 0)
+			end
+		end
+	end
+	BambiUI_ShowPets = CreateFrame('CheckButton', 'BambiUI_ShowPets', BambiUI_ShowPets, 'UICheckButtonTemplate')
+	BambiUI_ShowPets:SetScript('OnClick', function() ShowPets()	end)
+
 	local function MoveRaidUpperRight()
 		if InCombatLockdown() then
-			print("InCombatLockdown: MoveRaid (Standard Bottom)")
+			print("|cff00cccfBambiUI|r : InCombatLockdown: MoveRaid (Standard Bottom)")
 			return
 		else
 			local f,s,p=CompactRaidFrameContainer,EditModeManagerFrame,PartyFrame
@@ -182,7 +204,7 @@ end)
 			p:SetClampedToScreen(false)
 			f:SetScale(sizeStandard);
 			p:SetScale(sizeStandard);
-			print("RaidFrames Position (Standard Bottom)")
+			print("|cff00cccfBambiUI|r : RaidFrames Position (Standard Bottom)")
 			
 			if MainCbBottom then
 				if MainCbBottom:GetChecked() then 
@@ -203,12 +225,12 @@ end)
 				--Would be nice to ENABLE pets here
 			FramerateAnchor:ClearAllPoints()
 			FramerateAnchor:SetPoint("CENTER",UIParent,"CENTER", 0, yFramerateAnchor)
-		end
-		if fs then 
-			fs.Options:SetPlayerSortMode("Arena", "Bottom")
-			fs.Options:SetPlayerSortMode("Dungeon", "Bottom")
-			fs.Options:SetPlayerSortMode("Raid", "Bottom")
-			fs.Options:SetPlayerSortMode("World", "Bottom")
+			if fs then 
+				fs.Options:SetPlayerSortMode("Arena", "Bottom")
+				fs.Options:SetPlayerSortMode("Dungeon", "Bottom")
+				fs.Options:SetPlayerSortMode("Raid", "Bottom")
+				fs.Options:SetPlayerSortMode("World", "Bottom")
+			end
 		end
 		BambiUI:OmniCDAnchor(true)
 		BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
@@ -218,7 +240,7 @@ end)
 
 	local function MoveRaidUpperRightTop()
 		if InCombatLockdown() then
-			print("InCombatLockdown: MoveRaid (Standard Top)")
+			print("|cff00cccfBambiUI|r : InCombatLockdown: MoveRaid (Standard Top)")
 			return
 		else
 			local f,s,p=CompactRaidFrameContainer,EditModeManagerFrame,PartyFrame
@@ -235,7 +257,7 @@ end)
 			p:SetClampedToScreen(false)
 			f:SetScale(sizeStandard);
 			p:SetScale(sizeStandard);
-			print("RaidFrames Position (Standard Top)")
+			print("|cff00cccfBambiUI|r : RaidFrames Position (Standard Top)")
 
 			if MainCbTop then 
 				if MainCbTop:GetChecked() then 
@@ -256,12 +278,12 @@ end)
 				--Would be nice to ENABLE pets here
 			FramerateAnchor:ClearAllPoints()
 			FramerateAnchor:SetPoint("CENTER",UIParent,"CENTER", 0, yFramerateAnchor)
-		end
-		if fs then 
-			fs.Options:SetPlayerSortMode("Arena", "Top")
-			fs.Options:SetPlayerSortMode("Dungeon", "Top")
-			fs.Options:SetPlayerSortMode("Raid", "Top")
-			fs.Options:SetPlayerSortMode("World", "Top")
+			if fs then 
+				fs.Options:SetPlayerSortMode("Arena", "Top")
+				fs.Options:SetPlayerSortMode("Dungeon", "Top")
+				fs.Options:SetPlayerSortMode("Raid", "Top")
+				fs.Options:SetPlayerSortMode("World", "Top")
+			end
 		end
 		BambiUI:OmniCDAnchor(true)
 		BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
@@ -271,7 +293,7 @@ end)
 
 	local function MoveRaidCenter()
 		if InCombatLockdown() then
-			print("InCombatLockdown: MoveRaid (Center)")
+			print("|cff00cccfBambiUI|r : InCombatLockdown: MoveRaid (Center)")
 			return
 		else
 			local f,s,p=CompactRaidFrameContainer,EditModeManagerFrame,PartyFrame
@@ -284,7 +306,7 @@ end)
 			s:OnSystemPositionChange(f);
 			s:OnSystemPositionChange(p);
 			s:SaveLayoutChanges();
-			print("RaidFrames Position (Center)")
+			print("|cff00cccfBambiUI|r : RaidFrames Position (Center)")
 			if MainCbTop then 
 				if MainCbTop:GetChecked() then 
 					MainCbTop:Click()
@@ -302,12 +324,12 @@ end)
 				--Would be nice to DISABLE pets here
 			FramerateAnchor:ClearAllPoints()
 			FramerateAnchor:SetPoint("CENTER",UIParent,"CENTER", 0, -85)
-		end
-		if fs then 
-			fs.Options:SetPlayerSortMode("Arena", "Top")
-			fs.Options:SetPlayerSortMode("Dungeon", "Top")
-			fs.Options:SetPlayerSortMode("Raid", "Top")
-			fs.Options:SetPlayerSortMode("World", "Top")
+			if fs then 
+				fs.Options:SetPlayerSortMode("Arena", "Top")
+				fs.Options:SetPlayerSortMode("Dungeon", "Top")
+				fs.Options:SetPlayerSortMode("Raid", "Top")
+				fs.Options:SetPlayerSortMode("World", "Top")
+			end
 		end
 		BambiUI:OmniCDAnchor(true)
 		BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
@@ -318,7 +340,7 @@ end)
 
 	local function ScaleFramesRaid()
 		if InCombatLockdown() then
-			print("InCombatLockdown: ScaleFrames")
+			print("|cff00cccfBambiUI|r : InCombatLockdown: ScaleFrames")
 			return
 		else
 			CompactRaidFrameContainer:SetScale(sizeRaid)
@@ -339,13 +361,13 @@ end)
 				end
 			end
 
-			print("FramesScaled ("..sizeRaid..")")
-		end
-		if fs then 
-			fs.Options:SetPlayerSortMode("Arena", "Top")
-			fs.Options:SetPlayerSortMode("Dungeon", "Top")
-			fs.Options:SetPlayerSortMode("Raid", "Top")
-			fs.Options:SetPlayerSortMode("World", "Top")
+			print("|cff00cccfBambiUI|r : FramesScaled ("..sizeRaid..")")
+			if fs then 
+				fs.Options:SetPlayerSortMode("Arena", "Top")
+				fs.Options:SetPlayerSortMode("Dungeon", "Top")
+				fs.Options:SetPlayerSortMode("Raid", "Top")
+				fs.Options:SetPlayerSortMode("World", "Top")
+			end
 		end
 		BambiUI:OmniCDAnchor(true)
 		BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()
@@ -365,32 +387,20 @@ end)
 	BottomBar.texture:SetColorTexture(0.0, 0.0, 0.0, 1)
 	BottomBar:SetFrameStrata("BACKGROUND")
 
---------------------------------------------------------------------------------------------------------------------------------
---Hide Arena Frames
---------------------------------------------------------------------------------------------------------------------------------
 
-	local function ArenaHide()
-		local inInstance, instanceType = IsInInstance()
-		if instanceType == "arena"  then
-			CompactArenaFrame:Hide()
-			--CompactArenaFrame:HookScript("OnShow", function() CompactArenaFrame:Hide() end)
-			--hooksecurefunc(CompactArenaFrame, "UpdateVisibility", function() CompactArenaFrame:Hide() end)
-		end
-	end
-
-
-	--CompactArenaFrame:HookScript("OnShow", function(self) CompactArenaFrame:Hide() end)
-	--CompactArenaFrame:HookScript("OnEvent", function(self) CompactArenaFrame:Hide() end)
 
 --------------------------------------------------------------------------------------------------------------------------------
 --SetUI_OnLoad
 --------------------------------------------------------------------------------------------------------------------------------
 
 	local function SetUI_OnLoad()
+		RunScripts()
 		MoveRaidUpperRight()
 		MoveFrameRate()
+
 		CompactRaidFrameContainer:SetScale(sizeStandard) --works in combat
 		PartyFrame:SetScale(sizeStandard)
+		
 		CompactRaidFrameContainer:SetClampedToScreen(false) --Allows RaidFrame to Move OffScreen
 		if CompactPartyFrameTitle then --Hides Party on PartyFrame
 			CompactPartyFrameTitle:SetAlpha(0)
@@ -1186,23 +1196,38 @@ end)
 		BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
 	end
 
+	local SetUp = CreateFrame('Frame')
+	local FrameSort = CreateFrame('Frame')
+
+	local function OnLoadFramSort()
+		if not InCombatLockdown() then 
+			fs = FrameSortApi.v1
+			if fs then 
+				-- register some code to run after sorting
+				fs.Sorting:RegisterPostSortCallback(function()
+					BambiUI:OmniCDAnchor()
+					BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
+				end)
+
+				fs.Options:SetPlayerSortMode("Arena", "Bottom")
+				fs.Options:SetPlayerSortMode("Dungeon", "Bottom")
+				fs.Options:SetPlayerSortMode("Raid", "Bottom")
+				fs.Options:SetPlayerSortMode("World", "Bottom")
+			end
+			FrameSort:SetScript("OnUpdate",  nil)
+		end
+	end
+
+	local function OnLoadSetup()
+		if not InCombatLockdown() then 
+			SetUI_OnLoad()	
+			SetUp:SetScript("OnUpdate",  nil)
+		end
+	end
+
 	function BambiUI:ADDON_LOADED(arg1)
 		if arg1 == "FrameSort" then
-			Ctimer(1, function() 	
-				fs = FrameSortApi.v1
-				if fs then 
-					-- register some code to run after sorting
-					fs.Sorting:RegisterPostSortCallback(function()
-						BambiUI:OmniCDAnchor()
-						BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
-					end)
-
-					fs.Options:SetPlayerSortMode("Arena", "Bottom")
-					fs.Options:SetPlayerSortMode("Dungeon", "Bottom")
-					fs.Options:SetPlayerSortMode("Raid", "Bottom")
-					fs.Options:SetPlayerSortMode("World", "Bottom")
-				end
-			end)
+			FrameSort:SetScript("OnUpdate",  OnLoadFramSort)
 		end
 		 OmniCDKey(arg1)
 	end
@@ -1213,10 +1238,9 @@ end)
 	end
 
 	function BambiUI:PLAYER_ENTERING_WORLD()
-		SetUI_OnLoad()
-		 Ctimer(1, function() 	
-			SetUI_OnLoad()	 
-			--ArenaHide()
+		SetUI_OnLoad()	
+		Ctimer(1, function() 	
+			SetUp:SetScript("OnUpdate",  OnLoadSetup)
 			BambiUI:OmniCDAnchor(true)
 			BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame() 
 		end) 
@@ -1245,3 +1269,10 @@ end)
 	BambiUI:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 	BambiUI:SetScript("OnEvent",function(self,event,...) if self[event] then self[event](self,...) end end)
 
+
+	Frame_Force = CreateFrame('CheckButton', 'Frame_Force', Frame_Force, 'UICheckButtonTemplate')
+	Frame_Force:SetScript('OnClick', function()
+		BambiUI:OmniCDAnchor(true)
+		BambiUI:UpdateAndHookAllRaidIconsAnchorCompactRaidFrame()  
+		print("LC & OmniCD Anchors Forced") 
+	end)
